@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Real Estate Management System</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css" rel="stylesheet">
+  <!-- Custom Styling -->
+  <link href="css/style.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand text-white fw-bold" href="admin.html">
+        <i class="bi bi-shield-lock-fill text-danger me-2"></i>ADMIN PORTAL
+      </a>
+      <div class="d-flex align-items-center gap-3">
+        <a href="index.html" class="btn btn-outline-light btn-sm"><i class="bi bi-arrow-left me-1"></i>Back to Main Site</a>
+        <button class="btn btn-danger btn-sm" onclick="App.logout(event)"><i class="bi bi-power"></i></button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ADMIN PORTAL WRAPPER -->
+  <div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h3 class="fw-bold text-dark mb-1">System Administration</h3>
+        <p class="text-muted mb-0">Manage listings, owner approvals, KYC verification, users, and audit records.</p>
+      </div>
+      <button class="btn btn-outline-secondary btn-sm" onclick="loadAdminData()"><i class="bi bi-arrow-clockwise me-1"></i>Refresh Data</button>
+    </div>
+
+    <!-- 8 KPI STATS CARDS -->
+    <div class="row g-3 mb-4">
+      <!-- 1. Total Users -->
+      <div class="col-lg-3 col-md-6 col-6">
+        <div class="card p-3 border-0 shadow-sm rounded-3 bg-white">
+          <div class="text-muted small fw-semibold">Total Users</div>
+          <h3 class="fw-bold text-dark mt-1 mb-0" id="stat-totalUsers">0</h3>
+        </div>
+      </div>
+      <!-- 2. Total Properties -->
+      <div class="col-lg-3 col-md-6 col-6">
+        <div class="card p-3 border-0 shadow-sm rounded-3 bg-white">
+          <div class="text-muted small fw-semibold">Total Properties</div>
+          <h3 class="fw-bold text-dark mt-1 mb-0" id="stat-totalProperties">0</h3>
+        </div>
+      </div>
+      <!-- 3. Properties For Sale -->
+      <div class="col-lg-3 col-md-6 col-6">
+        <div class="card p-3 border-0 shadow-sm rounded-3 bg-white">
+          <div class="text-muted small fw-semibold">Properties For Sale</div>
+          <h3 class="fw-bold text-dark mt-1 mb-0" id="stat-propertiesForSale">0</h3>
+        </div>
+      </div>
+      <!-- 4. Properties For Rent -->
+      <div class="col-lg-3 col-md-6 col-6">
+        <div class="card p-3 border-0 shadow-sm rounded-3 bg-white">
+          <div class="text-muted small fw-semibold">Properties For Rent</div>
+          <h3 class="fw-bold text-info mt-1 mb-0" id="stat-propertiesForRent">0</h3>
+        </div>
+      </div>
+      <!-- 5. Pending Approvals -->
+      <div class="col-lg-3 col-md-6 col-6">
+        <div class="card p-3 border-0 shadow-sm rounded-3 bg-white border-start border-warning border-4">
+          <div class="text-warning small fw-bold">Pending Approvals</div>
+          <h3 class="fw-bold text-warning mt-1 mb-0" id="stat-pendingApprovals">0</h3>
+        </div>
+      </div>
+      <!-- 6. Verified Owners -->
+      <div class="col-lg-3 col-md-6 col-6">
+        <div class="card p-3 border-0 shadow-sm rounded-3 bg-white border-start border-success border-4">
+          <div class="text-success small fw-bold">Verified Owners</div>
+          <h3 class="fw-bold text-success mt-1 mb-0" id="stat-verifiedOwners">0</h3>
+        </div>
+      </div>
+      <!-- 7. Total Appointments -->
+      <div class="col-lg-3 col-md-6 col-6">
+        <div class="card p-3 border-0 shadow-sm rounded-3 bg-white">
+          <div class="text-muted small fw-semibold">Total Visits</div>
+          <h3 class="fw-bold text-secondary mt-1 mb-0" id="stat-totalAppointments">0</h3>
+        </div>
+      </div>
+      <!-- 8. Purchases -->
+      <div class="col-lg-3 col-md-6 col-6">
+        <div class="card p-3 border-0 shadow-sm rounded-3 bg-white">
+          <div class="text-muted small fw-semibold">Purchase Transactions</div>
+          <h3 class="fw-bold text-success mt-1 mb-0" id="stat-purchaseTransactions">0</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <ul class="nav nav-tabs mb-4" id="adminTabs" role="tablist">
+      <li class="nav-item">
+        <button class="nav-link active fw-bold" data-bs-toggle="tab" data-bs-target="#tab-pending">
+          <i class="bi bi-clock-history me-1"></i>Pending Properties (<span id="tab-pending-count">0</span>)
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link fw-bold" data-bs-toggle="tab" data-bs-target="#tab-kyc">
+          <i class="bi bi-person-check me-1"></i>Owner Verification Requests
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link fw-bold" data-bs-toggle="tab" data-bs-target="#tab-users">
+          <i class="bi bi-people me-1"></i>Registered Users
+        </button>
+      </li>
+    </ul>
+
+    <div class="tab-content">
+      <!-- 1. PENDING PROPERTIES -->
+      <div class="tab-pane fade show active" id="tab-pending">
+        <div class="card border-0 shadow-sm rounded-3 p-4 bg-white">
+          <h5 class="fw-bold mb-3 text-dark">Properties Awaiting Admin Approval</h5>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>Property</th>
+                  <th>Category</th>
+                  <th>Owner</th>
+                  <th>Price</th>
+                  <th>Submitted</th>
+                  <th class="text-end">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="pending-properties-tbody">
+                <tr><td colspan="6" class="text-center py-4 text-muted">Loading pending listings...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. OWNER VERIFICATIONS -->
+      <div class="tab-pane fade" id="tab-kyc">
+        <div class="card border-0 shadow-sm rounded-3 p-4 bg-white">
+          <h5 class="fw-bold mb-3 text-dark">Owner KYC &amp; Title Verification</h5>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>User</th>
+                  <th>Identity Proof</th>
+                  <th>Document Number</th>
+                  <th>Property Address</th>
+                  <th>Documents</th>
+                  <th class="text-end">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="kyc-requests-tbody">
+                <tr><td colspan="6" class="text-center py-4 text-muted">Loading KYC requests...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. ALL USERS -->
+      <div class="tab-pane fade" id="tab-users">
+        <div class="card border-0 shadow-sm rounded-3 p-4 bg-white">
+          <h5 class="fw-bold mb-3 text-dark">Registered Users</h5>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>User ID</th>
+                  <th>Full Name</th>
+                  <th>Email</th>
+                  <th>Mobile</th>
+                  <th>Role</th>
+                  <th>Verified Status</th>
+                </tr>
+              </thead>
+              <tbody id="users-list-tbody">
+                <tr><td colspan="6" class="text-center py-4 text-muted">Loading users...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REJECT REASON MODAL -->
+  <div class="modal fade" id="rejectModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold">Reject Property Listing</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="reject-property-id">
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Rejection Reason</label>
+            <textarea class="form-control" id="reject-reason" rows="3" placeholder="Explain what needs to be fixed..."></textarea>
+          </div>
+          <div class="d-grid">
+            <button type="button" class="btn btn-danger py-2" onclick="confirmRejectProperty()">Confirm Rejection</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Application Client -->
+  <script src="js/app.js"></script>
+
+  <script>
+    async function checkAdminAuth() {
+      try {
+        const res = await fetch('/api/auth/me');
+        const json = await res.json();
+        if (json.status !== 'success' || !json.data || json.data.role !== 'ADMIN') {
+          alert('Access Forbidden: Administrator privileges required.');
+          window.location.href = 'login.html';
+          return false;
+        }
+        return true;
+      } catch (err) {
+        window.location.href = 'login.html';
+        return false;
+      }
+    }
+
+    async function loadAdminData() {
+      const ok = await checkAdminAuth();
+      if (!ok) return;
+
+      loadStats();
+      loadPendingProperties();
+      loadKYCRequests();
+      loadUsers();
+    }
+
+    async function loadStats() {
+      try {
+        const res = await fetch('/api/admin/stats');
+        const json = await res.json();
+        if (json.status === 'success' && json.data) {
+          const s = json.data;
+          document.getElementById('stat-totalUsers').textContent = s.totalUsers || 0;
+          document.getElementById('stat-totalProperties').textContent = s.totalProperties || 0;
+          document.getElementById('stat-propertiesForSale').textContent = s.propertiesForSale || 0;
+          document.getElementById('stat-propertiesForRent').textContent = s.propertiesForRent || 0;
+          document.getElementById('stat-pendingApprovals').textContent = s.pendingApprovals || 0;
+          document.getElementById('stat-verifiedOwners').textContent = s.verifiedOwners || 0;
+          document.getElementById('stat-totalAppointments').textContent = s.totalAppointments || 0;
+          document.getElementById('stat-purchaseTransactions').textContent = s.purchaseTransactions || 0;
+          document.getElementById('tab-pending-count').textContent = s.pendingApprovals || 0;
+        }
+      } catch (err) {}
+    }
+
+    async function loadPendingProperties() {
+      const tbody = document.getElementById('pending-properties-tbody');
+      try {
+        const res = await fetch('/api/admin/properties/pending');
+        const json = await res.json();
+        if (json.status === 'success' && json.data) {
+          if (json.data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-success"><i class="bi bi-check-circle-fill me-1"></i>All properties have been reviewed! No pending approvals.</td></tr>';
+            return;
+          }
+          tbody.innerHTML = json.data.map(p => `
+            <tr>
+              <td>
+                <strong>${App.escapeHtml(p.title)}</strong>
+                <div class="text-muted small">${p.locality}, ${p.city} &bull; ${p.propertyArea} ${p.areaUnit}</div>
+              </td>
+              <td>${p.categoryName}</td>
+              <td>${App.escapeHtml(p.ownerName || 'User #' + p.ownerId)}</td>
+              <td class="fw-bold text-success">${App.formatPrice(p.price, p.purpose)}</td>
+              <td class="text-muted small">Just now</td>
+              <td class="text-end">
+                <a href="property-details.html?id=${p.propertyId}" target="_blank" class="btn btn-sm btn-outline-secondary me-1">Preview</a>
+                <button class="btn btn-sm btn-success me-1" onclick="approveProperty(${p.propertyId})"><i class="bi bi-check-lg me-1"></i>Approve</button>
+                <button class="btn btn-sm btn-outline-danger" onclick="openRejectModal(${p.propertyId})"><i class="bi bi-x-lg me-1"></i>Reject</button>
+              </td>
+            </tr>
+          `).join('');
+        }
+      } catch (err) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-danger">Error loading pending properties.</td></tr>';
+      }
+    }
+
+    async function approveProperty(id) {
+      if (!confirm('Approve this listing for public display?')) return;
+      try {
+        const res = await fetch('/api/admin/properties/approve', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: 'propertyId=' + id
+        });
+        const json = await res.json();
+        if (json.status === 'success') {
+          App.showToast('Property listing approved and published!');
+          loadAdminData();
+        } else {
+          App.showToast(json.message || 'Approval failed', 'danger');
+        }
+      } catch (err) {
+        App.showToast('Server error approving property', 'danger');
+      }
+    }
+
+    function openRejectModal(id) {
+      document.getElementById('reject-property-id').value = id;
+      document.getElementById('reject-reason').value = '';
+      new bootstrap.Modal(document.getElementById('rejectModal')).show();
+    }
+
+    async function confirmRejectProperty() {
+      const id = document.getElementById('reject-property-id').value;
+      const reason = document.getElementById('reject-reason').value || 'Does not meet listing standards';
+
+      try {
+        const res = await fetch('/api/admin/properties/reject', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({ propertyId: id, reason: reason }).toString()
+        });
+        const json = await res.json();
+        if (json.status === 'success') {
+          bootstrap.Modal.getInstance(document.getElementById('rejectModal')).hide();
+          App.showToast('Property listing rejected.');
+          loadAdminData();
+        } else {
+          App.showToast(json.message || 'Action failed', 'danger');
+        }
+      } catch (err) {
+        App.showToast('Server error rejecting property', 'danger');
+      }
+    }
+
+    async function loadKYCRequests() {
+      const tbody = document.getElementById('kyc-requests-tbody');
+      try {
+        const res = await fetch('/api/admin/verifications');
+        const json = await res.json();
+        if (json.status === 'success' && json.data) {
+          if (json.data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted">No pending owner verification requests.</td></tr>';
+            return;
+          }
+          tbody.innerHTML = json.data.map(v => `
+            <tr>
+              <td><strong>${App.escapeHtml(v.userName || 'User #' + v.userId)}</strong></td>
+              <td>${v.proofType}</td>
+              <td><code>${App.escapeHtml(v.proofNumber)}</code></td>
+              <td class="small text-muted">${App.escapeHtml(v.address)}</td>
+              <td><span class="badge bg-light text-dark border">Signed Title Deed</span></td>
+              <td class="text-end">
+                <button class="btn btn-sm btn-success me-1" onclick="actionKYC(${v.verificationId}, 'APPROVED')"><i class="bi bi-check-circle me-1"></i>Verify</button>
+                <button class="btn btn-sm btn-outline-danger" onclick="actionKYC(${v.verificationId}, 'REJECTED')">Reject</button>
+              </td>
+            </tr>
+          `).join('');
+        }
+      } catch (err) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-danger">Error loading KYC requests.</td></tr>';
+      }
+    }
+
+    async function actionKYC(id, status) {
+      if (!confirm(`Mark this verification request as ${status}?`)) return;
+      try {
+        const res = await fetch('/api/admin/verifications/action', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({ verificationId: id, status: status, notes: 'Reviewed by admin' }).toString()
+        });
+        const json = await res.json();
+        if (json.status === 'success') {
+          App.showToast(`Owner verification ${status.toLowerCase()}!`);
+          loadAdminData();
+        } else {
+          App.showToast(json.message || 'Action failed', 'danger');
+        }
+      } catch (err) {
+        App.showToast('Server error during KYC update', 'danger');
+      }
+    }
+
+    async function loadUsers() {
+      const tbody = document.getElementById('users-list-tbody');
+      try {
+        const res = await fetch('/api/admin/users');
+        const json = await res.json();
+        if (json.status === 'success' && json.data) {
+          tbody.innerHTML = json.data.map(u => `
+            <tr>
+              <td>#${u.userId}</td>
+              <td><strong>${App.escapeHtml(u.fullName)}</strong></td>
+              <td>${App.escapeHtml(u.email)}</td>
+              <td>${App.escapeHtml(u.mobile)}</td>
+              <td><span class="badge bg-navy text-uppercase">${u.role}</span></td>
+              <td>${u.isVerified ? '<span class="badge bg-success">Verified</span>' : '<span class="badge bg-light text-muted border">Unverified</span>'}</td>
+            </tr>
+          `).join('');
+        }
+      } catch (err) {}
+    }
+
+    document.addEventListener('DOMContentLoaded', loadAdminData);
+  </script>
+</body>
+</html>

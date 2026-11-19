@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compare Properties | Real Estate Management System</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css" rel="stylesheet">
+  <!-- Custom Styling -->
+  <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <i class="bi bi-houses-fill"></i>
+        <span>REAL ESTATE</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="properties.html?purpose=BUY">Buy Property</a></li>
+          <li class="nav-item"><a class="nav-link" href="properties.html?purpose=RENT">Rent Property</a></li>
+          <li class="nav-item"><a class="nav-link" href="properties.html?category=AGRICULTURAL">Agricultural Land</a></li>
+          <li class="nav-item"><a class="nav-link" href="properties.html?category=FARMHOUSE">Farmhouses</a></li>
+          <li class="nav-item"><a class="nav-link" href="properties.html?category=PLOT">Plots</a></li>
+          <li class="nav-item"><a class="nav-link fw-semibold text-success" href="post-property.html"><i class="bi bi-plus-circle me-1"></i>Sell / Rent</a></li>
+        </ul>
+
+        <div class="d-flex align-items-center gap-3">
+          <a href="compare.html" id="nav-compare-link" class="btn btn-primary-custom btn-sm position-relative">
+            <i class="bi bi-arrow-left-right me-1"></i>Compare
+            <span id="compare-count-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display:none">0</span>
+          </a>
+          <div id="nav-auth-container"></div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- COMPARE CONTAINER -->
+  <div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+      <div>
+        <h2 class="fw-bold text-dark mb-1">Property Comparison</h2>
+        <p class="text-muted mb-0">Compare up to three properties side-by-side on price, location, area, and amenities.</p>
+      </div>
+      <button class="btn btn-outline-danger btn-sm" onclick="clearAllCompare()"><i class="bi bi-trash me-1"></i>Clear All</button>
+    </div>
+
+    <div id="compare-loading" class="text-center py-5">
+      <div class="spinner-border text-success" role="status"></div>
+      <p class="text-muted mt-2">Loading properties for comparison...</p>
+    </div>
+
+    <div id="compare-empty" class="text-center py-5" style="display: none;">
+      <i class="bi bi-arrow-left-right display-3 text-muted mb-3 d-inline-block"></i>
+      <h4 class="fw-bold">No Properties in Comparison</h4>
+      <p class="text-muted">Browse our marketplace and click the "Compare" button on any property card.</p>
+      <a href="properties.html" class="btn btn-primary-custom mt-2">Browse Properties</a>
+    </div>
+
+    <!-- COMPARISON MATRIX TABLE -->
+    <div class="card shadow-sm border rounded-3 overflow-hidden" id="compare-table-card" style="display: none;">
+      <div class="table-responsive">
+        <table class="table table-bordered table-compare mb-0 text-center">
+          <thead>
+            <tr id="compare-headers">
+              <th class="w-25 text-start bg-dark text-white">Features / Property</th>
+              <!-- Injected dynamically -->
+            </tr>
+          </thead>
+          <tbody id="compare-body">
+            <!-- Dynamic rows -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Application Client -->
+  <script src="js/app.js"></script>
+
+  <script>
+    async function loadComparison() {
+      const urlParams = new URLSearchParams(window.location.search);
+      let ids = urlParams.get('ids');
+
+      if (!ids && App.compareList.length > 0) {
+        ids = App.compareList.join(',');
+      }
+
+      if (!ids) {
+        document.getElementById('compare-loading').style.display = 'none';
+        document.getElementById('compare-empty').style.display = 'block';
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/properties/compare?ids=' + ids);
+        const json = await res.json();
+
+        document.getElementById('compare-loading').style.display = 'none';
+
+        if (json.status === 'success' && json.data && json.data.length > 0) {
+          renderComparisonTable(json.data);
+        } else {
+          document.getElementById('compare-empty').style.display = 'block';
+        }
+      } catch (err) {
+        document.getElementById('compare-loading').innerHTML = '<div class="alert alert-danger">Error fetching comparison data.</div>';
+      }
+    }
+
+    function renderComparisonTable(properties) {
+      document.getElementById('compare-table-card').style.display = 'block';
+      const theadTr = document.getElementById('compare-headers');
+      const tbody = document.getElementById('compare-body');
+
+      // Clear previous headers except first column
+      theadTr.innerHTML = '<th class="w-25 text-start bg-dark text-white p-3">Property Feature</th>';
+      properties.forEach(p => {
+        theadTr.innerHTML += `
+          <th class="p-3 text-center bg-dark text-white" style="width: 25%;">
+            <img src="${p.primaryImageUrl || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1000&q=80'}" class="img-fluid rounded mb-2" style="height: 120px; width: 100%; object-fit: cover;">
+            <div class="fw-bold">${App.escapeHtml(p.title)}</div>
+            <div class="mt-2">
+              <a href="property-details.html?id=${p.propertyId}" class="btn btn-light btn-sm py-1 px-2">View</a>
+              <button class="btn btn-outline-light btn-sm py-1 px-2 ms-1" onclick="removeCompareId(${p.propertyId})"><i class="bi bi-x"></i></button>
+            </div>
+          </th>
+        `;
+      });
+
+      // Rows: Price, Location, Category, Purpose, Total Area, Bedrooms, Bathrooms, Amenities
+      const rows = [
+        { label: 'Expected Price', fn: p => `<strong class="text-success fs-5">${App.formatPrice(p.price, p.purpose)}</strong>` },
+        { label: 'Purpose', fn: p => `<span class="badge ${p.purpose === 'BUY' ? 'bg-dark' : 'bg-success'}">${p.purpose}</span>` },
+        { label: 'Property Category', fn: p => p.categoryName },
+        { label: 'Specialized Specs', fn: p => p.typeDetails || 'N/A' },
+        { label: 'Total Area', fn: p => `${p.propertyArea} ${p.areaUnit}` },
+        { label: 'Bedrooms', fn: p => p.bedrooms > 0 ? `${p.bedrooms} BHK` : 'N/A' },
+        { label: 'Bathrooms', fn: p => p.bathrooms > 0 ? `${p.bathrooms} Baths` : 'N/A' },
+        { label: 'City & Locality', fn: p => `${p.locality}, ${p.city}` },
+        { label: 'Owner Verification', fn: p => p.ownerVerified ? '<span class="text-success"><i class="bi bi-check-circle-fill"></i> Verified</span>' : '<span class="text-muted">Unverified</span>' },
+        { label: 'Est. Legal Stamp Duty', fn: p => `₹ ${(p.estRegistration ? p.estRegistration.toLocaleString('en-IN') : '0')}` },
+        { label: 'Est. Maintenance', fn: p => `₹ ${(p.estMaintenance ? p.estMaintenance.toLocaleString('en-IN') : '0')} / mo` },
+        { label: 'Amenities', fn: p => (p.amenities && p.amenities.length > 0) ? p.amenities.join(', ') : 'Standard Basic Utilities' }
+      ];
+
+      tbody.innerHTML = rows.map(r => `
+        <tr>
+          <td class="text-start fw-bold bg-light text-secondary">${r.label}</td>
+          ${properties.map(p => `<td>${r.fn(p)}</td>`).join('')}
+        </tr>
+      `).join('');
+    }
+
+    function removeCompareId(id) {
+      App.toggleCompare(id, null);
+      window.location.search = App.compareList.length > 0 ? '?ids=' + App.compareList.join(',') : '';
+    }
+
+    function clearAllCompare() {
+      App.compareList = [];
+      localStorage.removeItem('realestate_compare');
+      App.initCompareBadge();
+      window.location.search = '';
+    }
+
+    document.addEventListener('DOMContentLoaded', loadComparison);
+  </script>
+</body>
+</html>

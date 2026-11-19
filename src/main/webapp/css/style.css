@@ -1,0 +1,738 @@
+/* =============================================================================
+   REAL ESTATE MANAGEMENT SYSTEM - WHITE, GREEN & BLACK THEME
+   Clean, Simple, Modern & User-Friendly Design
+   Palette:
+     - White:   #ffffff / #f7faf8
+     - Black:   #0a0a0a / #141414 / #1f1f23
+     - Green:   #059669 (primary) / #10b981 (bright) / #047857 (hover)
+============================================================================= */
+
+:root {
+  --black-pure: #0a0a0a;
+  --black-soft: #141416;
+  --black-muted: #27272a;
+  --green-primary: #059669;
+  --green-bright: #10b981;
+  --green-hover: #047857;
+  --green-soft: #ecfdf5;
+  --white-pure: #ffffff;
+  --bg-surface: #f7f9f8;
+  --text-main: #0a0a0a;
+  --text-muted: #52525b;
+  --border-light: #e4e4e7;
+  --card-radius: 14px;
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 18px 36px rgba(0, 0, 0, 0.12);
+
+  /* Backward-compatible aliases so all existing pages adopt White/Green/Black */
+  --primary-navy: var(--black-pure);
+  --secondary-navy: var(--black-soft);
+  --accent-green: var(--green-primary);
+  --accent-green-hover: var(--green-hover);
+  --accent-blue: var(--green-primary);
+  --bg-light: var(--bg-surface);
+  --bg-white: var(--white-pure);
+  --text-dark: var(--text-main);
+  --border-color: var(--border-light);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--text-main);
+  background-color: var(--bg-surface);
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+
+/* =============================================================================
+   NAVBAR (Crisp White + Black Text + Emerald Green Accents)
+============================================================================= */
+.navbar-custom {
+  background-color: var(--white-pure);
+  border-bottom: 1px solid var(--border-light);
+  padding: 0.85rem 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.navbar-brand {
+  font-weight: 800;
+  font-size: 1.3rem;
+  color: var(--black-pure) !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.navbar-brand i {
+  color: var(--green-primary);
+  font-size: 1.55rem;
+}
+
+.nav-link {
+  color: var(--black-muted) !important;
+  font-weight: 500;
+  font-size: 0.93rem;
+  padding: 0.48rem 0.85rem !important;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: var(--green-primary) !important;
+  background-color: var(--green-soft);
+}
+
+/* =============================================================================
+   BUTTONS (Green Primary + Rich Black + Crisp Outline)
+============================================================================= */
+.btn-primary-custom {
+  background-color: var(--green-primary);
+  border: 1.5px solid var(--green-primary);
+  color: var(--white-pure);
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.55rem 1.25rem;
+  transition: all 0.2s ease;
+}
+
+.btn-primary-custom:hover, .btn-primary-custom:focus {
+  background-color: var(--green-hover);
+  border-color: var(--green-hover);
+  color: var(--white-pure);
+  transform: translateY(-1px);
+}
+
+.btn-outline-custom {
+  color: var(--green-primary);
+  border: 1.5px solid var(--green-primary);
+  background-color: transparent;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.55rem 1.25rem;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-custom:hover {
+  background-color: var(--green-primary);
+  color: var(--white-pure);
+}
+
+.btn-black, .btn-navy {
+  background-color: var(--black-pure);
+  border: 1.5px solid var(--black-pure);
+  color: var(--white-pure);
+  font-weight: 600;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.btn-black:hover, .btn-navy:hover {
+  background-color: var(--black-muted);
+  border-color: var(--black-muted);
+  color: var(--white-pure);
+}
+
+.bg-navy {
+  background-color: var(--black-pure) !important;
+  color: var(--white-pure) !important;
+}
+
+/* =============================================================================
+   VIDEO HERO SECTION (Black Overlay + Real Looping Video + Green Accent)
+============================================================================= */
+.hero-video-section {
+  position: relative;
+  min-height: 560px;
+  display: flex;
+  align-items: center;
+  background-color: var(--black-pure);
+  overflow: hidden;
+  padding: 4.5rem 0 4rem 0;
+}
+
+.hero-bg-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.48;
+  z-index: 0;
+}
+
+.hero-video-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(10, 10, 10, 0.72) 0%, rgba(10, 10, 10, 0.58) 50%, rgba(10, 10, 10, 0.85) 100%);
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: rgba(16, 185, 129, 0.16);
+  border: 1px solid rgba(16, 185, 129, 0.45);
+  color: #6ee7b7;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  margin-bottom: 1rem;
+  letter-spacing: 0.03em;
+}
+
+.hero-section {
+  background-color: var(--white-pure);
+  padding: 3.5rem 0 2.5rem 0;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.hero-title {
+  font-weight: 800;
+  font-size: clamp(2.1rem, 4vw, 3.25rem);
+  color: var(--white-pure);
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.hero-title .text-accent {
+  color: var(--green-bright);
+}
+
+.hero-subtitle {
+  color: #d4d4d8;
+  font-size: 1.12rem;
+  max-width: 660px;
+  margin: 0.85rem auto 2rem auto;
+}
+
+/* SEARCH CARD */
+.search-card {
+  background: var(--white-pure);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+  padding: 1.5rem;
+}
+
+.search-card .form-label {
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: var(--black-pure);
+  margin-bottom: 0.35rem;
+}
+
+.search-card .form-control,
+.search-card .form-select,
+.form-control,
+.form-select {
+  border: 1.5px solid var(--border-light);
+  border-radius: 10px;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.94rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--green-primary);
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.16);
+}
+
+/* =============================================================================
+   LIVE METRICS STRIP (Black Bar with Emerald Numbers)
+============================================================================= */
+.metrics-strip {
+  background-color: var(--black-pure);
+  color: var(--white-pure);
+  padding: 1.5rem 0;
+  border-top: 1px solid #1f1f23;
+}
+
+.metric-value {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--green-bright);
+  line-height: 1.1;
+}
+
+.metric-label {
+  font-size: 0.82rem;
+  color: #a1a1aa;
+}
+
+/* =============================================================================
+   CATEGORY CARDS (With Real Images)
+============================================================================= */
+.category-card {
+  background: var(--white-pure);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  text-align: center;
+  transition: all 0.25s ease;
+  text-decoration: none;
+  display: block;
+  color: var(--black-pure);
+  box-shadow: var(--shadow-sm);
+  height: 100%;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--green-primary);
+  color: var(--green-primary);
+}
+
+.category-thumb {
+  height: 92px;
+  width: 100%;
+  object-fit: cover;
+  filter: brightness(0.88);
+  transition: transform 0.3s ease;
+}
+
+.category-card:hover .category-thumb {
+  transform: scale(1.06);
+  filter: brightness(1);
+}
+
+.category-card-body {
+  padding: 0.9rem 0.75rem 1.1rem;
+}
+
+.category-icon {
+  font-size: 1.7rem;
+  color: var(--green-primary);
+  margin-bottom: 0.35rem;
+}
+
+.category-title {
+  font-weight: 700;
+  font-size: 0.98rem;
+  margin-bottom: 0.2rem;
+}
+
+.category-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* =============================================================================
+   PROPERTY CARDS
+============================================================================= */
+.property-card {
+  background: var(--white-pure);
+  border: 1px solid var(--border-light);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.property-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--green-primary);
+}
+
+.property-img-wrapper {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+  background-color: #18181b;
+}
+
+.property-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.property-card:hover .property-img {
+  transform: scale(1.05);
+}
+
+.badge-purpose {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.32rem 0.68rem;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.badge-buy { background-color: var(--black-pure); color: var(--white-pure); }
+.badge-rent { background-color: var(--green-primary); color: var(--white-pure); }
+.badge-lease { background-color: #18181b; color: #6ee7b7; border: 1px solid var(--green-bright); }
+
+.badge-category {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(10, 10, 10, 0.82);
+  color: var(--white-pure);
+  font-size: 0.74rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  backdrop-filter: blur(4px);
+}
+
+.badge-verified {
+  background-color: var(--green-soft);
+  color: var(--green-hover);
+  font-size: 0.74rem;
+  font-weight: 600;
+  padding: 0.22rem 0.55rem;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.property-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.property-price {
+  font-size: 1.32rem;
+  font-weight: 800;
+  color: var(--green-primary);
+  margin-bottom: 0.3rem;
+}
+
+.property-title {
+  font-size: 1.04rem;
+  font-weight: 700;
+  color: var(--black-pure);
+  margin-bottom: 0.4rem;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.property-location {
+  color: var(--text-muted);
+  font-size: 0.87rem;
+  margin-bottom: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.property-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  margin-top: auto;
+  border-top: 1px solid var(--border-light);
+  font-size: 0.84rem;
+  color: var(--black-muted);
+}
+
+.property-features span {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+/* =============================================================================
+   VIDEO TOURS SECTION (Dark Black Showcase + Emerald Accents)
+============================================================================= */
+.video-showcase-section {
+  background-color: var(--black-pure);
+  color: var(--white-pure);
+  padding: 4.5rem 0;
+}
+
+.video-tour-card {
+  background-color: var(--black-soft);
+  border: 1px solid #27272a;
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  transition: all 0.25s ease;
+  height: 100%;
+}
+
+.video-tour-card:hover {
+  border-color: var(--green-bright);
+  transform: translateY(-4px);
+}
+
+.video-tour-player {
+  width: 100%;
+  height: 215px;
+  object-fit: cover;
+  background-color: #000;
+  display: block;
+}
+
+/* =============================================================================
+   SECTION HEADERS & MISC COMPONENTS
+============================================================================= */
+.section-header {
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-weight: 800;
+  color: var(--black-pure);
+  font-size: 1.85rem;
+  margin-bottom: 0.35rem;
+  letter-spacing: -0.02em;
+}
+
+.section-subtitle {
+  color: var(--text-muted);
+  font-size: 0.98rem;
+}
+
+.option-select-card {
+  background: var(--white-pure);
+  border: 2px solid var(--border-light);
+  border-radius: var(--card-radius);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.option-select-card:hover, .option-select-card.selected {
+  border-color: var(--green-primary);
+  background-color: var(--green-soft);
+}
+
+.option-select-card i {
+  font-size: 2.4rem;
+  color: var(--green-primary);
+  margin-bottom: 1rem;
+}
+
+.table-compare th {
+  background-color: var(--black-pure);
+  color: var(--white-pure);
+  font-weight: 600;
+}
+
+.table-compare td, .table-compare th {
+  padding: 1rem;
+  vertical-align: middle;
+}
+
+/* =============================================================================
+   AUTH PAGES (Split-Screen White/Green/Black + Email Validator + OTP Inputs)
+============================================================================= */
+.auth-page {
+  min-height: 100vh;
+  background-color: var(--bg-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.auth-split-card {
+  background: var(--white-pure);
+  border: 1px solid var(--border-light);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  max-width: 980px;
+  width: 100%;
+}
+
+.auth-visual-panel {
+  position: relative;
+  background-color: var(--black-pure);
+  color: var(--white-pure);
+  min-height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2.5rem;
+}
+
+.auth-visual-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.42;
+}
+
+.auth-visual-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(10, 10, 10, 0.55) 0%, rgba(10, 10, 10, 0.88) 100%);
+}
+
+.auth-visual-content {
+  position: relative;
+  z-index: 2;
+}
+
+.email-feedback {
+  font-size: 0.8rem;
+  margin-top: 0.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 1.2rem;
+}
+
+.email-feedback.valid { color: var(--green-primary); font-weight: 600; }
+.email-feedback.invalid { color: #dc2626; font-weight: 500; }
+.email-feedback.checking { color: var(--text-muted); }
+
+.otp-inputs-group {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+  margin: 1.25rem 0;
+}
+
+.otp-digit {
+  width: 50px;
+  height: 58px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 800;
+  border: 2px solid var(--border-light);
+  border-radius: 12px;
+  background: var(--white-pure);
+  color: var(--black-pure);
+  transition: all 0.2s ease;
+}
+
+.otp-digit:focus {
+  outline: none;
+  border-color: var(--green-primary);
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.18);
+}
+
+.step-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.75rem;
+  position: relative;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  z-index: 1;
+  flex: 1;
+}
+
+.step-circle {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  background: #e4e4e7;
+  color: #52525b;
+  transition: all 0.25s ease;
+}
+
+.step-item.active .step-circle {
+  background: var(--green-primary);
+  color: var(--white-pure);
+  box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.18);
+}
+
+.step-item.done .step-circle {
+  background: var(--black-pure);
+  color: var(--green-bright);
+}
+
+.step-label {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.step-item.active .step-label {
+  color: var(--black-pure);
+}
+
+/* =============================================================================
+   FOOTER (Rich Black + White + Green Hover)
+============================================================================= */
+.footer-custom {
+  background-color: var(--black-pure);
+  color: #d4d4d8;
+  padding: 3.5rem 0 1.75rem 0;
+  margin-top: 4rem;
+}
+
+.footer-custom h5 {
+  color: var(--white-pure);
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-bottom: 1.15rem;
+}
+
+.footer-custom a {
+  color: #a1a1aa;
+  text-decoration: none;
+  font-size: 0.9rem;
+  display: block;
+  margin-bottom: 0.5rem;
+  transition: color 0.2s ease;
+}
+
+.footer-custom a:hover {
+  color: var(--green-bright);
+}
+
+.footer-bottom {
+  border-top: 1px solid #27272a;
+  padding-top: 1.5rem;
+  margin-top: 2rem;
+  font-size: 0.85rem;
+  color: #71717a;
+}
+
+/* TOAST / ALERTS */
+.toast-container-custom {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1090;
+}

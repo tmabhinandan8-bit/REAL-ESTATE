@@ -1,0 +1,12 @@
+.env
+.git
+.venv
+.claude
+target
+bin
+*.class
+*.bat
+*.ps1
+database
+README.md
+CLAUDE.md
