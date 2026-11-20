@@ -206,4 +206,13 @@ public abstract class Property implements Searchable, Auditable {
 
     public boolean isOwnerVerified() { return ownerVerified; }
     public void setOwnerVerified(boolean ownerVerified) { this.ownerVerified = ownerVerified; }
+
+    private String videoUrl;
+    private String videoLabel;
+
+    public String getVideoUrl() { return videoUrl; }
+    public void setVideoUrl(String videoUrl) { this.videoUrl = videoUrl; }
+
+    public String getVideoLabel() { return videoLabel; }
+    public void setVideoLabel(String videoLabel) { this.videoLabel = videoLabel; }
 }

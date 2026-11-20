@@ -497,6 +497,12 @@ public class RealEstateBackend {
         public void setOwnerPhone(String ownerPhone) { this.ownerPhone = ownerPhone; }
         public boolean isOwnerVerified() { return ownerVerified; }
         public void setOwnerVerified(boolean ownerVerified) { this.ownerVerified = ownerVerified; }
+        private String videoUrl;
+        private String videoLabel;
+        public String getVideoUrl() { return videoUrl; }
+        public void setVideoUrl(String videoUrl) { this.videoUrl = videoUrl; }
+        public String getVideoLabel() { return videoLabel; }
+        public void setVideoLabel(String videoLabel) { this.videoLabel = videoLabel; }
     }
 
     public static class ResidentialProperty extends Property {
@@ -2361,7 +2367,139 @@ public class RealEstateBackend {
                (authToken != null ? ",\"authToken\":" + JsonUtil.escape(authToken) : "") + "}";
     }
 
+    public static String resolveVideoUrl(Property p) {
+        if (p.getVideoUrl() != null && !p.getVideoUrl().trim().isEmpty()) {
+            return p.getVideoUrl();
+        }
+        String cat = p.getCategoryCode() != null ? p.getCategoryCode().toUpperCase() : "RESIDENTIAL";
+        String title = p.getTitle() != null ? p.getTitle().toLowerCase() : "";
+        if ("AGRICULTURAL".equals(cat)) {
+            return "https://videos.pexels.com/video-files/1851190/1851190-hd_1280_720_25fps.mp4";
+        } else if ("FARMHOUSE".equals(cat)) {
+            return "https://videos.pexels.com/video-files/5527788/5527788-hd_1280_720_25fps.mp4";
+        } else if ("PLOT".equals(cat)) {
+            return "https://videos.pexels.com/video-files/3129957/3129957-hd_1280_720_25fps.mp4";
+        } else if ("COMMERCIAL".equals(cat)) {
+            return "https://videos.pexels.com/video-files/853870/853870-hd_1280_720_25fps.mp4";
+        } else if ("BUILDING".equals(cat)) {
+            return "https://videos.pexels.com/video-files/2882118/2882118-hd_1280_720_24fps.mp4";
+        } else {
+            if (title.contains("apartment") || title.contains("flat") || title.contains("pg") || title.contains("high-rise") || title.contains("condo")) {
+                return "https://videos.pexels.com/video-files/7578547/7578547-hd_1280_720_30fps.mp4";
+            } else {
+                return "https://videos.pexels.com/video-files/7578552/7578552-hd_1280_720_30fps.mp4";
+            }
+        }
+    }
+
+    public static String resolveVideoLabel(Property p) {
+        if (p.getVideoLabel() != null && !p.getVideoLabel().trim().isEmpty()) {
+            return p.getVideoLabel();
+        }
+        String cat = p.getCategoryCode() != null ? p.getCategoryCode().toUpperCase() : "RESIDENTIAL";
+        String title = p.getTitle() != null ? p.getTitle().toLowerCase() : "";
+        if ("AGRICULTURAL".equals(cat)) {
+            return "Aerial Farmland & Crop Survey Tour";
+        } else if ("FARMHOUSE".equals(cat)) {
+            return "Scenic Farmhouse & Countryside Estate Tour";
+        } else if ("PLOT".equals(cat)) {
+            return "Plot Boundary & Layout Drone Flyover";
+        } else if ("COMMERCIAL".equals(cat)) {
+            return "Commercial Tech Park & Office Walkthrough";
+        } else if ("BUILDING".equals(cat)) {
+            return "Multi-Story Complex & Architecture Tour";
+        } else {
+            if (title.contains("apartment") || title.contains("flat") || title.contains("pg")) {
+                return "Modern Apartment & High-Rise Tour";
+            } else {
+                return "Luxury Villa & Residence Walkthrough";
+            }
+        }
+    }
+
+    public static List<String> resolveImageGallery(Property p) {
+        List<String> list = new ArrayList<>();
+        if (p.getPrimaryImageUrl() != null && !p.getPrimaryImageUrl().trim().isEmpty()) {
+            list.add(p.getPrimaryImageUrl().trim());
+        }
+        if (p.getImageUrls() != null) {
+            for (String u : p.getImageUrls()) {
+                if (u != null && !u.trim().isEmpty() && !list.contains(u.trim())) {
+                    list.add(u.trim());
+                }
+            }
+        }
+        if (list.size() < 3) {
+            String cat = p.getCategoryCode() != null ? p.getCategoryCode().toUpperCase() : "RESIDENTIAL";
+            String title = p.getTitle() != null ? p.getTitle().toLowerCase() : "";
+            if ("AGRICULTURAL".equals(cat)) {
+                String[] fallbacks = {
+                    "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&w=1200&q=80"
+                };
+                for (String f : fallbacks) if (!list.contains(f)) list.add(f);
+            } else if ("FARMHOUSE".equals(cat)) {
+                String[] fallbacks = {
+                    "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80"
+                };
+                for (String f : fallbacks) if (!list.contains(f)) list.add(f);
+            } else if ("PLOT".equals(cat)) {
+                String[] fallbacks = {
+                    "https://images.unsplash.com/photo-1524813686514-a57563d77d61?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80"
+                };
+                for (String f : fallbacks) if (!list.contains(f)) list.add(f);
+            } else if ("COMMERCIAL".equals(cat)) {
+                String[] fallbacks = {
+                    "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80"
+                };
+                for (String f : fallbacks) if (!list.contains(f)) list.add(f);
+            } else if ("BUILDING".equals(cat)) {
+                String[] fallbacks = {
+                    "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80"
+                };
+                for (String f : fallbacks) if (!list.contains(f)) list.add(f);
+            } else {
+                if (title.contains("apartment") || title.contains("flat") || title.contains("pg")) {
+                    String[] fallbacks = {
+                        "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
+                        "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80",
+                        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80",
+                        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80"
+                    };
+                    for (String f : fallbacks) if (!list.contains(f)) list.add(f);
+                } else {
+                    String[] fallbacks = {
+                        "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80",
+                        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+                        "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=1200&q=80",
+                        "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=80"
+                    };
+                    for (String f : fallbacks) if (!list.contains(f)) list.add(f);
+                }
+            }
+        }
+        return list;
+    }
+
     private static String serializeProperty(Property p, boolean includeDetails) {
+        List<String> fullGallery = resolveImageGallery(p);
+        String primaryImg = (p.getPrimaryImageUrl() != null && !p.getPrimaryImageUrl().trim().isEmpty())
+            ? p.getPrimaryImageUrl().trim()
+            : (!fullGallery.isEmpty() ? fullGallery.get(0) : "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1000&q=80");
+
         StringBuilder sb = new StringBuilder("{");
         sb.append("\"propertyId\":").append(p.getPropertyId())
           .append(",\"ownerId\":").append(p.getOwnerId())
@@ -2382,7 +2520,9 @@ public class RealEstateBackend {
           .append(",\"approvalStatus\":").append(JsonUtil.escape(p.getApprovalStatus()))
           .append(",\"listingStatus\":").append(JsonUtil.escape(p.getListingStatus()))
           .append(",\"isFeatured\":").append(p.isFeatured())
-          .append(",\"primaryImageUrl\":").append(JsonUtil.escape(p.getPrimaryImageUrl()))
+          .append(",\"primaryImageUrl\":").append(JsonUtil.escape(primaryImg))
+          .append(",\"videoUrl\":").append(JsonUtil.escape(resolveVideoUrl(p)))
+          .append(",\"videoLabel\":").append(JsonUtil.escape(resolveVideoLabel(p)))
           .append(",\"typeDetails\":").append(JsonUtil.escape(p.getPropertyTypeDetails()))
           .append(",\"estMaintenance\":").append(p.calculateEstimatedMaintenanceCost())
           .append(",\"estRegistration\":").append(p.calculateEstimatedRegistrationFee())
@@ -2398,15 +2538,14 @@ public class RealEstateBackend {
         } else {
             sb.append(",\"bedrooms\":0,\"bathrooms\":0,\"furnishingStatus\":\"N/A\"");
         }
+        sb.append(",\"images\":[");
+        for (int i = 0; i < fullGallery.size(); i++) {
+            if (i > 0) sb.append(",");
+            sb.append(JsonUtil.escape(fullGallery.get(i)));
+        }
+        sb.append("]");
         if (includeDetails) {
-            sb.append(",\"images\":[");
-            if (p.getImageUrls() != null) {
-                for (int i = 0; i < p.getImageUrls().size(); i++) {
-                    if (i > 0) sb.append(",");
-                    sb.append(JsonUtil.escape(p.getImageUrls().get(i)));
-                }
-            }
-            sb.append("],\"amenities\":[");
+            sb.append(",\"amenities\":[");
             if (p.getAmenities() != null) {
                 for (int i = 0; i < p.getAmenities().size(); i++) {
                     if (i > 0) sb.append(",");

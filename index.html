@@ -992,15 +992,175 @@
     let fpEmail = '', fpOtp = '', fpResetToken = '', fpTimer = null;
     let cachedProps = [];
 
-    // Built-in showcase fallback (only used if Java backend isn't running yet)
+    // Built-in showcase fallback (rich category-accurate images & walkthrough videos)
     const FALLBACK_PROPERTIES = [
-      { propertyId: 1, ownerId: 2, title: 'Luxury 4 BHK Independent Villa in Vijayanagar', categoryCode: 'RESIDENTIAL', categoryName: 'Residential Properties', purpose: 'BUY', price: 18500000, propertyArea: 3200, areaUnit: 'Sq. Ft.', city: 'Mysuru', locality: 'Vijayanagar 2nd Stage', address: 'No 45, 12th Cross, Vijayanagar 2nd Stage, Mysuru', description: 'Exquisite brand-new 4 BHK duplex villa with Burma teakwood finish, landscaped garden, and Italian marble flooring.', bedrooms: 4, bathrooms: 4, ownerName: 'Rajesh Gowda', ownerPhone: '+91 9845012345', ownerVerified: true, estMaintenance: 8000, estRegistration: 1221000, primaryImageUrl: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1000&q=80', images: ['https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1000&q=80','https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80'], amenities: ['Private Garden','Modular Kitchen','Covered Parking','Solar Heater','CCTV'] },
-      { propertyId: 2, ownerId: 3, title: 'Premium 3 BHK High-Rise Apartment in Indiranagar', categoryCode: 'RESIDENTIAL', categoryName: 'Residential Properties', purpose: 'RENT', price: 65000, propertyArea: 1950, areaUnit: 'Sq. Ft.', city: 'Bengaluru', locality: 'Indiranagar 100ft Road', address: 'Flat 802, Prestige Ozone Towers, Indiranagar, Bengaluru', description: 'Spacious semi-furnished apartment with panoramic Bengaluru skyline views, modular kitchen, and clubhouse access.', bedrooms: 3, bathrooms: 3, ownerName: 'Anand Kulkarni', ownerPhone: '+91 9845198765', ownerVerified: true, estMaintenance: 4875, estRegistration: 0, primaryImageUrl: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1000&q=80', images: ['https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1000&q=80','https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1000&q=80'], amenities: ['Swimming Pool','Gym','Clubhouse','24/7 Security','Lift'] },
-      { propertyId: 8, ownerId: 6, title: 'Grade-A Plug & Play IT Office in Whitefield', categoryCode: 'COMMERCIAL', categoryName: 'Commercial Properties', purpose: 'LEASE', price: 450000, propertyArea: 7500, areaUnit: 'Sq. Ft.', city: 'Bengaluru', locality: 'Whitefield IT Corridor', address: 'Level 4, Sigma Tech Park, Whitefield, Bengaluru', description: 'Fully furnished 90-seater IT office space with boardrooms, server room, cafeteria, and 24/7 security.', bedrooms: 0, bathrooms: 0, ownerName: 'Suresh Reddy Properties', ownerPhone: '+91 9900887766', ownerVerified: true, estMaintenance: 33750, estRegistration: 0, primaryImageUrl: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1000&q=80', images: ['https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1000&q=80'], amenities: ['High Speed Internet','Central AC','Cafeteria','Power Backup'] },
-      { propertyId: 12, ownerId: 3, title: '5.5 Acres Fertile Sugarcane & Paddy Farmland', categoryCode: 'AGRICULTURAL', categoryName: 'Agricultural Land', purpose: 'BUY', price: 16500000, propertyArea: 5.5, areaUnit: 'Acres', city: 'Mandya', locality: 'Maddur Highway', address: 'Survey No 142/3, Maddur Taluk, Mandya', description: 'Highly fertile irrigated agricultural land with perennial Cauvery canal water supply and 2 running borewells.', bedrooms: 0, bathrooms: 0, ownerName: 'Anand Kulkarni', ownerPhone: '+91 9845198765', ownerVerified: true, estMaintenance: 8250, estRegistration: 1089000, primaryImageUrl: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80', images: ['https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80'], amenities: ['Canal Water','2 Borewells','3-Phase Power','Tar Road'] },
-      { propertyId: 17, ownerId: 2, title: 'Boutique Coffee Estate Farmhouse with Stream', categoryCode: 'FARMHOUSE', categoryName: 'Farmhouses', purpose: 'BUY', price: 22000000, propertyArea: 3.0, areaUnit: 'Acres', city: 'Hassan', locality: 'Sakleshpur Estate Belt', address: 'Valley View Estate, NH 75, Sakleshpur, Hassan', description: 'Scenic weekend farmhouse inside a 3-acre coffee plantation with natural stream and organic orchard.', bedrooms: 3, bathrooms: 3, ownerName: 'Rajesh Gowda', ownerPhone: '+91 9845012345', ownerVerified: true, estMaintenance: 8000, estRegistration: 1452000, primaryImageUrl: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1000&q=80', images: ['https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1000&q=80'], amenities: ['Private Stream','Swimming Pool','Gazebo','Orchard'] },
-      { propertyId: 22, ownerId: 3, title: 'Prime 50x80 North-East Facing Corner Plot', categoryCode: 'PLOT', categoryName: 'Plots and Sites', purpose: 'BUY', price: 11500000, propertyArea: 4000, areaUnit: 'Sq. Ft.', city: 'Mysuru', locality: 'Vijayanagar 2nd Stage', address: 'Site No 102, H-Block, Vijayanagar, Mysuru', description: 'MUDA-approved residential corner site in a fully developed gated layout with 60ft asphalt road.', bedrooms: 0, bathrooms: 0, ownerName: 'Anand Kulkarni', ownerPhone: '+91 9845198765', ownerVerified: true, estMaintenance: 500, estRegistration: 759000, primaryImageUrl: 'https://images.unsplash.com/photo-1524813686514-a57563d77d61?auto=format&fit=crop&w=1000&q=80', images: ['https://images.unsplash.com/photo-1524813686514-a57563d77d61?auto=format&fit=crop&w=1000&q=80'], amenities: ['MUDA Approved','Gated Layout','Underground Drainage'] }
+      {
+        propertyId: 1, ownerId: 2, title: 'Luxury 4 BHK Independent Villa in Vijayanagar', categoryCode: 'RESIDENTIAL', categoryName: 'Residential Properties', purpose: 'BUY', price: 18500000, propertyArea: 3200, areaUnit: 'Sq. Ft.', city: 'Mysuru', locality: 'Vijayanagar 2nd Stage', address: 'No 45, 12th Cross, Vijayanagar 2nd Stage, Mysuru', description: 'Exquisite brand-new 4 BHK duplex villa with Burma teakwood finish, landscaped garden, and Italian marble flooring.', bedrooms: 4, bathrooms: 4, ownerName: 'Rajesh Gowda', ownerPhone: '+91 9845012345', ownerVerified: true, estMaintenance: 8000, estRegistration: 1221000,
+        primaryImageUrl: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80',
+        images: ['https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=80'],
+        videoUrl: 'https://videos.pexels.com/video-files/7578552/7578552-hd_1280_720_30fps.mp4',
+        videoLabel: 'Luxury 4 BHK Duplex Villa Tour',
+        amenities: ['Private Garden','Modular Kitchen','Covered Parking','Solar Water Heater','24/7 CCTV Security']
+      },
+      {
+        propertyId: 2, ownerId: 3, title: 'Premium 3 BHK High-Rise Apartment in Indiranagar', categoryCode: 'RESIDENTIAL', categoryName: 'Residential Properties', purpose: 'RENT', price: 65000, propertyArea: 1950, areaUnit: 'Sq. Ft.', city: 'Bengaluru', locality: 'Indiranagar 100ft Road', address: 'Flat 802, Prestige Ozone Towers, Indiranagar, Bengaluru', description: 'Spacious semi-furnished apartment with panoramic Bengaluru skyline views, modular kitchen, and clubhouse access.', bedrooms: 3, bathrooms: 3, ownerName: 'Anand Kulkarni', ownerPhone: '+91 9845198765', ownerVerified: true, estMaintenance: 4875, estRegistration: 0,
+        primaryImageUrl: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80',
+        images: ['https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80'],
+        videoUrl: 'https://videos.pexels.com/video-files/7578547/7578547-hd_1280_720_30fps.mp4',
+        videoLabel: 'High-Rise Apartment & Skyline Living Tour',
+        amenities: ['Swimming Pool','Gymnasium','Clubhouse','24/7 Security','High Speed Elevators']
+      },
+      {
+        propertyId: 8, ownerId: 6, title: 'Grade-A Plug & Play IT Office in Whitefield', categoryCode: 'COMMERCIAL', categoryName: 'Commercial Properties', purpose: 'LEASE', price: 450000, propertyArea: 7500, areaUnit: 'Sq. Ft.', city: 'Bengaluru', locality: 'Whitefield IT Corridor', address: 'Level 4, Sigma Tech Park, Whitefield, Bengaluru', description: 'Fully furnished 90-seater IT office space with boardrooms, server room, cafeteria, and 24/7 security.', bedrooms: 0, bathrooms: 0, ownerName: 'Suresh Reddy Properties', ownerPhone: '+91 9900887766', ownerVerified: true, estMaintenance: 33750, estRegistration: 0,
+        primaryImageUrl: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80',
+        images: ['https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80'],
+        videoUrl: 'https://videos.pexels.com/video-files/853870/853870-hd_1280_720_25fps.mp4',
+        videoLabel: 'Grade-A Commercial IT Park Tour',
+        amenities: ['High Speed Fiber Internet','Central HVAC','Executive Cafeteria','100% DG Power Backup']
+      },
+      {
+        propertyId: 12, ownerId: 3, title: '5.5 Acres Fertile Sugarcane & Paddy Farmland in Mandya', categoryCode: 'AGRICULTURAL', categoryName: 'Agricultural Land', purpose: 'BUY', price: 16500000, propertyArea: 5.5, areaUnit: 'Acres', city: 'Mandya', locality: 'Maddur Highway', address: 'Survey No 142/3, Maddur Taluk, Mandya', description: 'Highly fertile irrigated agricultural land with perennial Cauvery canal water supply and 2 running borewells.', bedrooms: 0, bathrooms: 0, ownerName: 'Anand Kulkarni', ownerPhone: '+91 9845198765', ownerVerified: true, estMaintenance: 8250, estRegistration: 1089000,
+        primaryImageUrl: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80',
+        images: ['https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&w=1200&q=80'],
+        videoUrl: 'https://videos.pexels.com/video-files/1851190/1851190-hd_1280_720_25fps.mp4',
+        videoLabel: 'Fertile Sugarcane & Paddy Farmland Drone Tour',
+        amenities: ['Perennial Canal Water','2 Running Borewells','3-Phase Agri Power','Tar Road Access']
+      },
+      {
+        propertyId: 17, ownerId: 2, title: 'Boutique Coffee Estate Farmhouse with Natural Stream', categoryCode: 'FARMHOUSE', categoryName: 'Farmhouses', purpose: 'BUY', price: 22000000, propertyArea: 3.0, areaUnit: 'Acres', city: 'Hassan', locality: 'Sakleshpur Estate Belt', address: 'Valley View Estate, NH 75, Sakleshpur, Hassan', description: 'Scenic weekend farmhouse inside a 3-acre coffee plantation with natural stream and organic orchard.', bedrooms: 3, bathrooms: 3, ownerName: 'Rajesh Gowda', ownerPhone: '+91 9845012345', ownerVerified: true, estMaintenance: 8000, estRegistration: 1452000,
+        primaryImageUrl: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1200&q=80',
+        images: ['https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80'],
+        videoUrl: 'https://videos.pexels.com/video-files/5527788/5527788-hd_1280_720_25fps.mp4',
+        videoLabel: 'Coffee Estate Farmhouse & Countryside Tour',
+        amenities: ['Natural Running Stream','Private Swimming Pool','Garden Gazebo','Organic Fruit Orchard']
+      },
+      {
+        propertyId: 22, ownerId: 3, title: 'Prime 50x80 North-East Facing Corner Plot', categoryCode: 'PLOT', categoryName: 'Plots and Sites', purpose: 'BUY', price: 11500000, propertyArea: 4000, areaUnit: 'Sq. Ft.', city: 'Mysuru', locality: 'Vijayanagar 2nd Stage', address: 'Site No 102, H-Block, Vijayanagar, Mysuru', description: 'MUDA-approved residential corner site in a fully developed gated layout with 60ft asphalt road.', bedrooms: 0, bathrooms: 0, ownerName: 'Anand Kulkarni', ownerPhone: '+91 9845198765', ownerVerified: true, estMaintenance: 500, estRegistration: 759000,
+        primaryImageUrl: 'https://images.unsplash.com/photo-1524813686514-a57563d77d61?auto=format&fit=crop&w=1200&q=80',
+        images: ['https://images.unsplash.com/photo-1524813686514-a57563d77d61?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80'],
+        videoUrl: 'https://videos.pexels.com/video-files/3129957/3129957-hd_1280_720_25fps.mp4',
+        videoLabel: 'Plot Boundary & Gated Layout Drone Flyover',
+        amenities: ['MUDA Approved','Gated Asphalt Road','Underground Drainage','A-Khata Clear Title']
+      },
+      {
+        propertyId: 27, ownerId: 2, title: 'Coastal Palms 24-Unit Residential Apartment Building', categoryCode: 'BUILDING', categoryName: 'Buildings & Townships', purpose: 'BUY', price: 85000000, propertyArea: 28000, areaUnit: 'Sq. Ft.', city: 'Mangaluru', locality: 'Kadri Hills', address: 'Coastal Palms, Kadri Main Road, Mangaluru', description: 'Fully approved 24-unit stilt+4 residential complex with automatic elevators, terrace garden, and power backup.', bedrooms: 48, bathrooms: 48, ownerName: 'Rajesh Gowda', ownerPhone: '+91 9845012345', ownerVerified: true, estMaintenance: 45000, estRegistration: 5610000,
+        primaryImageUrl: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80',
+        images: ['https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80'],
+        videoUrl: 'https://videos.pexels.com/video-files/2882118/2882118-hd_1280_720_24fps.mp4',
+        videoLabel: '24-Unit Apartment Building Architectural Tour',
+        amenities: ['Twin Elevators','100% Generator Backup','Rainwater Harvesting','Basement Parking']
+      }
     ];
+
+    /* Dynamic Video and Gallery Resolvers - Matches each property to its exact category tour */
+    function getPropertyVideo(p) {
+      if (p.videoUrl && String(p.videoUrl).trim()) {
+        return { url: p.videoUrl.trim(), label: p.videoLabel || 'HD Walkthrough Tour' };
+      }
+      const cat = (p.categoryCode || '').toUpperCase();
+      const title = (p.title || '').toLowerCase();
+      if (cat === 'AGRICULTURAL') {
+        return {
+          url: 'https://videos.pexels.com/video-files/1851190/1851190-hd_1280_720_25fps.mp4',
+          label: 'Aerial Farmland & Crop Survey Tour'
+        };
+      }
+      if (cat === 'FARMHOUSE') {
+        return {
+          url: 'https://videos.pexels.com/video-files/5527788/5527788-hd_1280_720_25fps.mp4',
+          label: 'Scenic Countryside Farmhouse & Orchard Tour'
+        };
+      }
+      if (cat === 'PLOT') {
+        return {
+          url: 'https://videos.pexels.com/video-files/3129957/3129957-hd_1280_720_25fps.mp4',
+          label: 'Plot Boundary & Layout Drone Flyover'
+        };
+      }
+      if (cat === 'COMMERCIAL') {
+        return {
+          url: 'https://videos.pexels.com/video-files/853870/853870-hd_1280_720_25fps.mp4',
+          label: 'Commercial IT Park & Office Space Walkthrough'
+        };
+      }
+      if (cat === 'BUILDING') {
+        return {
+          url: 'https://videos.pexels.com/video-files/2882118/2882118-hd_1280_720_24fps.mp4',
+          label: 'Multi-Unit Complex Architecture Walkthrough'
+        };
+      }
+      // Residential category: differentiate between apartment/flat/PG vs Villa/Independent House
+      if (title.includes('apartment') || title.includes('flat') || title.includes('pg') || title.includes('high-rise') || title.includes('condo')) {
+        return {
+          url: 'https://videos.pexels.com/video-files/7578547/7578547-hd_1280_720_30fps.mp4',
+          label: 'Modern Apartment & High-Rise Tour'
+        };
+      }
+      return {
+        url: 'https://videos.pexels.com/video-files/7578552/7578552-hd_1280_720_30fps.mp4',
+        label: 'Luxury Villa & Duplex Walkthrough Tour'
+      };
+    }
+
+    function getPropertyGallery(p) {
+      if (p.images && p.images.length > 1) return p.images;
+      const cat = (p.categoryCode || '').toUpperCase();
+      const title = (p.title || '').toLowerCase();
+      const prim = p.primaryImageUrl;
+      let gallery = [];
+      if (cat === 'AGRICULTURAL') {
+        gallery = [
+          prim || 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&w=1200&q=80'
+        ];
+      } else if (cat === 'FARMHOUSE') {
+        gallery = [
+          prim || 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80'
+        ];
+      } else if (cat === 'PLOT') {
+        gallery = [
+          prim || 'https://images.unsplash.com/photo-1524813686514-a57563d77d61?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80'
+        ];
+      } else if (cat === 'COMMERCIAL') {
+        gallery = [
+          prim || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80'
+        ];
+      } else if (cat === 'BUILDING') {
+        gallery = [
+          prim || 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80'
+        ];
+      } else {
+        if (title.includes('apartment') || title.includes('flat') || title.includes('pg')) {
+          gallery = [
+            prim || 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80'
+          ];
+        } else {
+          gallery = [
+            prim || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=80'
+          ];
+        }
+      }
+      return gallery;
+    }
 
     async function apiFetch(path, options = {}) {
       const headers = Object.assign({}, options.headers || {});
@@ -1088,13 +1248,19 @@
     function renderPropCard(p) {
       const bCls = p.purpose === 'BUY' ? 'b-buy' : (p.purpose === 'RENT' ? 'b-rent' : 'b-lease');
       const inCmp = compareIds.includes(p.propertyId);
+      const gallery = getPropertyGallery(p);
+      const vid = getPropertyVideo(p);
+      const cardImg = p.primaryImageUrl || (gallery.length ? gallery[0] : 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1000&q=80');
       return `
         <div class="col-lg-4 col-md-6">
           <div class="prop-card">
-            <div class="prop-img-box">
-              <img src="${esc(p.primaryImageUrl || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1000&q=80')}" class="prop-img" alt="${esc(p.title)}">
+            <div class="prop-img-box position-relative">
+              <img src="${esc(cardImg)}" class="prop-img" alt="${esc(p.title)}" loading="lazy">
               <span class="badge-purpose ${bCls}">${esc(p.purpose)}</span>
               <span class="badge-cat">${esc(p.categoryName || p.categoryCode)}</span>
+              <span class="badge bg-black bg-opacity-75 text-white position-absolute bottom-0 start-0 m-2 px-2 py-1 small rounded-2 d-inline-flex align-items-center gap-1 shadow-sm" style="font-size:0.72rem;backdrop-filter:blur(4px)">
+                <i class="bi bi-play-circle-fill text-success"></i> Video Tour
+              </span>
             </div>
             <div class="p-3 d-flex flex-column flex-grow-1">
               <div class="d-flex justify-content-between align-items-center mb-1">
@@ -1109,7 +1275,7 @@
                 ${p.bathrooms > 0 ? `<span><i class="bi bi-droplet text-success"></i> ${p.bathrooms} Baths</span>` : ''}
               </div>
               <div class="d-flex gap-2 mt-3">
-                <button class="btn btn-black btn-sm flex-grow-1 py-2" onclick="openPropertyDetails(${p.propertyId})">View Details</button>
+                <button class="btn btn-black btn-sm flex-grow-1 py-2" onclick="openPropertyDetails(${p.propertyId})">View Details & Tour</button>
                 <button class="btn ${inCmp ? 'btn-green' : 'btn-outline-dark'} btn-sm px-3" onclick="toggleCompare(${p.propertyId}, this)" title="Compare">
                   <i class="bi ${inCmp ? 'bi-check2' : 'bi-arrow-left-right'}"></i>
                 </button>
@@ -1186,7 +1352,8 @@
 
       document.getElementById('md-purpose').textContent = p.purpose;
       document.getElementById('md-title').textContent = p.title;
-      const imgs = (p.images && p.images.length) ? p.images : [p.primaryImageUrl || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1000&q=80'];
+      const vid = getPropertyVideo(p);
+      const imgs = getPropertyGallery(p);
       const amens = p.amenities || [];
       const isBuy = p.purpose === 'BUY';
 
@@ -1194,20 +1361,32 @@
         <div class="row g-4">
           <div class="col-lg-7">
             <img id="md-main-img" src="${esc(imgs[0])}" class="w-100 rounded-3 mb-2" style="height:320px;object-fit:cover">
-            <div class="d-flex gap-2 mb-4 flex-wrap">
+            <div class="d-flex gap-2 mb-3 flex-wrap">
               ${imgs.map((u,i) => `<img src="${esc(u)}" class="detail-thumb ${i===0?'active':''}" onclick="document.getElementById('md-main-img').src=this.src;document.querySelectorAll('.detail-thumb').forEach(t=>t.classList.remove('active'));this.classList.add('active')">`).join('')}
             </div>
             <h5 class="fw-bold mb-2">About This Property</h5>
             <p class="text-muted small">${esc(p.description)}</p>
-            <div class="mb-4">
+            <div class="mb-3">
               <h6 class="fw-bold mb-2">Amenities</h6>
               <div class="d-flex flex-wrap gap-2">${amens.map(a => `<span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2">${esc(a)}</span>`).join('') || '<span class="text-muted small">Standard utilities</span>'}</div>
             </div>
-            <div class="bg-dark text-white p-3 rounded-3">
-              <div class="small fw-bold mb-2"><i class="bi bi-play-circle-fill text-success me-1"></i>HD Property Walkthrough Video</div>
-              <video class="w-100 rounded-2" style="max-height:240px;object-fit:cover;background:#000" controls muted playsinline preload="metadata" poster="${esc(imgs[0])}">
-                <source src="https://videos.pexels.com/video-files/7578552/7578552-hd_1280_720_30fps.mp4" type="video/mp4">
+            <!-- CATEGORY-SPECIFIC HD VIDEO TOUR -->
+            <div class="bg-dark text-white p-3 rounded-3 shadow-sm border border-secondary border-opacity-25 mt-3">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="small fw-bold text-white d-flex align-items-center gap-2">
+                  <i class="bi bi-camera-reels-fill text-success fs-6"></i>
+                  <span>${esc(vid.label)}</span>
+                </div>
+                <span class="badge bg-success-subtle text-success border border-success-subtle small px-2 py-1">HD Video Tour</span>
+              </div>
+              <video id="md-prop-video" class="w-100 rounded-2" style="max-height:260px;object-fit:cover;background:#000" controls playsinline preload="metadata" poster="${esc(imgs[0])}">
+                <source src="${esc(vid.url)}" type="video/mp4">
+                Your browser does not support HTML5 video.
               </video>
+              <div class="small text-muted mt-2 d-flex align-items-center justify-content-between">
+                <span><i class="bi bi-geo-alt text-success me-1"></i>${esc(p.locality || p.address || '')}, ${esc(p.city || '')}</span>
+                <span class="text-secondary">${esc(p.categoryName || p.categoryCode || 'Property')} Verified Video</span>
+              </div>
             </div>
           </div>
 
@@ -1706,6 +1885,14 @@
           d.split('').forEach((ch,i) => { if (boxes[i]) boxes[i].value = ch; });
         });
       });
+
+      const propModalEl = document.getElementById('propertyModal');
+      if (propModalEl) {
+        propModalEl.addEventListener('hidden.bs.modal', () => {
+          const v = document.getElementById('md-prop-video');
+          if (v) { v.pause(); v.currentTime = 0; }
+        });
+      }
 
       updateCompareBadge();
       checkSession();

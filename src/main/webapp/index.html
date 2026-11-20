@@ -6,14 +6,283 @@
   <title>Real Estate Management System | Find. Buy. Sell. Rent. Build.</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css" rel="stylesheet">
-  <link href="css/style.css" rel="stylesheet">
+  <style>
+    /* =========================================================================
+       WHITE, GREEN & BLACK REAL ESTATE DESIGN SYSTEM (ALL-IN-ONE)
+    ========================================================================= */
+    :root {
+      --black: #0a0a0a;
+      --black-soft: #141416;
+      --black-muted: #27272a;
+      --green: #059669;
+      --green-bright: #10b981;
+      --green-hover: #047857;
+      --green-soft: #ecfdf5;
+      --white: #ffffff;
+      --surface: #f7f9f8;
+      --text-muted: #52525b;
+      --border: #e4e4e7;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--black);
+      background-color: var(--surface);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    /* NAVBAR */
+    .navbar-custom {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0.78rem 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .navbar-brand {
+      font-weight: 800;
+      font-size: 1.3rem;
+      color: var(--black) !important;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      cursor: pointer;
+    }
+    .navbar-brand i { color: var(--green); font-size: 1.55rem; }
+    .nav-link {
+      color: var(--black-muted) !important;
+      font-weight: 500;
+      font-size: 0.92rem;
+      padding: 0.46rem 0.85rem !important;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: var(--green) !important;
+      background: var(--green-soft);
+    }
+
+    /* BUTTONS */
+    .btn-green {
+      background: var(--green);
+      border: 1.5px solid var(--green);
+      color: var(--white);
+      font-weight: 600;
+      border-radius: 10px;
+      transition: all 0.2s;
+    }
+    .btn-green:hover { background: var(--green-hover); border-color: var(--green-hover); color: var(--white); transform: translateY(-1px); }
+    .btn-outline-green {
+      color: var(--green);
+      border: 1.5px solid var(--green);
+      background: transparent;
+      font-weight: 600;
+      border-radius: 10px;
+    }
+    .btn-outline-green:hover { background: var(--green); color: var(--white); }
+    .btn-black {
+      background: var(--black);
+      border: 1.5px solid var(--black);
+      color: var(--white);
+      font-weight: 600;
+      border-radius: 10px;
+    }
+    .btn-black:hover { background: var(--black-muted); border-color: var(--black-muted); color: var(--white); }
+
+    .form-control, .form-select {
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 0.58rem 0.85rem;
+      font-size: 0.93rem;
+    }
+    .form-control:focus, .form-select:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.16);
+    }
+
+    /* SPA VIEWS */
+    .spa-view { display: none; animation: fadeIn 0.25s ease; }
+    .spa-view.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* VIDEO HERO */
+    .hero-video-section {
+      position: relative;
+      min-height: 550px;
+      display: flex;
+      align-items: center;
+      background: var(--black);
+      overflow: hidden;
+      padding: 4.2rem 0 3.8rem;
+    }
+    .hero-bg-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.46;
+      z-index: 0;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(10,10,10,0.72), rgba(10,10,10,0.62), rgba(10,10,10,0.88));
+      z-index: 1;
+    }
+    .hero-content { position: relative; z-index: 2; }
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: rgba(16,185,129,0.16);
+      border: 1px solid rgba(16,185,129,0.5);
+      color: #6ee7b7;
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 0.35rem 0.95rem;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+    .hero-title {
+      font-weight: 800;
+      font-size: clamp(2.1rem, 4.2vw, 3.25rem);
+      color: var(--white);
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+    }
+    .hero-title span { color: var(--green-bright); }
+    .hero-subtitle { color: #d4d4d8; font-size: 1.08rem; max-width: 650px; margin: 0.85rem auto 2rem; }
+    .search-card {
+      background: var(--white);
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.28);
+      padding: 1.4rem;
+    }
+
+    /* METRICS STRIP */
+    .metrics-strip {
+      background: var(--black);
+      color: var(--white);
+      padding: 1.4rem 0;
+      border-top: 1px solid #1f1f23;
+    }
+    .metric-val { font-size: 1.65rem; font-weight: 800; color: var(--green-bright); line-height: 1.1; }
+    .metric-lbl { font-size: 0.8rem; color: #a1a1aa; }
+
+    /* CATEGORIES */
+    .cat-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s;
+      height: 100%;
+    }
+    .cat-card:hover { transform: translateY(-5px); border-color: var(--green); box-shadow: 0 10px 22px rgba(0,0,0,0.08); }
+    .cat-thumb { width: 100%; height: 92px; object-fit: cover; transition: transform 0.3s; }
+    .cat-card:hover .cat-thumb { transform: scale(1.06); }
+
+    /* PROPERTY CARDS */
+    .prop-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: all 0.25s;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    .prop-card:hover { transform: translateY(-5px); border-color: var(--green); box-shadow: 0 16px 32px rgba(0,0,0,0.1); }
+    .prop-img-box { position: relative; height: 215px; overflow: hidden; background: #18181b; }
+    .prop-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.35s; }
+    .prop-card:hover .prop-img { transform: scale(1.05); }
+    .badge-purpose {
+      position: absolute; top: 12px; left: 12px; font-size: 0.72rem; font-weight: 700;
+      padding: 0.3rem 0.65rem; border-radius: 6px; text-transform: uppercase;
+    }
+    .b-buy { background: var(--black); color: var(--white); }
+    .b-rent { background: var(--green); color: var(--white); }
+    .b-lease { background: #18181b; color: #6ee7b7; border: 1px solid var(--green-bright); }
+    .badge-cat {
+      position: absolute; bottom: 12px; left: 12px; background: rgba(10,10,10,0.82);
+      color: var(--white); font-size: 0.74rem; padding: 0.25rem 0.6rem; border-radius: 6px;
+    }
+    .badge-verified {
+      background: var(--green-soft); color: var(--green-hover); font-size: 0.74rem;
+      font-weight: 600; padding: 0.22rem 0.55rem; border-radius: 6px;
+    }
+    .prop-price { font-size: 1.3rem; font-weight: 800; color: var(--green); }
+    .prop-title {
+      font-size: 1.03rem; font-weight: 700; color: var(--black);
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .prop-features {
+      display: flex; flex-wrap: wrap; gap: 0.75rem; padding-top: 0.7rem; margin-top: auto;
+      border-top: 1px solid var(--border); font-size: 0.83rem; color: var(--black-muted);
+    }
+
+    /* VIDEO SHOWCASE */
+    .video-section { background: var(--black); color: var(--white); padding: 4.2rem 0; }
+    .video-card {
+      background: var(--black-soft); border: 1px solid #27272a; border-radius: 14px;
+      overflow: hidden; transition: all 0.25s; height: 100%;
+    }
+    .video-card:hover { border-color: var(--green-bright); transform: translateY(-4px); }
+    .video-player { width: 100%; height: 215px; object-fit: cover; background: #000; display: block; }
+
+    /* AUTH & OTP */
+    .email-feedback { font-size: 0.8rem; margin-top: 0.35rem; min-height: 1.2rem; display: flex; align-items: center; gap: 0.35rem; }
+    .email-feedback.valid { color: var(--green); font-weight: 600; }
+    .email-feedback.invalid { color: #dc2626; font-weight: 500; }
+    .email-feedback.checking { color: var(--text-muted); }
+
+    .otp-group { display: flex; gap: 0.55rem; justify-content: center; margin: 1.15rem 0; }
+    .otp-digit {
+      width: 48px; height: 56px; text-align: center; font-size: 1.45rem; font-weight: 800;
+      border: 2px solid var(--border); border-radius: 12px; color: var(--black);
+    }
+    .otp-digit:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 3px rgba(5,150,105,0.18); }
+
+    .step-bar { display: flex; justify-content: space-between; margin-bottom: 1.4rem; }
+    .step-node { flex: 1; text-align: center; }
+    .step-dot {
+      width: 32px; height: 32px; border-radius: 50%; margin: 0 auto 0.3rem;
+      display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem;
+      background: #e4e4e7; color: #52525b;
+    }
+    .step-node.active .step-dot { background: var(--green); color: var(--white); box-shadow: 0 0 0 4px rgba(5,150,105,0.2); }
+    .step-node.done .step-dot { background: var(--black); color: var(--green-bright); }
+    .step-lbl { font-size: 0.74rem; font-weight: 600; color: var(--text-muted); }
+
+    /* GALLERY THUMBS */
+    .detail-thumb { width: 76px; height: 54px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 2px solid transparent; opacity: 0.75; }
+    .detail-thumb.active, .detail-thumb:hover { border-color: var(--green); opacity: 1; }
+
+    /* FOOTER */
+    .footer-custom { background: var(--black); color: #d4d4d8; padding: 3.2rem 0 1.6rem; margin-top: 4rem; }
+    .footer-custom h5 { color: var(--white); font-weight: 700; font-size: 1.02rem; margin-bottom: 1rem; }
+    .footer-custom a { color: #a1a1aa; text-decoration: none; display: block; margin-bottom: 0.45rem; font-size: 0.9rem; cursor: pointer; }
+    .footer-custom a:hover { color: var(--green-bright); }
+
+    /* TOASTS */
+    .toast-box { position: fixed; bottom: 22px; right: 22px; z-index: 2000; max-width: 360px; }
+  </style>
 </head>
 <body>
 
-  <!-- NAVIGATION BAR -->
+  <!-- =========================================================================
+       NAVIGATION BAR
+  ========================================================================= -->
   <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
     <div class="container">
-      <a class="navbar-brand" href="index.html">
+      <a class="navbar-brand" onclick="navigate('home')">
         <i class="bi bi-houses-fill"></i>
         <span>REAL<span class="text-success">ESTATE</span></span>
       </a>
@@ -23,429 +292,1612 @@
 
       <div class="collapse navbar-collapse" id="mainNav">
         <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="properties.html?purpose=BUY">Buy</a></li>
-          <li class="nav-item"><a class="nav-link" href="properties.html?purpose=RENT">Rent</a></li>
-          <li class="nav-item"><a class="nav-link" href="properties.html?category=AGRICULTURAL">Farmland</a></li>
-          <li class="nav-item"><a class="nav-link" href="properties.html?category=FARMHOUSE">Farmhouses</a></li>
-          <li class="nav-item"><a class="nav-link" href="#video-tours">Video Tours</a></li>
-          <li class="nav-item"><a class="nav-link fw-semibold text-success" href="post-property.html"><i class="bi bi-plus-circle me-1"></i>Post Property</a></li>
+          <li class="nav-item"><a class="nav-link active" id="nav-home" onclick="navigate('home')">Home</a></li>
+          <li class="nav-item"><a class="nav-link" id="nav-properties" onclick="openProperties({})">Properties</a></li>
+          <li class="nav-item"><a class="nav-link" onclick="openProperties({purpose:'BUY'})">Buy</a></li>
+          <li class="nav-item"><a class="nav-link" onclick="openProperties({purpose:'RENT'})">Rent</a></li>
+          <li class="nav-item"><a class="nav-link" onclick="navigate('home'); setTimeout(()=>document.getElementById('video-tours').scrollIntoView({behavior:'smooth'}),120)">Video Tours</a></li>
+          <li class="nav-item"><a class="nav-link fw-semibold text-success" id="nav-post" onclick="navigate('post')"><i class="bi bi-plus-circle me-1"></i>Post Property</a></li>
         </ul>
 
         <div class="d-flex align-items-center gap-2">
-          <a href="compare.html" id="nav-compare-link" class="btn btn-outline-dark btn-sm position-relative">
+          <span id="backend-status-pill" class="badge bg-dark text-success border border-success d-none d-xl-inline-flex align-items-center gap-1 py-2 px-2" style="font-size:0.72rem">
+            <i class="bi bi-circle-fill" style="font-size:0.45rem"></i> Connecting...
+          </span>
+          <button class="btn btn-outline-dark btn-sm position-relative" onclick="navigate('compare')">
             <i class="bi bi-arrow-left-right me-1"></i>Compare
-            <span id="compare-count-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success" style="display:none">0</span>
-          </a>
-          <div id="nav-auth-container">
-            <a href="login.html" class="btn btn-outline-custom btn-sm">Login</a>
-            <a href="register.html" class="btn btn-primary-custom btn-sm">Register</a>
+            <span id="compare-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success" style="display:none">0</span>
+          </button>
+          <div id="nav-auth-slot" class="d-flex gap-2">
+            <button class="btn btn-outline-green btn-sm px-3" onclick="openAuthModal('login')">Login</button>
+            <button class="btn btn-green btn-sm px-3" onclick="openAuthModal('register')">Register</button>
           </div>
         </div>
       </div>
     </div>
   </nav>
 
-  <!-- VIDEO HERO & SEARCH -->
-  <header class="hero-video-section">
-    <video class="hero-bg-video" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1600&q=80">
-      <source src="https://videos.pexels.com/video-files/7578552/7578552-hd_1280_720_30fps.mp4" type="video/mp4">
-    </video>
-    <div class="hero-video-overlay"></div>
+  <!-- =========================================================================
+       VIEW 1: HOME PAGE (VIDEO HERO + CATEGORIES + FEATURED + HD VIDEO TOURS)
+  ========================================================================= -->
+  <section id="view-home" class="spa-view active">
+    <header class="hero-video-section">
+      <video class="hero-bg-video" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1600&q=80">
+        <source src="https://videos.pexels.com/video-files/7578552/7578552-hd_1280_720_30fps.mp4" type="video/mp4">
+      </video>
+      <div class="hero-overlay"></div>
 
-    <div class="container text-center hero-content">
-      <div class="hero-pill">
-        <i class="bi bi-patch-check-fill"></i>
-        <span>Verified Properties &bull; Live Supabase Database</span>
+      <div class="container text-center hero-content">
+        <div class="hero-pill">
+          <i class="bi bi-patch-check-fill"></i>
+          <span>Verified Properties &bull; Java Backend + Live Supabase Database</span>
+        </div>
+        <h1 class="hero-title">Find Your Next <span>Dream Property</span></h1>
+        <p class="hero-subtitle">Explore verified villas, apartments, commercial spaces, farmhouses, plots, and agricultural lands across India.</p>
+
+        <div class="search-card mx-auto mt-4" style="max-width: 1050px;">
+          <form onsubmit="handleHeroSearch(event)">
+            <div class="row g-3 align-items-end text-start">
+              <div class="col-md-3 col-sm-6">
+                <label class="form-label small fw-bold"><i class="bi bi-geo-alt-fill text-success me-1"></i>City</label>
+                <select class="form-select" id="hero-city">
+                  <option value="ALL">All Cities (India)</option>
+                  <option value="Mysuru">Mysuru</option>
+                  <option value="Bengaluru">Bengaluru</option>
+                  <option value="Mandya">Mandya</option>
+                  <option value="Hassan">Hassan</option>
+                  <option value="Kodagu">Kodagu</option>
+                  <option value="Mangaluru">Mangaluru</option>
+                  <option value="Chennai">Chennai</option>
+                  <option value="Hyderabad">Hyderabad</option>
+                  <option value="Mumbai">Mumbai</option>
+                  <option value="Pune">Pune</option>
+                </select>
+              </div>
+              <div class="col-md-3 col-sm-6">
+                <label class="form-label small fw-bold"><i class="bi bi-grid-fill text-success me-1"></i>Category</label>
+                <select class="form-select" id="hero-cat">
+                  <option value="ALL">All Categories</option>
+                  <option value="RESIDENTIAL">Residential</option>
+                  <option value="COMMERCIAL">Commercial</option>
+                  <option value="AGRICULTURAL">Agricultural Land</option>
+                  <option value="FARMHOUSE">Farmhouses</option>
+                  <option value="PLOT">Plots &amp; Sites</option>
+                  <option value="BUILDING">Buildings &amp; Projects</option>
+                </select>
+              </div>
+              <div class="col-md-2 col-sm-6">
+                <label class="form-label small fw-bold"><i class="bi bi-tag-fill text-success me-1"></i>Purpose</label>
+                <select class="form-select" id="hero-purpose">
+                  <option value="ALL">Any</option>
+                  <option value="BUY">Buy</option>
+                  <option value="RENT">Rent</option>
+                  <option value="LEASE">Lease</option>
+                </select>
+              </div>
+              <div class="col-md-2 col-sm-6">
+                <label class="form-label small fw-bold"><i class="bi bi-currency-rupee text-success me-1"></i>Max Budget</label>
+                <select class="form-select" id="hero-max">
+                  <option value="">Any Budget</option>
+                  <option value="100000">Up to ₹ 1 Lakh</option>
+                  <option value="5000000">Up to ₹ 50 Lakhs</option>
+                  <option value="10000000">Up to ₹ 1 Crore</option>
+                  <option value="25000000">Up to ₹ 2.5 Crores</option>
+                  <option value="50000000">Up to ₹ 5 Crores</option>
+                </select>
+              </div>
+              <div class="col-md-2 col-sm-12">
+                <button type="submit" class="btn btn-green w-100 py-2"><i class="bi bi-search me-1"></i>Search</button>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
-      <h1 class="hero-title">Find Your Next <span class="text-accent">Dream Property</span></h1>
-      <p class="hero-subtitle">Explore verified villas, apartments, commercial tech spaces, farmhouses, plots, and agricultural lands across India.</p>
+    </header>
 
-      <!-- SEARCH FORM -->
-      <div class="search-card mx-auto mt-4" style="max-width: 1060px;">
-        <form id="hero-search-form" onsubmit="handleSearch(event)">
-          <div class="row g-3 align-items-end text-start">
-            <div class="col-md-3 col-sm-6">
-              <label class="form-label"><i class="bi bi-geo-alt-fill text-success me-1"></i>City / Location</label>
-              <select class="form-select" id="search-city">
-                <option value="ALL">All Cities (India)</option>
-                <option value="Mysuru">Mysuru</option>
-                <option value="Bengaluru">Bengaluru</option>
-                <option value="Mandya">Mandya</option>
-                <option value="Hassan">Hassan</option>
-                <option value="Kodagu">Kodagu</option>
-                <option value="Mangaluru">Mangaluru</option>
-                <option value="Chennai">Chennai</option>
-                <option value="Hyderabad">Hyderabad</option>
-                <option value="Mumbai">Mumbai</option>
-                <option value="Pune">Pune</option>
-              </select>
+    <!-- METRICS -->
+    <div class="metrics-strip">
+      <div class="container">
+        <div class="row g-3 text-center">
+          <div class="col-6 col-md-3"><div class="metric-val">30+</div><div class="metric-lbl">Live Verified Properties</div></div>
+          <div class="col-6 col-md-3"><div class="metric-val">6</div><div class="metric-lbl">Property Categories</div></div>
+          <div class="col-6 col-md-3"><div class="metric-val">100%</div><div class="metric-lbl">KYC Verified Owners</div></div>
+          <div class="col-6 col-md-3"><div class="metric-val">OTP</div><div class="metric-lbl">Email Verified Security</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 CATEGORIES WITH REAL PHOTOS -->
+    <section class="py-5 bg-white border-bottom">
+      <div class="container">
+        <div class="text-center mb-4">
+          <h2 class="fw-bold">Explore by Category</h2>
+          <p class="text-muted">Click any category to browse matching properties immediately</p>
+        </div>
+        <div class="row g-3">
+          <div class="col-lg-2 col-md-4 col-6">
+            <div class="cat-card" onclick="openProperties({category:'RESIDENTIAL'})">
+              <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=500&q=80" class="cat-thumb" alt="Residential">
+              <div class="p-2 pb-3"><div class="fw-bold">Residential</div><div class="small text-muted">Villas &amp; Flats</div></div>
             </div>
+          </div>
+          <div class="col-lg-2 col-md-4 col-6">
+            <div class="cat-card" onclick="openProperties({category:'COMMERCIAL'})">
+              <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=500&q=80" class="cat-thumb" alt="Commercial">
+              <div class="p-2 pb-3"><div class="fw-bold">Commercial</div><div class="small text-muted">Offices &amp; Shops</div></div>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-4 col-6">
+            <div class="cat-card" onclick="openProperties({category:'AGRICULTURAL'})">
+              <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=500&q=80" class="cat-thumb" alt="Agricultural">
+              <div class="p-2 pb-3"><div class="fw-bold">Agricultural</div><div class="small text-muted">Farmlands</div></div>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-4 col-6">
+            <div class="cat-card" onclick="openProperties({category:'FARMHOUSE'})">
+              <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=500&q=80" class="cat-thumb" alt="Farmhouses">
+              <div class="p-2 pb-3"><div class="fw-bold">Farmhouses</div><div class="small text-muted">Luxury Retreats</div></div>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-4 col-6">
+            <div class="cat-card" onclick="openProperties({category:'PLOT'})">
+              <img src="https://images.unsplash.com/photo-1524813686514-a57563d77d61?auto=format&fit=crop&w=500&q=80" class="cat-thumb" alt="Plots">
+              <div class="p-2 pb-3"><div class="fw-bold">Plots &amp; Sites</div><div class="small text-muted">Approved Layouts</div></div>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-4 col-6">
+            <div class="cat-card" onclick="openProperties({category:'BUILDING'})">
+              <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=500&q=80" class="cat-thumb" alt="Projects">
+              <div class="p-2 pb-3"><div class="fw-bold">Projects</div><div class="small text-muted">Towers &amp; Flats</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-            <div class="col-md-3 col-sm-6">
-              <label class="form-label"><i class="bi bi-grid-fill text-success me-1"></i>Category</label>
-              <select class="form-select" id="search-category">
-                <option value="ALL">All Categories</option>
-                <option value="RESIDENTIAL">Residential Properties</option>
-                <option value="COMMERCIAL">Commercial Spaces</option>
+    <!-- FEATURED PROPERTIES -->
+    <section class="py-5">
+      <div class="container">
+        <div class="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-4">
+          <div>
+            <span class="badge bg-success-subtle text-success px-3 py-2 mb-2">LIVE FROM SUPABASE</span>
+            <h2 class="fw-bold mb-1">Featured Properties</h2>
+            <p class="text-muted mb-0">Handpicked verified listings ready to buy, rent, or lease</p>
+          </div>
+          <button class="btn btn-black btn-sm px-3 py-2" onclick="openProperties({})">View All Properties <i class="bi bi-arrow-right ms-1"></i></button>
+        </div>
+        <div class="row g-4" id="featured-grid">
+          <div class="col-12 text-center py-5"><div class="spinner-border text-success"></div><p class="text-muted mt-2">Loading properties...</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HD VIRTUAL VIDEO TOURS -->
+    <section class="video-section" id="video-tours">
+      <div class="container">
+        <div class="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-4">
+          <div>
+            <span class="badge bg-success px-3 py-2 mb-2"><i class="bi bi-play-circle-fill me-1"></i>HD VIDEO TOURS</span>
+            <h2 class="fw-bold text-white mb-1">Real Architectural Walkthroughs</h2>
+            <p class="text-secondary mb-0">Watch interior and exterior property videos before booking your visit</p>
+          </div>
+          <button class="btn btn-outline-light btn-sm px-3" onclick="openProperties({})">Explore All</button>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-lg-4 col-md-6">
+            <div class="video-card">
+              <video class="video-player" controls muted playsinline preload="metadata" poster="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80">
+                <source src="https://videos.pexels.com/video-files/7578552/7578552-hd_1280_720_30fps.mp4" type="video/mp4">
+              </video>
+              <div class="p-3">
+                <span class="badge bg-success mb-2">Luxury Villa Tour</span>
+                <h5 class="text-white fs-6 fw-bold mb-1">Modern Duplex &amp; Garden Villas</h5>
+                <p class="text-secondary small mb-2">Contemporary living rooms, designer kitchens, and private lawns.</p>
+                <a class="text-success small fw-semibold text-decoration-none" style="cursor:pointer" onclick="openProperties({category:'RESIDENTIAL'})">Browse Villas <i class="bi bi-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="video-card">
+              <video class="video-player" controls muted playsinline preload="metadata" poster="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=900&q=80">
+                <source src="https://videos.pexels.com/video-files/7578544/7578544-hd_1280_720_30fps.mp4" type="video/mp4">
+              </video>
+              <div class="p-3">
+                <span class="badge bg-success mb-2">High-Rise Walkthrough</span>
+                <h5 class="text-white fs-6 fw-bold mb-1">Urban Apartments &amp; Penthouses</h5>
+                <p class="text-secondary small mb-2">Open floor plans with city skyline balconies and clubhouse amenities.</p>
+                <a class="text-success small fw-semibold text-decoration-none" style="cursor:pointer" onclick="openProperties({purpose:'RENT'})">Browse Rentals <i class="bi bi-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-12">
+            <div class="video-card">
+              <video class="video-player" controls muted playsinline preload="metadata" poster="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=900&q=80">
+                <source src="https://videos.pexels.com/video-files/7578550/7578550-hd_1280_720_30fps.mp4" type="video/mp4">
+              </video>
+              <div class="p-3">
+                <span class="badge bg-success mb-2">Estate Showcase</span>
+                <h5 class="text-white fs-6 fw-bold mb-1">Weekend Farmhouses &amp; Estates</h5>
+                <p class="text-secondary small mb-2">Peaceful retreats surrounded by lush greenery and private pools.</p>
+                <a class="text-success small fw-semibold text-decoration-none" style="cursor:pointer" onclick="openProperties({category:'FARMHOUSE'})">Browse Farmhouses <i class="bi bi-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <!-- =========================================================================
+       VIEW 2: ALL PROPERTIES EXPLORER
+  ========================================================================= -->
+  <section id="view-properties" class="spa-view py-5">
+    <div class="container">
+      <div class="bg-white p-4 rounded-4 border shadow-sm mb-4">
+        <div class="row g-3 align-items-end">
+          <div class="col-md-2">
+            <label class="form-label small fw-bold">City</label>
+            <select class="form-select form-select-sm" id="f-city">
+              <option value="ALL">All Cities</option>
+              <option value="Mysuru">Mysuru</option><option value="Bengaluru">Bengaluru</option>
+              <option value="Mandya">Mandya</option><option value="Hassan">Hassan</option>
+              <option value="Kodagu">Kodagu</option><option value="Mangaluru">Mangaluru</option>
+              <option value="Chennai">Chennai</option><option value="Hyderabad">Hyderabad</option>
+              <option value="Mumbai">Mumbai</option><option value="Pune">Pune</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label small fw-bold">Category</label>
+            <select class="form-select form-select-sm" id="f-cat">
+              <option value="ALL">All</option>
+              <option value="RESIDENTIAL">Residential</option><option value="COMMERCIAL">Commercial</option>
+              <option value="AGRICULTURAL">Agricultural</option><option value="FARMHOUSE">Farmhouse</option>
+              <option value="PLOT">Plot</option><option value="BUILDING">Building</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label small fw-bold">Purpose</label>
+            <select class="form-select form-select-sm" id="f-purpose">
+              <option value="ALL">All</option>
+              <option value="BUY">Buy</option><option value="RENT">Rent</option><option value="LEASE">Lease</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label small fw-bold">Keyword</label>
+            <input type="text" class="form-control form-control-sm" id="f-keyword" placeholder="Villa, IT Park...">
+          </div>
+          <div class="col-md-2">
+            <label class="form-label small fw-bold">Sort By</label>
+            <select class="form-select form-select-sm" id="f-sort">
+              <option value="newest">Newest</option>
+              <option value="price_asc">Price: Low to High</option>
+              <option value="price_desc">Price: High to Low</option>
+              <option value="area_desc">Area: Largest</option>
+            </select>
+          </div>
+          <div class="col-md-2 d-grid">
+            <button class="btn btn-green btn-sm py-2" onclick="loadAllProperties()"><i class="bi bi-funnel me-1"></i>Apply</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-bold mb-0">Available Properties <span class="badge bg-dark ms-1" id="prop-count">0</span></h4>
+        <button class="btn btn-outline-dark btn-sm" onclick="resetFilters()">Reset Filters</button>
+      </div>
+      <div class="row g-4" id="all-properties-grid"></div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       VIEW 3: COMPARE PROPERTIES
+  ========================================================================= -->
+  <section id="view-compare" class="spa-view py-5">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h2 class="fw-bold mb-1">Side-by-Side Property Comparison</h2>
+          <p class="text-muted small mb-0">Compare up to 3 selected properties across price, area, registration fees, and specs</p>
+        </div>
+        <button class="btn btn-outline-danger btn-sm" onclick="clearCompare()">Clear List</button>
+      </div>
+      <div id="compare-container" class="bg-white rounded-4 border shadow-sm p-4"></div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       VIEW 4: POST PROPERTY
+  ========================================================================= -->
+  <section id="view-post" class="spa-view py-5">
+    <div class="container" style="max-width: 820px;">
+      <div class="bg-white p-4 p-md-5 rounded-4 border shadow-sm">
+        <span class="badge bg-success mb-2">SUBMIT TO SUPABASE</span>
+        <h2 class="fw-bold mb-1">Post a New Property Listing</h2>
+        <p class="text-muted small mb-4">New listings are submitted for administrator approval before going live publicly.</p>
+
+        <form id="post-prop-form" onsubmit="submitNewProperty(event)">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label small fw-bold">Category *</label>
+              <select class="form-select" name="categoryCode" id="post-cat" onchange="renderCategoryExtra()">
+                <option value="RESIDENTIAL">Residential</option>
+                <option value="COMMERCIAL">Commercial</option>
                 <option value="AGRICULTURAL">Agricultural Land</option>
-                <option value="FARMHOUSE">Farmhouses</option>
-                <option value="PLOT">Plots &amp; Sites</option>
-                <option value="BUILDING">Buildings &amp; Projects</option>
+                <option value="FARMHOUSE">Farmhouse</option>
+                <option value="PLOT">Plot / Site</option>
+                <option value="BUILDING">Building / Project</option>
               </select>
             </div>
-
-            <div class="col-md-2 col-sm-6">
-              <label class="form-label"><i class="bi bi-tag-fill text-success me-1"></i>Purpose</label>
-              <select class="form-select" id="search-purpose">
-                <option value="ALL">Any</option>
-                <option value="BUY">Buy</option>
+            <div class="col-md-4">
+              <label class="form-label small fw-bold">Purpose *</label>
+              <select class="form-select" name="purpose">
+                <option value="BUY">Sell (Buy)</option>
                 <option value="RENT">Rent</option>
                 <option value="LEASE">Lease</option>
               </select>
             </div>
-
-            <div class="col-md-2 col-sm-6">
-              <label class="form-label"><i class="bi bi-currency-rupee text-success me-1"></i>Max Budget</label>
-              <select class="form-select" id="search-max-price">
-                <option value="">Any Budget</option>
-                <option value="100000">Up to ₹ 1 Lakh</option>
-                <option value="5000000">Up to ₹ 50 Lakhs</option>
-                <option value="10000000">Up to ₹ 1 Crore</option>
-                <option value="25000000">Up to ₹ 2.5 Crores</option>
-                <option value="50000000">Up to ₹ 5 Crores</option>
-              </select>
+            <div class="col-md-4">
+              <label class="form-label small fw-bold">Price (₹) *</label>
+              <input type="number" class="form-control" name="price" placeholder="e.g. 9500000" required min="1">
             </div>
-
-            <div class="col-md-2 col-sm-12">
-              <button type="submit" class="btn btn-primary-custom w-100 py-2">
-                <i class="bi bi-search me-1"></i>Search
-              </button>
+            <div class="col-12">
+              <label class="form-label small fw-bold">Property Title *</label>
+              <input type="text" class="form-control" name="title" placeholder="e.g. Modern 3 BHK Independent Villa in Vijayanagar" required minlength="5">
             </div>
+            <div class="col-md-4">
+              <label class="form-label small fw-bold">Area *</label>
+              <input type="number" step="0.01" class="form-control" name="propertyArea" placeholder="e.g. 2400" required min="1">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small fw-bold">Area Unit</label>
+              <input type="text" class="form-control" name="areaUnit" id="post-area-unit" value="Sq. Ft.">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small fw-bold">City *</label>
+              <input type="text" class="form-control" name="city" placeholder="e.g. Mysuru" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Locality *</label>
+              <input type="text" class="form-control" name="locality" placeholder="e.g. Vijayanagar 2nd Stage" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Full Address *</label>
+              <input type="text" class="form-control" name="address" placeholder="Door No, Street, Landmark" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label small fw-bold">Description *</label>
+              <textarea class="form-control" name="description" rows="3" placeholder="Highlight key features, connectivity, and highlights..." required></textarea>
+            </div>
+            <div class="col-12 p-3 bg-light rounded-3 border" id="post-extra-fields"></div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Image URL (optional)</label>
+              <input type="url" class="form-control" name="imageUrls" placeholder="https://images.unsplash.com/...">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold">Amenities (comma-separated)</label>
+              <input type="text" class="form-control" name="amenities" placeholder="Garden, Parking, Security, Power Backup">
+            </div>
+          </div>
+          <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-green py-2 fw-bold" id="btn-post-prop"><i class="bi bi-cloud-arrow-up-fill me-2"></i>Submit Property</button>
           </div>
         </form>
       </div>
     </div>
-  </header>
-
-  <!-- LIVE METRICS BAR -->
-  <section class="metrics-strip">
-    <div class="container">
-      <div class="row g-3 text-center">
-        <div class="col-6 col-md-3">
-          <div class="metric-value">30+</div>
-          <div class="metric-label">Curated Listings</div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="metric-value">6</div>
-          <div class="metric-label">Property Categories</div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="metric-value">100%</div>
-          <div class="metric-label">KYC Verified Owners</div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="metric-value">24/7</div>
-          <div class="metric-label">Direct Visit Booking</div>
-        </div>
-      </div>
-    </div>
   </section>
 
-  <!-- 6 VISUAL PROPERTY CATEGORIES WITH REAL IMAGES -->
-  <section class="py-5 bg-white border-bottom">
+  <!-- =========================================================================
+       VIEW 5: USER DASHBOARD
+  ========================================================================= -->
+  <section id="view-dashboard" class="spa-view py-5">
     <div class="container">
-      <div class="section-header text-center">
-        <h2 class="section-title">Explore by Category</h2>
-        <p class="section-subtitle">Choose from six dedicated categories tailored for homes, business, and land investments</p>
-      </div>
-
-      <div class="row g-3">
-        <div class="col-lg-2 col-md-4 col-6">
-          <a href="properties.html?category=RESIDENTIAL" class="category-card">
-            <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=500&q=80" alt="Residential" class="category-thumb">
-            <div class="category-card-body">
-              <div class="category-title">Residential</div>
-              <p class="category-desc">Villas, Flats &amp; Homes</p>
-            </div>
-          </a>
-        </div>
-        <div class="col-lg-2 col-md-4 col-6">
-          <a href="properties.html?category=COMMERCIAL" class="category-card">
-            <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=500&q=80" alt="Commercial" class="category-thumb">
-            <div class="category-card-body">
-              <div class="category-title">Commercial</div>
-              <p class="category-desc">Offices &amp; Showrooms</p>
-            </div>
-          </a>
-        </div>
-        <div class="col-lg-2 col-md-4 col-6">
-          <a href="properties.html?category=AGRICULTURAL" class="category-card">
-            <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=500&q=80" alt="Agricultural" class="category-thumb">
-            <div class="category-card-body">
-              <div class="category-title">Agricultural</div>
-              <p class="category-desc">Farmlands &amp; Estates</p>
-            </div>
-          </a>
-        </div>
-        <div class="col-lg-2 col-md-4 col-6">
-          <a href="properties.html?category=FARMHOUSE" class="category-card">
-            <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=500&q=80" alt="Farmhouses" class="category-thumb">
-            <div class="category-card-body">
-              <div class="category-title">Farmhouses</div>
-              <p class="category-desc">Luxury Retreats</p>
-            </div>
-          </a>
-        </div>
-        <div class="col-lg-2 col-md-4 col-6">
-          <a href="properties.html?category=PLOT" class="category-card">
-            <img src="https://images.unsplash.com/photo-1524813686514-a57563d77d61?auto=format&fit=crop&w=500&q=80" alt="Plots" class="category-thumb">
-            <div class="category-card-body">
-              <div class="category-title">Plots &amp; Sites</div>
-              <p class="category-desc">Approved Layouts</p>
-            </div>
-          </a>
-        </div>
-        <div class="col-lg-2 col-md-4 col-6">
-          <a href="properties.html?category=BUILDING" class="category-card">
-            <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=500&q=80" alt="Projects" class="category-thumb">
-            <div class="category-card-body">
-              <div class="category-title">Projects</div>
-              <p class="category-desc">Towers &amp; Townships</p>
-            </div>
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FEATURED PROPERTIES (DYNAMIC FROM SUPABASE) -->
-  <section class="py-5">
-    <div class="container">
-      <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
         <div>
-          <span class="badge bg-success-subtle text-success fw-semibold px-3 py-2 mb-2">LIVE LISTINGS</span>
-          <h2 class="section-title mb-1">Featured Properties</h2>
-          <p class="section-subtitle mb-0">Handpicked listings loaded directly from Supabase</p>
+          <h2 class="fw-bold mb-1" id="dash-welcome">My Dashboard</h2>
+          <p class="text-muted small mb-0">Manage your posted properties, site visits, rental agreements, purchases, and KYC verification.</p>
         </div>
-        <a href="properties.html" class="btn btn-black btn-sm px-3 py-2">View All Properties <i class="bi bi-arrow-right ms-1"></i></a>
+        <button class="btn btn-green btn-sm" onclick="navigate('post')"><i class="bi bi-plus-circle me-1"></i>Post New Listing</button>
       </div>
 
-      <div class="row g-4" id="featured-properties-container">
-        <div class="col-12 text-center py-5">
-          <div class="spinner-border text-success" role="status"></div>
-          <p class="text-muted mt-2">Loading verified properties from Supabase...</p>
+      <ul class="nav nav-pills gap-2 mb-4" id="dash-tabs">
+        <li class="nav-item"><button class="btn btn-black btn-sm" onclick="showDashTab('listings', this)">My Listings</button></li>
+        <li class="nav-item"><button class="btn btn-outline-dark btn-sm" onclick="showDashTab('visits', this)">Visits</button></li>
+        <li class="nav-item"><button class="btn btn-outline-dark btn-sm" onclick="showDashTab('rentals', this)">Rentals</button></li>
+        <li class="nav-item"><button class="btn btn-outline-dark btn-sm" onclick="showDashTab('purchases', this)">Purchases</button></li>
+        <li class="nav-item"><button class="btn btn-outline-dark btn-sm" onclick="showDashTab('kyc', this)">Owner KYC</button></li>
+      </ul>
+
+      <div class="bg-white rounded-4 border shadow-sm p-4">
+        <div id="dash-tab-listings"><div class="row g-3" id="dash-my-props"></div></div>
+        <div id="dash-tab-visits" style="display:none"><div class="table-responsive"><table class="table align-middle mb-0"><thead class="table-dark"><tr><th>Property</th><th>Date</th><th>Time</th><th>Contact</th><th>Status</th><th>Notes</th></tr></thead><tbody id="dash-visits-body"></tbody></table></div></div>
+        <div id="dash-tab-rentals" style="display:none"><div class="table-responsive"><table class="table align-middle mb-0"><thead class="table-dark"><tr><th>Property</th><th>Monthly Rent</th><th>Deposit</th><th>Term</th><th>Status</th><th>Action</th></tr></thead><tbody id="dash-rentals-body"></tbody></table></div></div>
+        <div id="dash-tab-purchases" style="display:none"><div class="table-responsive"><table class="table align-middle mb-0"><thead class="table-dark"><tr><th>Property</th><th>Price</th><th>Reference</th><th>Status</th><th>Remarks</th></tr></thead><tbody id="dash-purchases-body"></tbody></table></div></div>
+        <div id="dash-tab-kyc" style="display:none">
+          <div id="dash-kyc-status" class="alert alert-secondary small">Checking KYC status...</div>
+          <form id="dash-kyc-form" onsubmit="submitKyc(event)" style="max-width:560px">
+            <div class="mb-3">
+              <label class="form-label small fw-bold">Identity Proof Type</label>
+              <select class="form-select" id="kyc-type">
+                <option value="AADHAAR">Aadhaar Card</option>
+                <option value="PAN">PAN Card</option>
+                <option value="PASSPORT">Passport</option>
+                <option value="DRIVING_LICENSE">Driving License</option>
+                <option value="RERA_CERT">RERA Certificate</option>
+              </select>
+            </div>
+            <div class="mb-3"><label class="form-label small fw-bold">Document Number</label><input type="text" class="form-control" id="kyc-num" required placeholder="e.g. XXXX-XXXX-9821"></div>
+            <div class="mb-3"><label class="form-label small fw-bold">Property Address</label><textarea class="form-control" id="kyc-addr" rows="2" required></textarea></div>
+            <button type="submit" class="btn btn-green btn-sm px-4">Submit KYC</button>
+          </form>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- VIRTUAL PROPERTY VIDEO TOURS (BLACK + EMERALD SHOWCASE) -->
-  <section class="video-showcase-section" id="video-tours">
+  <!-- =========================================================================
+       VIEW 6: ADMIN PORTAL
+  ========================================================================= -->
+  <section id="view-admin" class="spa-view py-5">
     <div class="container">
-      <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+      <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <span class="badge bg-success text-white px-3 py-2 mb-2"><i class="bi bi-play-circle-fill me-1"></i>HD VIDEO TOURS</span>
-          <h2 class="fw-bold text-white mb-1">Experience Spaces in Motion</h2>
-          <p class="text-secondary mb-0">Walk through real architectural interiors and modern living spaces before scheduling your visit</p>
+          <span class="badge bg-dark text-success mb-1">ADMINISTRATOR</span>
+          <h2 class="fw-bold mb-0">Admin Governance Portal</h2>
         </div>
-        <a href="properties.html" class="btn btn-outline-light btn-sm px-3 py-2">Browse All Listings</a>
+        <button class="btn btn-outline-dark btn-sm" onclick="loadAdminPortal()"><i class="bi bi-arrow-clockwise me-1"></i>Refresh</button>
       </div>
 
-      <div class="row g-4">
-        <div class="col-lg-4 col-md-6">
-          <div class="video-tour-card">
-            <video class="video-tour-player" controls muted playsinline preload="metadata" poster="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80">
-              <source src="https://videos.pexels.com/video-files/7578552/7578552-hd_1280_720_30fps.mp4" type="video/mp4">
-            </video>
-            <div class="p-3">
-              <div class="d-flex justify-content-between align-items-center mb-1">
-                <span class="badge bg-success">Luxury Villa Tour</span>
-                <span class="text-secondary small"><i class="bi bi-geo-alt me-1"></i>Mysuru</span>
+      <div class="row g-3 mb-4" id="admin-kpi-row"></div>
+
+      <div class="bg-white rounded-4 border shadow-sm p-4 mb-4">
+        <h5 class="fw-bold mb-3">Pending Property Approvals</h5>
+        <div class="table-responsive"><table class="table align-middle mb-0"><thead class="table-dark"><tr><th>Property</th><th>Category</th><th>Owner</th><th>Price</th><th class="text-end">Action</th></tr></thead><tbody id="admin-pending-body"></tbody></table></div>
+      </div>
+
+      <div class="bg-white rounded-4 border shadow-sm p-4 mb-4">
+        <h5 class="fw-bold mb-3">Pending Owner KYC Verifications</h5>
+        <div class="table-responsive"><table class="table align-middle mb-0"><thead class="table-dark"><tr><th>Owner</th><th>Proof</th><th>Number</th><th>Address</th><th class="text-end">Action</th></tr></thead><tbody id="admin-kyc-body"></tbody></table></div>
+      </div>
+
+      <div class="bg-white rounded-4 border shadow-sm p-4">
+        <h5 class="fw-bold mb-3">All Registered Users</h5>
+        <div class="table-responsive"><table class="table align-middle mb-0"><thead class="table-dark"><tr><th>ID</th><th>Name</th><th>Email</th><th>Mobile</th><th>Role</th><th>Status</th></tr></thead><tbody id="admin-users-body"></tbody></table></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       MODAL: PROPERTY DETAILS + VIDEO + VISIT BOOKING + BUY/RENT
+  ========================================================================= -->
+  <div class="modal fade" id="propertyModal" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-content rounded-4 overflow-hidden">
+        <div class="modal-header bg-dark text-white border-0">
+          <div>
+            <span class="badge bg-success me-2" id="md-purpose">BUY</span>
+            <span class="fw-bold" id="md-title">Property Details</span>
+          </div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4" id="md-body"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL: AUTHENTICATION (LOGIN + REGISTER + 3-STEP FORGOT PASSWORD OTP)
+  ========================================================================= -->
+  <div class="modal fade" id="authModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content rounded-4 overflow-hidden border-0 shadow-lg">
+        <div class="row g-0">
+          <!-- LEFT FORM PANEL -->
+          <div class="col-lg-7 p-4 p-md-5 bg-white position-relative">
+            <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal"></button>
+
+            <!-- PANEL A: LOGIN -->
+            <div id="auth-panel-login">
+              <h3 class="fw-bold mb-1">Sign In</h3>
+              <p class="text-muted small mb-4">Access your properties, bookings, and dashboard.</p>
+              <form onsubmit="handleLogin(event)" novalidate>
+                <div class="mb-3">
+                  <label class="form-label small fw-bold">Email Address</label>
+                  <input type="email" class="form-control" id="in-login-email" placeholder="name@example.com" required>
+                  <div id="fb-login-email" class="email-feedback"></div>
+                </div>
+                <div class="mb-3">
+                  <div class="d-flex justify-content-between mb-1">
+                    <label class="form-label small fw-bold mb-0">Password</label>
+                    <a class="small text-success fw-semibold text-decoration-none" style="cursor:pointer" onclick="switchAuthTab('forgot')">Forgot Password?</a>
+                  </div>
+                  <div class="input-group">
+                    <input type="password" class="form-control" id="in-login-pwd" placeholder="Enter password" required>
+                    <button class="btn btn-outline-secondary" type="button" onclick="toggleEye('in-login-pwd', this)"><i class="bi bi-eye"></i></button>
+                  </div>
+                </div>
+                <div class="d-grid mb-3">
+                  <button type="submit" class="btn btn-green py-2 fw-bold" id="btn-do-login">Sign In</button>
+                </div>
+                <div class="border-top pt-3 text-center">
+                  <div class="small text-muted mb-2">1-Click Demo Credentials:</div>
+                  <div class="d-flex justify-content-center gap-1 flex-wrap">
+                    <button type="button" class="btn btn-outline-dark btn-sm py-0 px-2" onclick="fillDemo('admin@realestate.com','Admin@123')">Admin</button>
+                    <button type="button" class="btn btn-outline-dark btn-sm py-0 px-2" onclick="fillDemo('rajesh.owner@example.com','Password@123')">Owner</button>
+                    <button type="button" class="btn btn-outline-dark btn-sm py-0 px-2" onclick="fillDemo('priya.buyer@example.com','Password@123')">Buyer</button>
+                    <button type="button" class="btn btn-outline-dark btn-sm py-0 px-2" onclick="fillDemo('kiran.tenant@example.com','Password@123')">Tenant</button>
+                  </div>
+                </div>
+                <p class="text-center small text-muted mt-3 mb-0">New here? <a class="text-success fw-bold text-decoration-none" style="cursor:pointer" onclick="switchAuthTab('register')">Create Account</a></p>
+              </form>
+            </div>
+
+            <!-- PANEL B: REGISTER -->
+            <div id="auth-panel-register" style="display:none">
+              <h3 class="fw-bold mb-1">Create Account</h3>
+              <p class="text-muted small mb-3">Verified email registration connected directly to Supabase.</p>
+              <form onsubmit="handleRegister(event)" novalidate>
+                <div class="row g-2">
+                  <div class="col-6"><label class="form-label small fw-bold">Full Name</label><input type="text" class="form-control" id="in-reg-name" required minlength="2"></div>
+                  <div class="col-6"><label class="form-label small fw-bold">Mobile</label><input type="tel" class="form-control" id="in-reg-mobile" required minlength="8" placeholder="+91 ..."></div>
+                  <div class="col-12">
+                    <label class="form-label small fw-bold">Email Address</label>
+                    <input type="email" class="form-control" id="in-reg-email" placeholder="you@gmail.com" required>
+                    <div id="fb-reg-email" class="email-feedback"></div>
+                  </div>
+                  <div class="col-6">
+                    <label class="form-label small fw-bold">Password</label>
+                    <input type="password" class="form-control" id="in-reg-pwd" minlength="6" required placeholder="Min 6 chars">
+                  </div>
+                  <div class="col-6">
+                    <label class="form-label small fw-bold">Role</label>
+                    <select class="form-select" id="in-reg-role">
+                      <option value="BUYER">Buyer</option>
+                      <option value="SELLER">Seller</option>
+                      <option value="PROPERTY_OWNER">Property Owner</option>
+                      <option value="TENANT">Tenant</option>
+                      <option value="AGENT">Agent / Broker</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="d-grid mt-3">
+                  <button type="submit" class="btn btn-green py-2 fw-bold" id="btn-do-reg">Create Account</button>
+                </div>
+                <p class="text-center small text-muted mt-3 mb-0">Already registered? <a class="text-success fw-bold text-decoration-none" style="cursor:pointer" onclick="switchAuthTab('login')">Sign In</a></p>
+              </form>
+            </div>
+
+            <!-- PANEL C: FORGOT PASSWORD (3-STEP EMAIL OTP) -->
+            <div id="auth-panel-forgot" style="display:none">
+              <h3 class="fw-bold mb-1">Forgot Password</h3>
+              <p class="text-muted small mb-3">We will send a 6-digit OTP to your registered email address.</p>
+
+              <div class="step-bar">
+                <div class="step-node active" id="fp-dot-1"><div class="step-dot">1</div><div class="step-lbl">Email</div></div>
+                <div class="step-node" id="fp-dot-2"><div class="step-dot">2</div><div class="step-lbl">OTP</div></div>
+                <div class="step-node" id="fp-dot-3"><div class="step-dot">3</div><div class="step-lbl">Reset</div></div>
               </div>
-              <h5 class="fw-bold text-white fs-6 mt-2 mb-1">Modern Duplex &amp; Garden Residences</h5>
-              <p class="text-secondary small mb-3">Sunlit living spaces, contemporary kitchens, and private landscaped terraces.</p>
-              <a href="properties.html?category=RESIDENTIAL" class="text-success fw-semibold small text-decoration-none">Explore Residential <i class="bi bi-arrow-right"></i></a>
+
+              <!-- Step 1 -->
+              <div id="fp-step-1">
+                <form onsubmit="handleSendOtp(event)" novalidate>
+                  <label class="form-label small fw-bold">Registered Email</label>
+                  <input type="email" class="form-control" id="in-fp-email" placeholder="Enter your registered email" required>
+                  <div id="fb-fp-email" class="email-feedback"></div>
+                  <div class="d-grid mt-3">
+                    <button type="submit" class="btn btn-green py-2 fw-bold" id="btn-fp-send"><i class="bi bi-send-fill me-1"></i>Send 6-Digit OTP</button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Step 2 -->
+              <div id="fp-step-2" style="display:none">
+                <div id="fp-otp-banner" class="alert alert-success small mb-2"></div>
+                <form onsubmit="handleVerifyOtp(event)">
+                  <div class="otp-group" id="fp-otp-boxes">
+                    <input maxlength="1" inputmode="numeric" class="otp-digit" required>
+                    <input maxlength="1" inputmode="numeric" class="otp-digit" required>
+                    <input maxlength="1" inputmode="numeric" class="otp-digit" required>
+                    <input maxlength="1" inputmode="numeric" class="otp-digit" required>
+                    <input maxlength="1" inputmode="numeric" class="otp-digit" required>
+                    <input maxlength="1" inputmode="numeric" class="otp-digit" required>
+                  </div>
+                  <div class="d-flex justify-content-between small text-muted mb-3">
+                    <span>Expires in <strong id="fp-timer" class="text-dark">05:00</strong></span>
+                    <button type="button" class="btn btn-link btn-sm p-0 text-success fw-semibold text-decoration-none" onclick="handleResendOtp()">Resend OTP</button>
+                  </div>
+                  <div class="d-grid"><button type="submit" class="btn btn-green py-2 fw-bold" id="btn-fp-verify">Verify OTP</button></div>
+                </form>
+              </div>
+
+              <!-- Step 3 -->
+              <div id="fp-step-3" style="display:none">
+                <form onsubmit="handleResetPassword(event)">
+                  <div class="mb-3"><label class="form-label small fw-bold">New Password</label><input type="password" class="form-control" id="in-fp-newpwd" minlength="6" required></div>
+                  <div class="mb-3"><label class="form-label small fw-bold">Confirm Password</label><input type="password" class="form-control" id="in-fp-confpwd" minlength="6" required></div>
+                  <div class="d-grid"><button type="submit" class="btn btn-green py-2 fw-bold" id="btn-fp-reset">Update Password</button></div>
+                </form>
+              </div>
+
+              <p class="text-center small mt-3 mb-0"><a class="text-success fw-semibold text-decoration-none" style="cursor:pointer" onclick="switchAuthTab('login')"><i class="bi bi-arrow-left me-1"></i>Back to Sign In</a></p>
             </div>
           </div>
-        </div>
 
-        <div class="col-lg-4 col-md-6">
-          <div class="video-tour-card">
-            <video class="video-tour-player" controls muted playsinline preload="metadata" poster="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=900&q=80">
+          <!-- RIGHT BLACK VISUAL PANEL -->
+          <div class="col-lg-5 d-none d-lg-flex flex-column justify-content-between p-4 position-relative bg-dark text-white" style="min-height:460px;overflow:hidden">
+            <video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.38">
               <source src="https://videos.pexels.com/video-files/7578544/7578544-hd_1280_720_30fps.mp4" type="video/mp4">
             </video>
-            <div class="p-3">
-              <div class="d-flex justify-content-between align-items-center mb-1">
-                <span class="badge bg-success">Interior Walkthrough</span>
-                <span class="text-secondary small"><i class="bi bi-geo-alt me-1"></i>Bengaluru</span>
-              </div>
-              <h5 class="fw-bold text-white fs-6 mt-2 mb-1">High-Rise Apartments &amp; Penthouses</h5>
-              <p class="text-secondary small mb-3">Open-concept floor plans with panoramic skyline views and premium finishes.</p>
-              <a href="properties.html?purpose=RENT" class="text-success fw-semibold small text-decoration-none">Explore Rentals <i class="bi bi-arrow-right"></i></a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-12">
-          <div class="video-tour-card">
-            <video class="video-tour-player" controls muted playsinline preload="metadata" poster="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=900&q=80">
-              <source src="https://videos.pexels.com/video-files/7578550/7578550-hd_1280_720_30fps.mp4" type="video/mp4">
-            </video>
-            <div class="p-3">
-              <div class="d-flex justify-content-between align-items-center mb-1">
-                <span class="badge bg-success">Estate Showcase</span>
-                <span class="text-secondary small"><i class="bi bi-geo-alt me-1"></i>Hassan &amp; Kodagu</span>
-              </div>
-              <h5 class="fw-bold text-white fs-6 mt-2 mb-1">Weekend Farmhouses &amp; Country Estates</h5>
-              <p class="text-secondary small mb-3">Peaceful retreats surrounded by greenery, private gardens, and modern amenities.</p>
-              <a href="properties.html?category=FARMHOUSE" class="text-success fw-semibold small text-decoration-none">Explore Farmhouses <i class="bi bi-arrow-right"></i></a>
+            <div style="position:relative;z-index:2"><span class="badge bg-success px-3 py-2">WHITE &bull; GREEN &bull; BLACK</span></div>
+            <div style="position:relative;z-index:2">
+              <h4 class="fw-bold mb-2">Verified Real Estate Access</h4>
+              <p class="small text-light opacity-75 mb-3">Live DNS email validation, salted SHA-256 authentication, and 6-digit Email OTP password recovery backed by Supabase.</p>
+              <div class="small text-success fw-semibold"><i class="bi bi-shield-lock-fill me-1"></i>End-to-End Protected</div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
-
-  <!-- TRUST & SECURITY FEATURES -->
-  <section class="py-5 bg-white border-top">
-    <div class="container">
-      <div class="row g-4 text-center">
-        <div class="col-md-4">
-          <div class="p-4 rounded-4 border h-100">
-            <i class="bi bi-shield-check text-success display-5 mb-3 d-inline-block"></i>
-            <h5 class="fw-bold">Verified Owners &amp; KYC</h5>
-            <p class="text-muted small mb-0">Documented owner identity checks, title deed validation, and transparent approval workflows.</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="p-4 rounded-4 border h-100">
-            <i class="bi bi-envelope-check text-success display-5 mb-3 d-inline-block"></i>
-            <h5 class="fw-bold">Verified Accounts &amp; OTP Security</h5>
-            <p class="text-muted small mb-0">Real-time email domain verification, salted SHA-256 hashing, and email OTP password recovery.</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="p-4 rounded-4 border h-100">
-            <i class="bi bi-calendar2-check text-success display-5 mb-3 d-inline-block"></i>
-            <h5 class="fw-bold">Instant Visits &amp; Agreements</h5>
-            <p class="text-muted small mb-0">Book site inspections, compare up to 3 properties, and manage rentals or purchases in one place.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  </div>
 
   <!-- FOOTER -->
   <footer class="footer-custom">
     <div class="container">
       <div class="row g-4">
-        <div class="col-lg-4 col-md-6">
+        <div class="col-lg-4">
           <h5><i class="bi bi-houses-fill text-success me-2"></i>REAL<span class="text-success">ESTATE</span></h5>
-          <p class="small text-secondary mb-2">Find. Buy. Sell. Rent. Build.</p>
-          <p class="small text-secondary mb-0">A simple, modern, full-stack property marketplace powered by Java &amp; Supabase PostgreSQL.</p>
+          <p class="small text-secondary">Find. Buy. Sell. Rent. Build. All-in-one frontend connected live to Java Backend &amp; Supabase PostgreSQL.</p>
         </div>
-        <div class="col-lg-2 col-md-3 col-6">
-          <h5>Quick Links</h5>
-          <a href="properties.html?purpose=BUY">Buy Properties</a>
-          <a href="properties.html?purpose=RENT">Rent Properties</a>
-          <a href="properties.html?category=AGRICULTURAL">Agricultural Land</a>
-          <a href="properties.html?category=PLOT">Plots &amp; Sites</a>
-          <a href="post-property.html">Post Property</a>
+        <div class="col-lg-3 col-6">
+          <h5>Explore</h5>
+          <a onclick="openProperties({purpose:'BUY'})">Buy Properties</a>
+          <a onclick="openProperties({purpose:'RENT'})">Rent Properties</a>
+          <a onclick="openProperties({category:'AGRICULTURAL'})">Agricultural Land</a>
+          <a onclick="openProperties({category:'FARMHOUSE'})">Farmhouses</a>
         </div>
-        <div class="col-lg-3 col-md-3 col-6">
-          <h5>Top Cities</h5>
-          <a href="properties.html?city=Mysuru">Mysuru</a>
-          <a href="properties.html?city=Bengaluru">Bengaluru</a>
-          <a href="properties.html?city=Mandya">Mandya</a>
-          <a href="properties.html?city=Mangaluru">Mangaluru</a>
-          <a href="properties.html?city=Hyderabad">Hyderabad</a>
+        <div class="col-lg-2 col-6">
+          <h5>Account</h5>
+          <a onclick="openAuthModal('login')">Sign In</a>
+          <a onclick="openAuthModal('register')">Register</a>
+          <a onclick="openAuthModal('forgot')">Forgot Password (OTP)</a>
+          <a onclick="navigate('compare')">Compare</a>
         </div>
-        <div class="col-lg-3 col-md-12">
-          <h5>Account &amp; Security</h5>
-          <a href="login.html">Sign In</a>
-          <a href="register.html">Create Account</a>
-          <a href="forgot-password.html">Forgot Password (Email OTP)</a>
-          <a href="dashboard.html">User Dashboard</a>
+        <div class="col-lg-3">
+          <h5>Cities</h5>
+          <a onclick="openProperties({city:'Mysuru'})">Mysuru</a>
+          <a onclick="openProperties({city:'Bengaluru'})">Bengaluru</a>
+          <a onclick="openProperties({city:'Hyderabad'})">Hyderabad</a>
+          <a onclick="openProperties({city:'Mumbai'})">Mumbai</a>
         </div>
       </div>
-      <div class="footer-bottom text-center">
-        <p class="mb-0">&copy; 2026 Real Estate Management System. Connected to Supabase.</p>
+      <div class="text-center pt-4 mt-4 border-top border-secondary small text-secondary">
+        &copy; 2026 Real Estate Management System &bull; Single-File All-in-One Frontend
       </div>
     </div>
   </footer>
 
+  <div class="toast-box" id="toast-box"></div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="js/app.js"></script>
   <script>
-    function handleSearch(e) {
-      e.preventDefault();
-      const params = new URLSearchParams();
-      const city = document.getElementById('search-city').value;
-      const category = document.getElementById('search-category').value;
-      const purpose = document.getElementById('search-purpose').value;
-      const maxPrice = document.getElementById('search-max-price').value;
-      if (city && city !== 'ALL') params.append('city', city);
-      if (category && category !== 'ALL') params.append('category', category);
-      if (purpose && purpose !== 'ALL') params.append('purpose', purpose);
-      if (maxPrice) params.append('maxPrice', maxPrice);
-      window.location.href = 'properties.html?' + params.toString();
-    }
+    /* =========================================================================
+       ALL-IN-ONE REAL ESTATE SPA CLIENT
+       Works both via double-click (file:// -> http://localhost:8080) & HTTP!
+    ========================================================================= */
+    const API_BASE = (window.location.protocol === 'file:') ? 'http://localhost:8080' : '';
+    let authToken = localStorage.getItem('re_auth_token') || '';
+    let currentUser = null;
+    let backendOnline = false;
+    let compareIds = JSON.parse(localStorage.getItem('re_compare') || '[]');
+    let fpEmail = '', fpOtp = '', fpResetToken = '', fpTimer = null;
+    let cachedProps = [];
 
-    async function loadFeaturedProperties() {
-      const container = document.getElementById('featured-properties-container');
-      try {
-        const res = await fetch('/api/properties?featured=true');
-        const json = await res.json();
-        if (json.status === 'success' && json.data && json.data.length > 0) {
-          container.innerHTML = json.data.map(p => renderPropertyCard(p)).join('');
-        } else {
-          container.innerHTML = '<div class="col-12 text-center text-muted py-4">No featured properties available right now.</div>';
-        }
-      } catch (err) {
-        container.innerHTML = '<div class="col-12 text-center text-danger py-4">Failed to load properties. Ensure backend server is running.</div>';
+    // Built-in showcase fallback (rich category-accurate images & walkthrough videos)
+    const FALLBACK_PROPERTIES = [
+      {
+        propertyId: 1, ownerId: 2, title: 'Luxury 4 BHK Independent Villa in Vijayanagar', categoryCode: 'RESIDENTIAL', categoryName: 'Residential Properties', purpose: 'BUY', price: 18500000, propertyArea: 3200, areaUnit: 'Sq. Ft.', city: 'Mysuru', locality: 'Vijayanagar 2nd Stage', address: 'No 45, 12th Cross, Vijayanagar 2nd Stage, Mysuru', description: 'Exquisite brand-new 4 BHK duplex villa with Burma teakwood finish, landscaped garden, and Italian marble flooring.', bedrooms: 4, bathrooms: 4, ownerName: 'Rajesh Gowda', ownerPhone: '+91 9845012345', ownerVerified: true, estMaintenance: 8000, estRegistration: 1221000,
+        primaryImageUrl: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80',
+        images: ['https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=80'],
+        videoUrl: 'https://videos.pexels.com/video-files/7578552/7578552-hd_1280_720_30fps.mp4',
+        videoLabel: 'Luxury 4 BHK Duplex Villa Tour',
+        amenities: ['Private Garden','Modular Kitchen','Covered Parking','Solar Water Heater','24/7 CCTV Security']
+      },
+      {
+        propertyId: 2, ownerId: 3, title: 'Premium 3 BHK High-Rise Apartment in Indiranagar', categoryCode: 'RESIDENTIAL', categoryName: 'Residential Properties', purpose: 'RENT', price: 65000, propertyArea: 1950, areaUnit: 'Sq. Ft.', city: 'Bengaluru', locality: 'Indiranagar 100ft Road', address: 'Flat 802, Prestige Ozone Towers, Indiranagar, Bengaluru', description: 'Spacious semi-furnished apartment with panoramic Bengaluru skyline views, modular kitchen, and clubhouse access.', bedrooms: 3, bathrooms: 3, ownerName: 'Anand Kulkarni', ownerPhone: '+91 9845198765', ownerVerified: true, estMaintenance: 4875, estRegistration: 0,
+        primaryImageUrl: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80',
+        images: ['https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80'],
+        videoUrl: 'https://videos.pexels.com/video-files/7578547/7578547-hd_1280_720_30fps.mp4',
+        videoLabel: 'High-Rise Apartment & Skyline Living Tour',
+        amenities: ['Swimming Pool','Gymnasium','Clubhouse','24/7 Security','High Speed Elevators']
+      },
+      {
+        propertyId: 8, ownerId: 6, title: 'Grade-A Plug & Play IT Office in Whitefield', categoryCode: 'COMMERCIAL', categoryName: 'Commercial Properties', purpose: 'LEASE', price: 450000, propertyArea: 7500, areaUnit: 'Sq. Ft.', city: 'Bengaluru', locality: 'Whitefield IT Corridor', address: 'Level 4, Sigma Tech Park, Whitefield, Bengaluru', description: 'Fully furnished 90-seater IT office space with boardrooms, server room, cafeteria, and 24/7 security.', bedrooms: 0, bathrooms: 0, ownerName: 'Suresh Reddy Properties', ownerPhone: '+91 9900887766', ownerVerified: true, estMaintenance: 33750, estRegistration: 0,
+        primaryImageUrl: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80',
+        images: ['https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80'],
+        videoUrl: 'https://videos.pexels.com/video-files/853870/853870-hd_1280_720_25fps.mp4',
+        videoLabel: 'Grade-A Commercial IT Park Tour',
+        amenities: ['High Speed Fiber Internet','Central HVAC','Executive Cafeteria','100% DG Power Backup']
+      },
+      {
+        propertyId: 12, ownerId: 3, title: '5.5 Acres Fertile Sugarcane & Paddy Farmland in Mandya', categoryCode: 'AGRICULTURAL', categoryName: 'Agricultural Land', purpose: 'BUY', price: 16500000, propertyArea: 5.5, areaUnit: 'Acres', city: 'Mandya', locality: 'Maddur Highway', address: 'Survey No 142/3, Maddur Taluk, Mandya', description: 'Highly fertile irrigated agricultural land with perennial Cauvery canal water supply and 2 running borewells.', bedrooms: 0, bathrooms: 0, ownerName: 'Anand Kulkarni', ownerPhone: '+91 9845198765', ownerVerified: true, estMaintenance: 8250, estRegistration: 1089000,
+        primaryImageUrl: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80',
+        images: ['https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&w=1200&q=80'],
+        videoUrl: 'https://videos.pexels.com/video-files/1851190/1851190-hd_1280_720_25fps.mp4',
+        videoLabel: 'Fertile Sugarcane & Paddy Farmland Drone Tour',
+        amenities: ['Perennial Canal Water','2 Running Borewells','3-Phase Agri Power','Tar Road Access']
+      },
+      {
+        propertyId: 17, ownerId: 2, title: 'Boutique Coffee Estate Farmhouse with Natural Stream', categoryCode: 'FARMHOUSE', categoryName: 'Farmhouses', purpose: 'BUY', price: 22000000, propertyArea: 3.0, areaUnit: 'Acres', city: 'Hassan', locality: 'Sakleshpur Estate Belt', address: 'Valley View Estate, NH 75, Sakleshpur, Hassan', description: 'Scenic weekend farmhouse inside a 3-acre coffee plantation with natural stream and organic orchard.', bedrooms: 3, bathrooms: 3, ownerName: 'Rajesh Gowda', ownerPhone: '+91 9845012345', ownerVerified: true, estMaintenance: 8000, estRegistration: 1452000,
+        primaryImageUrl: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1200&q=80',
+        images: ['https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80'],
+        videoUrl: 'https://videos.pexels.com/video-files/5527788/5527788-hd_1280_720_25fps.mp4',
+        videoLabel: 'Coffee Estate Farmhouse & Countryside Tour',
+        amenities: ['Natural Running Stream','Private Swimming Pool','Garden Gazebo','Organic Fruit Orchard']
+      },
+      {
+        propertyId: 22, ownerId: 3, title: 'Prime 50x80 North-East Facing Corner Plot', categoryCode: 'PLOT', categoryName: 'Plots and Sites', purpose: 'BUY', price: 11500000, propertyArea: 4000, areaUnit: 'Sq. Ft.', city: 'Mysuru', locality: 'Vijayanagar 2nd Stage', address: 'Site No 102, H-Block, Vijayanagar, Mysuru', description: 'MUDA-approved residential corner site in a fully developed gated layout with 60ft asphalt road.', bedrooms: 0, bathrooms: 0, ownerName: 'Anand Kulkarni', ownerPhone: '+91 9845198765', ownerVerified: true, estMaintenance: 500, estRegistration: 759000,
+        primaryImageUrl: 'https://images.unsplash.com/photo-1524813686514-a57563d77d61?auto=format&fit=crop&w=1200&q=80',
+        images: ['https://images.unsplash.com/photo-1524813686514-a57563d77d61?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80'],
+        videoUrl: 'https://videos.pexels.com/video-files/3129957/3129957-hd_1280_720_25fps.mp4',
+        videoLabel: 'Plot Boundary & Gated Layout Drone Flyover',
+        amenities: ['MUDA Approved','Gated Asphalt Road','Underground Drainage','A-Khata Clear Title']
+      },
+      {
+        propertyId: 27, ownerId: 2, title: 'Coastal Palms 24-Unit Residential Apartment Building', categoryCode: 'BUILDING', categoryName: 'Buildings & Townships', purpose: 'BUY', price: 85000000, propertyArea: 28000, areaUnit: 'Sq. Ft.', city: 'Mangaluru', locality: 'Kadri Hills', address: 'Coastal Palms, Kadri Main Road, Mangaluru', description: 'Fully approved 24-unit stilt+4 residential complex with automatic elevators, terrace garden, and power backup.', bedrooms: 48, bathrooms: 48, ownerName: 'Rajesh Gowda', ownerPhone: '+91 9845012345', ownerVerified: true, estMaintenance: 45000, estRegistration: 5610000,
+        primaryImageUrl: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80',
+        images: ['https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80'],
+        videoUrl: 'https://videos.pexels.com/video-files/2882118/2882118-hd_1280_720_24fps.mp4',
+        videoLabel: '24-Unit Apartment Building Architectural Tour',
+        amenities: ['Twin Elevators','100% Generator Backup','Rainwater Harvesting','Basement Parking']
       }
+    ];
+
+    /* Dynamic Video and Gallery Resolvers - Matches each property to its exact category tour */
+    function getPropertyVideo(p) {
+      if (p.videoUrl && String(p.videoUrl).trim()) {
+        return { url: p.videoUrl.trim(), label: p.videoLabel || 'HD Walkthrough Tour' };
+      }
+      const cat = (p.categoryCode || '').toUpperCase();
+      const title = (p.title || '').toLowerCase();
+      if (cat === 'AGRICULTURAL') {
+        return {
+          url: 'https://videos.pexels.com/video-files/1851190/1851190-hd_1280_720_25fps.mp4',
+          label: 'Aerial Farmland & Crop Survey Tour'
+        };
+      }
+      if (cat === 'FARMHOUSE') {
+        return {
+          url: 'https://videos.pexels.com/video-files/5527788/5527788-hd_1280_720_25fps.mp4',
+          label: 'Scenic Countryside Farmhouse & Orchard Tour'
+        };
+      }
+      if (cat === 'PLOT') {
+        return {
+          url: 'https://videos.pexels.com/video-files/3129957/3129957-hd_1280_720_25fps.mp4',
+          label: 'Plot Boundary & Layout Drone Flyover'
+        };
+      }
+      if (cat === 'COMMERCIAL') {
+        return {
+          url: 'https://videos.pexels.com/video-files/853870/853870-hd_1280_720_25fps.mp4',
+          label: 'Commercial IT Park & Office Space Walkthrough'
+        };
+      }
+      if (cat === 'BUILDING') {
+        return {
+          url: 'https://videos.pexels.com/video-files/2882118/2882118-hd_1280_720_24fps.mp4',
+          label: 'Multi-Unit Complex Architecture Walkthrough'
+        };
+      }
+      // Residential category: differentiate between apartment/flat/PG vs Villa/Independent House
+      if (title.includes('apartment') || title.includes('flat') || title.includes('pg') || title.includes('high-rise') || title.includes('condo')) {
+        return {
+          url: 'https://videos.pexels.com/video-files/7578547/7578547-hd_1280_720_30fps.mp4',
+          label: 'Modern Apartment & High-Rise Tour'
+        };
+      }
+      return {
+        url: 'https://videos.pexels.com/video-files/7578552/7578552-hd_1280_720_30fps.mp4',
+        label: 'Luxury Villa & Duplex Walkthrough Tour'
+      };
     }
 
-    function renderPropertyCard(p) {
-      const purposeBadgeClass = p.purpose === 'BUY' ? 'badge-buy' : (p.purpose === 'RENT' ? 'badge-rent' : 'badge-lease');
-      const inCompare = App.compareList.includes(p.propertyId);
+    function getPropertyGallery(p) {
+      if (p.images && p.images.length > 1) return p.images;
+      const cat = (p.categoryCode || '').toUpperCase();
+      const title = (p.title || '').toLowerCase();
+      const prim = p.primaryImageUrl;
+      let gallery = [];
+      if (cat === 'AGRICULTURAL') {
+        gallery = [
+          prim || 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&w=1200&q=80'
+        ];
+      } else if (cat === 'FARMHOUSE') {
+        gallery = [
+          prim || 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80'
+        ];
+      } else if (cat === 'PLOT') {
+        gallery = [
+          prim || 'https://images.unsplash.com/photo-1524813686514-a57563d77d61?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80'
+        ];
+      } else if (cat === 'COMMERCIAL') {
+        gallery = [
+          prim || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80'
+        ];
+      } else if (cat === 'BUILDING') {
+        gallery = [
+          prim || 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80',
+          'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80'
+        ];
+      } else {
+        if (title.includes('apartment') || title.includes('flat') || title.includes('pg')) {
+          gallery = [
+            prim || 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80'
+          ];
+        } else {
+          gallery = [
+            prim || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=80'
+          ];
+        }
+      }
+      return gallery;
+    }
 
+    async function apiFetch(path, options = {}) {
+      const headers = Object.assign({}, options.headers || {});
+      if (authToken) headers['X-Auth-Token'] = authToken;
+      const res = await fetch(API_BASE + path, Object.assign({}, options, { headers }));
+      return res.json();
+    }
+
+    function esc(s) {
+      if (!s) return '';
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function fmtPrice(price, purpose) {
+      const n = Number(price);
+      if (!n || isNaN(n)) return 'Price on Request';
+      const suf = (purpose === 'RENT' || purpose === 'LEASE') ? ' / mo' : '';
+      if (n >= 10000000) return '₹ ' + (n / 10000000).toFixed(2) + ' Cr' + suf;
+      if (n >= 100000) return '₹ ' + (n / 100000).toFixed(2) + ' Lakh' + suf;
+      return '₹ ' + n.toLocaleString('en-IN') + suf;
+    }
+
+    function toast(msg, type = 'success') {
+      const box = document.getElementById('toast-box');
+      const el = document.createElement('div');
+      const cls = type === 'success' ? 'bg-success' : (type === 'warning' ? 'bg-dark border border-success' : 'bg-danger');
+      el.className = `toast show text-white ${cls} border-0 shadow-lg mb-2`;
+      el.innerHTML = `<div class="d-flex align-items-center p-3 gap-2"><i class="bi ${type==='success'?'bi-check-circle-fill':'bi-exclamation-triangle-fill'}"></i><div class="small flex-grow-1">${esc(msg)}</div><button type="button" class="btn-close btn-close-white btn-sm" onclick="this.closest('.toast').remove()"></button></div>`;
+      box.appendChild(el);
+      setTimeout(() => el.remove(), 4500);
+    }
+
+    /* =========================================================================
+       NAVIGATION & INITIALIZATION
+    ========================================================================= */
+    function navigate(view) {
+      if (view === 'dashboard' && !currentUser) { openAuthModal('login'); toast('Please sign in to open your dashboard.', 'warning'); return; }
+      if (view === 'admin' && (!currentUser || currentUser.role !== 'ADMIN')) { openAuthModal('login'); toast('Administrator sign-in required.', 'warning'); return; }
+      if (view === 'post' && !currentUser) { openAuthModal('login'); toast('Please sign in to post a property.', 'warning'); return; }
+
+      document.querySelectorAll('.spa-view').forEach(v => v.classList.remove('active'));
+      const target = document.getElementById('view-' + view);
+      if (target) target.classList.add('active');
+      document.querySelectorAll('.nav-link').forEach(a => a.classList.remove('active'));
+      const navEl = document.getElementById('nav-' + view);
+      if (navEl) navEl.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (view === 'properties') loadAllProperties();
+      if (view === 'compare') loadCompareView();
+      if (view === 'post') renderCategoryExtra();
+      if (view === 'dashboard') loadDashboard();
+      if (view === 'admin') loadAdminPortal();
+    }
+
+    function openProperties(filters) {
+      document.getElementById('f-city').value = filters.city || 'ALL';
+      document.getElementById('f-cat').value = filters.category || 'ALL';
+      document.getElementById('f-purpose').value = filters.purpose || 'ALL';
+      document.getElementById('f-keyword').value = filters.keyword || '';
+      navigate('properties');
+    }
+
+    function handleHeroSearch(e) {
+      e.preventDefault();
+      openProperties({
+        city: document.getElementById('hero-city').value,
+        category: document.getElementById('hero-cat').value,
+        purpose: document.getElementById('hero-purpose').value
+      });
+    }
+
+    function resetFilters() {
+      document.getElementById('f-city').value = 'ALL';
+      document.getElementById('f-cat').value = 'ALL';
+      document.getElementById('f-purpose').value = 'ALL';
+      document.getElementById('f-keyword').value = '';
+      document.getElementById('f-sort').value = 'newest';
+      loadAllProperties();
+    }
+
+    /* =========================================================================
+       PROPERTY CARDS, FEATURED & EXPLORER
+    ========================================================================= */
+    function renderPropCard(p) {
+      const bCls = p.purpose === 'BUY' ? 'b-buy' : (p.purpose === 'RENT' ? 'b-rent' : 'b-lease');
+      const inCmp = compareIds.includes(p.propertyId);
+      const gallery = getPropertyGallery(p);
+      const vid = getPropertyVideo(p);
+      const cardImg = p.primaryImageUrl || (gallery.length ? gallery[0] : 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1000&q=80');
       return `
         <div class="col-lg-4 col-md-6">
-          <div class="property-card">
-            <div class="property-img-wrapper">
-              <img src="${p.primaryImageUrl || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1000&q=80'}" alt="${App.escapeHtml(p.title)}" class="property-img">
-              <span class="badge-purpose ${purposeBadgeClass}">${App.escapeHtml(p.purpose)}</span>
-              <span class="badge-category">${App.escapeHtml(p.categoryName)}</span>
+          <div class="prop-card">
+            <div class="prop-img-box position-relative">
+              <img src="${esc(cardImg)}" class="prop-img" alt="${esc(p.title)}" loading="lazy">
+              <span class="badge-purpose ${bCls}">${esc(p.purpose)}</span>
+              <span class="badge-cat">${esc(p.categoryName || p.categoryCode)}</span>
+              <span class="badge bg-black bg-opacity-75 text-white position-absolute bottom-0 start-0 m-2 px-2 py-1 small rounded-2 d-inline-flex align-items-center gap-1 shadow-sm" style="font-size:0.72rem;backdrop-filter:blur(4px)">
+                <i class="bi bi-play-circle-fill text-success"></i> Video Tour
+              </span>
             </div>
-            <div class="property-body">
+            <div class="p-3 d-flex flex-column flex-grow-1">
               <div class="d-flex justify-content-between align-items-center mb-1">
-                <div class="property-price">${App.formatPrice(p.price, p.purpose)}</div>
+                <div class="prop-price">${fmtPrice(p.price, p.purpose)}</div>
                 ${p.ownerVerified ? '<span class="badge-verified"><i class="bi bi-patch-check-fill"></i> Verified</span>' : ''}
               </div>
-              <h5 class="property-title">${App.escapeHtml(p.title)}</h5>
-              <div class="property-location">
-                <i class="bi bi-geo-alt text-success"></i> ${App.escapeHtml(p.locality)}, ${App.escapeHtml(p.city)}
-              </div>
-              <div class="property-features">
-                <span><i class="bi bi-aspect-ratio text-success"></i> ${p.propertyArea} ${App.escapeHtml(p.areaUnit)}</span>
+              <h5 class="prop-title mb-1">${esc(p.title)}</h5>
+              <div class="small text-muted mb-3"><i class="bi bi-geo-alt text-success me-1"></i>${esc(p.locality)}, ${esc(p.city)}</div>
+              <div class="prop-features">
+                <span><i class="bi bi-aspect-ratio text-success"></i> ${p.propertyArea} ${esc(p.areaUnit || 'Sq. Ft.')}</span>
                 ${p.bedrooms > 0 ? `<span><i class="bi bi-door-open text-success"></i> ${p.bedrooms} Beds</span>` : ''}
                 ${p.bathrooms > 0 ? `<span><i class="bi bi-droplet text-success"></i> ${p.bathrooms} Baths</span>` : ''}
               </div>
-              <div class="d-flex gap-2 mt-3 pt-2">
-                <a href="property-details.html?id=${p.propertyId}" class="btn btn-black btn-sm flex-grow-1 py-2">View Details</a>
-                <button type="button" class="btn ${inCompare ? 'btn-primary-custom' : 'btn-outline-dark'} btn-sm px-3" onclick="App.toggleCompare(${p.propertyId}, this)" title="Compare">
-                  <i class="bi ${inCompare ? 'bi-check2' : 'bi-arrow-left-right'}"></i>
+              <div class="d-flex gap-2 mt-3">
+                <button class="btn btn-black btn-sm flex-grow-1 py-2" onclick="openPropertyDetails(${p.propertyId})">View Details & Tour</button>
+                <button class="btn ${inCmp ? 'btn-green' : 'btn-outline-dark'} btn-sm px-3" onclick="toggleCompare(${p.propertyId}, this)" title="Compare">
+                  <i class="bi ${inCmp ? 'bi-check2' : 'bi-arrow-left-right'}"></i>
                 </button>
               </div>
             </div>
           </div>
-        </div>
-      `;
+        </div>`;
     }
 
-    document.addEventListener('DOMContentLoaded', loadFeaturedProperties);
+    async function loadFeatured() {
+      const grid = document.getElementById('featured-grid');
+      const pill = document.getElementById('backend-status-pill');
+      try {
+        const json = await apiFetch('/api/properties?featured=true');
+        if (json.status === 'success' && Array.isArray(json.data)) {
+          backendOnline = true;
+          cachedProps = json.data;
+          pill.innerHTML = '<i class="bi bi-circle-fill text-success" style="font-size:0.45rem"></i> Live: Supabase';
+          grid.innerHTML = json.data.map(renderPropCard).join('') || '<div class="col-12 text-center text-muted py-4">No properties found.</div>';
+          return;
+        }
+      } catch (e) {}
+      backendOnline = false;
+      cachedProps = FALLBACK_PROPERTIES;
+      pill.innerHTML = '<i class="bi bi-circle-fill text-warning" style="font-size:0.45rem"></i> Preview Mode (Run start.bat for Live DB)';
+      grid.innerHTML = FALLBACK_PROPERTIES.map(renderPropCard).join('');
+    }
+
+    async function loadAllProperties() {
+      const grid = document.getElementById('all-properties-grid');
+      grid.innerHTML = '<div class="col-12 text-center py-5"><div class="spinner-border text-success"></div></div>';
+      const params = new URLSearchParams();
+      const city = document.getElementById('f-city').value;
+      const cat = document.getElementById('f-cat').value;
+      const purpose = document.getElementById('f-purpose').value;
+      const kw = document.getElementById('f-keyword').value.trim();
+      const sort = document.getElementById('f-sort').value;
+      if (city !== 'ALL') params.set('city', city);
+      if (cat !== 'ALL') params.set('category', cat);
+      if (purpose !== 'ALL') params.set('purpose', purpose);
+      if (kw) params.set('keyword', kw);
+      if (sort) params.set('sortBy', sort);
+
+      try {
+        const json = await apiFetch('/api/properties?' + params.toString());
+        if (json.status === 'success' && Array.isArray(json.data)) {
+          cachedProps = json.data;
+          document.getElementById('prop-count').textContent = json.data.length;
+          grid.innerHTML = json.data.length ? json.data.map(renderPropCard).join('') : '<div class="col-12 text-center text-muted py-5">No properties match your filters.</div>';
+          return;
+        }
+      } catch (e) {}
+      let list = FALLBACK_PROPERTIES.filter(p =>
+        (city === 'ALL' || p.city.toLowerCase() === city.toLowerCase()) &&
+        (cat === 'ALL' || p.categoryCode === cat) &&
+        (purpose === 'ALL' || p.purpose === purpose) &&
+        (!kw || p.title.toLowerCase().includes(kw.toLowerCase()))
+      );
+      document.getElementById('prop-count').textContent = list.length;
+      grid.innerHTML = list.length ? list.map(renderPropCard).join('') : '<div class="col-12 text-center text-muted py-5">No matching properties.</div>';
+    }
+
+    /* =========================================================================
+       PROPERTY DETAILS MODAL + VISIT BOOKING + BUY/RENT
+    ========================================================================= */
+    async function openPropertyDetails(id) {
+      let p = null;
+      try {
+        const json = await apiFetch('/api/properties/details?id=' + id);
+        if (json.status === 'success' && json.data) p = json.data;
+      } catch (e) {}
+      if (!p) p = cachedProps.find(x => x.propertyId === id) || FALLBACK_PROPERTIES.find(x => x.propertyId === id);
+      if (!p) { toast('Property details unavailable.', 'danger'); return; }
+
+      document.getElementById('md-purpose').textContent = p.purpose;
+      document.getElementById('md-title').textContent = p.title;
+      const vid = getPropertyVideo(p);
+      const imgs = getPropertyGallery(p);
+      const amens = p.amenities || [];
+      const isBuy = p.purpose === 'BUY';
+
+      document.getElementById('md-body').innerHTML = `
+        <div class="row g-4">
+          <div class="col-lg-7">
+            <img id="md-main-img" src="${esc(imgs[0])}" class="w-100 rounded-3 mb-2" style="height:320px;object-fit:cover">
+            <div class="d-flex gap-2 mb-3 flex-wrap">
+              ${imgs.map((u,i) => `<img src="${esc(u)}" class="detail-thumb ${i===0?'active':''}" onclick="document.getElementById('md-main-img').src=this.src;document.querySelectorAll('.detail-thumb').forEach(t=>t.classList.remove('active'));this.classList.add('active')">`).join('')}
+            </div>
+            <h5 class="fw-bold mb-2">About This Property</h5>
+            <p class="text-muted small">${esc(p.description)}</p>
+            <div class="mb-3">
+              <h6 class="fw-bold mb-2">Amenities</h6>
+              <div class="d-flex flex-wrap gap-2">${amens.map(a => `<span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2">${esc(a)}</span>`).join('') || '<span class="text-muted small">Standard utilities</span>'}</div>
+            </div>
+            <!-- CATEGORY-SPECIFIC HD VIDEO TOUR -->
+            <div class="bg-dark text-white p-3 rounded-3 shadow-sm border border-secondary border-opacity-25 mt-3">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="small fw-bold text-white d-flex align-items-center gap-2">
+                  <i class="bi bi-camera-reels-fill text-success fs-6"></i>
+                  <span>${esc(vid.label)}</span>
+                </div>
+                <span class="badge bg-success-subtle text-success border border-success-subtle small px-2 py-1">HD Video Tour</span>
+              </div>
+              <video id="md-prop-video" class="w-100 rounded-2" style="max-height:260px;object-fit:cover;background:#000" controls playsinline preload="metadata" poster="${esc(imgs[0])}">
+                <source src="${esc(vid.url)}" type="video/mp4">
+                Your browser does not support HTML5 video.
+              </video>
+              <div class="small text-muted mt-2 d-flex align-items-center justify-content-between">
+                <span><i class="bi bi-geo-alt text-success me-1"></i>${esc(p.locality || p.address || '')}, ${esc(p.city || '')}</span>
+                <span class="text-secondary">${esc(p.categoryName || p.categoryCode || 'Property')} Verified Video</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-5">
+            <div class="p-3 rounded-3 bg-light border mb-3">
+              <div class="prop-price mb-1">${fmtPrice(p.price, p.purpose)}</div>
+              <div class="small text-muted mb-2"><i class="bi bi-geo-alt text-success me-1"></i>${esc(p.address || (p.locality + ', ' + p.city))}</div>
+              <div class="small"><strong>Area:</strong> ${p.propertyArea} ${esc(p.areaUnit)} &bull; <strong>Category:</strong> ${esc(p.categoryName)}</div>
+              <div class="small mt-1"><strong>Est. Maintenance:</strong> ₹ ${Math.round(p.estMaintenance || 0).toLocaleString('en-IN')} / mo</div>
+              ${isBuy ? `<div class="small"><strong>Est. Stamp Duty (6.6%):</strong> ₹ ${Math.round(p.estRegistration || 0).toLocaleString('en-IN')}</div>` : ''}
+            </div>
+
+            <div class="p-3 rounded-3 border mb-3">
+              <div class="small text-muted">Listed By</div>
+              <div class="fw-bold">${esc(p.ownerName || 'Verified Owner')} ${p.ownerVerified ? '<span class="badge-verified ms-1"><i class="bi bi-patch-check-fill"></i> Verified</span>' : ''}</div>
+              <div class="small text-muted">${esc(p.ownerPhone || '')}</div>
+            </div>
+
+            <!-- BOOK VISIT -->
+            <div class="p-3 rounded-3 border mb-3">
+              <h6 class="fw-bold mb-2"><i class="bi bi-calendar-check text-success me-1"></i>Book a Site Visit</h6>
+              <form onsubmit="bookVisit(event, ${p.propertyId})">
+                <div class="row g-2 mb-2">
+                  <div class="col-6"><input type="date" class="form-control form-control-sm" id="bv-date" required></div>
+                  <div class="col-6"><input type="time" class="form-control form-control-sm" id="bv-time" value="10:30" required></div>
+                </div>
+                <input type="text" class="form-control form-control-sm mb-2" id="bv-notes" placeholder="Notes (optional)">
+                <button type="submit" class="btn btn-green btn-sm w-100">Schedule Visit</button>
+              </form>
+            </div>
+
+            <!-- BUY / RENT -->
+            <div class="d-grid gap-2">
+              <button class="btn btn-black py-2" onclick="executeTransaction(${p.propertyId}, ${p.ownerId}, ${p.price}, '${esc(p.purpose)}')">
+                <i class="bi bi-cash-stack me-1"></i>${isBuy ? 'Simulate Property Purchase' : 'Initiate Rental Agreement'}
+              </button>
+            </div>
+          </div>
+        </div>`;
+
+      new bootstrap.Modal(document.getElementById('propertyModal')).show();
+    }
+
+    async function bookVisit(e, propertyId) {
+      e.preventDefault();
+      if (!currentUser) { openAuthModal('login'); toast('Please sign in to schedule a visit.', 'warning'); return; }
+      try {
+        const body = new URLSearchParams({
+          propertyId,
+          visitDate: document.getElementById('bv-date').value,
+          visitTime: document.getElementById('bv-time').value,
+          notes: document.getElementById('bv-notes').value
+        });
+        const json = await apiFetch('/api/appointments', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body.toString() });
+        toast(json.message || 'Visit booked!', json.status === 'success' ? 'success' : 'danger');
+      } catch (err) { toast('Server error booking visit.', 'danger'); }
+    }
+
+    async function executeTransaction(propertyId, ownerId, price, purpose) {
+      if (!currentUser) { openAuthModal('login'); toast('Please sign in first.', 'warning'); return; }
+      const isBuy = purpose === 'BUY';
+      if (!confirm(isBuy ? `Confirm simulated purchase for ${fmtPrice(price, 'BUY')}?` : `Confirm rental agreement at ${fmtPrice(price, 'RENT')}?`)) return;
+      try {
+        const endpoint = isBuy ? '/api/purchases' : '/api/rentals';
+        const payload = isBuy
+          ? { propertyId, sellerId: ownerId, purchasePrice: price }
+          : { propertyId, ownerId, monthlyRent: price, securityDeposit: price * 5, startDate: '2026-12-01', endDate: '2027-11-30' };
+        const json = await apiFetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(payload).toString() });
+        toast(json.message || 'Completed!', json.status === 'success' ? 'success' : 'danger');
+        if (json.status === 'success') { bootstrap.Modal.getInstance(document.getElementById('propertyModal')).hide(); loadFeatured(); }
+      } catch (err) { toast('Transaction failed.', 'danger'); }
+    }
+
+    /* =========================================================================
+       COMPARE
+    ========================================================================= */
+    function updateCompareBadge() {
+      const b = document.getElementById('compare-badge');
+      b.textContent = compareIds.length;
+      b.style.display = compareIds.length ? 'inline-block' : 'none';
+    }
+
+    function toggleCompare(id, btn) {
+      const i = compareIds.indexOf(id);
+      if (i > -1) { compareIds.splice(i, 1); toast('Removed from comparison'); }
+      else {
+        if (compareIds.length >= 3) { toast('Maximum 3 properties can be compared.', 'warning'); return; }
+        compareIds.push(id); toast('Added to comparison');
+      }
+      localStorage.setItem('re_compare', JSON.stringify(compareIds));
+      updateCompareBadge();
+      if (btn) {
+        const on = compareIds.includes(id);
+        btn.className = `btn ${on ? 'btn-green' : 'btn-outline-dark'} btn-sm px-3`;
+        btn.innerHTML = `<i class="bi ${on ? 'bi-check2' : 'bi-arrow-left-right'}"></i>`;
+      }
+    }
+
+    function clearCompare() { compareIds = []; localStorage.setItem('re_compare', '[]'); updateCompareBadge(); loadCompareView(); }
+
+    async function loadCompareView() {
+      const box = document.getElementById('compare-container');
+      if (!compareIds.length) {
+        box.innerHTML = '<div class="text-center py-5 text-muted">No properties selected. Click the compare icon (<i class="bi bi-arrow-left-right"></i>) on any property card.</div>';
+        return;
+      }
+      let list = [];
+      try {
+        const json = await apiFetch('/api/properties/compare?ids=' + compareIds.join(','));
+        if (json.status === 'success' && json.data) list = json.data;
+      } catch (e) {}
+      if (!list.length) list = FALLBACK_PROPERTIES.filter(p => compareIds.includes(p.propertyId));
+
+      const rows = [
+        ['Image', p => `<img src="${esc(p.primaryImageUrl)}" class="rounded-3" style="width:160px;height:100px;object-fit:cover">`],
+        ['Title', p => `<strong>${esc(p.title)}</strong>`],
+        ['Price', p => `<span class="fw-bold text-success">${fmtPrice(p.price, p.purpose)}</span>`],
+        ['Purpose', p => `<span class="badge ${p.purpose==='BUY'?'bg-dark':'bg-success'}">${esc(p.purpose)}</span>`],
+        ['Category', p => esc(p.categoryName)],
+        ['Location', p => `${esc(p.locality)}, ${esc(p.city)}`],
+        ['Area', p => `${p.propertyArea} ${esc(p.areaUnit)}`],
+        ['Est. Maintenance', p => `₹ ${Math.round(p.estMaintenance || 0).toLocaleString('en-IN')} / mo`]
+      ];
+      box.innerHTML = `<div class="table-responsive"><table class="table table-bordered align-middle mb-0">
+        <thead class="table-dark"><tr><th>Attribute</th>${list.map(p => `<th>${esc(p.city)} #${p.propertyId}</th>`).join('')}</tr></thead>
+        <tbody>${rows.map(r => `<tr><td class="fw-bold bg-light">${r[0]}</td>${list.map(p => `<td>${r[1](p)}</td>`).join('')}</tr>`).join('')}</tbody>
+      </table></div>`;
+    }
+
+    /* =========================================================================
+       POST PROPERTY
+    ========================================================================= */
+    function renderCategoryExtra() {
+      const cat = document.getElementById('post-cat').value;
+      const box = document.getElementById('post-extra-fields');
+      const unit = document.getElementById('post-area-unit');
+      if (cat === 'RESIDENTIAL') {
+        unit.value = 'Sq. Ft.';
+        box.innerHTML = `<div class="row g-2"><div class="col-4"><label class="form-label small fw-bold">Type</label><select class="form-select form-select-sm" name="residentialType"><option value="APARTMENT">Apartment</option><option value="VILLA">Villa</option><option value="INDEPENDENT_HOUSE">Independent House</option></select></div><div class="col-4"><label class="form-label small fw-bold">Bedrooms</label><input type="number" class="form-control form-control-sm" name="bedrooms" value="3" min="1"></div><div class="col-4"><label class="form-label small fw-bold">Bathrooms</label><input type="number" class="form-control form-control-sm" name="bathrooms" value="2" min="1"></div></div>`;
+      } else if (cat === 'COMMERCIAL') {
+        unit.value = 'Sq. Ft.';
+        box.innerHTML = `<div class="row g-2"><div class="col-6"><label class="form-label small fw-bold">Commercial Type</label><select class="form-select form-select-sm" name="commercialType"><option value="OFFICE_SPACE">Office Space</option><option value="SHOWROOM">Showroom</option><option value="SHOP">Shop</option><option value="WAREHOUSE">Warehouse</option></select></div><div class="col-6"><label class="form-label small fw-bold">Usage</label><input type="text" class="form-control form-control-sm" name="commercialUsage" placeholder="IT Office / Retail"></div></div>`;
+      } else if (cat === 'AGRICULTURAL') {
+        unit.value = 'Acres';
+        box.innerHTML = `<div class="row g-2"><div class="col-4"><label class="form-label small fw-bold">Land Type</label><select class="form-select form-select-sm" name="landType"><option value="FARMLAND">Farmland</option><option value="PLANTATION">Plantation</option></select></div><div class="col-4"><label class="form-label small fw-bold">Soil Type</label><input type="text" class="form-control form-control-sm" name="soilType" placeholder="Red Loamy"></div><div class="col-4"><label class="form-label small fw-bold">Water</label><input type="text" class="form-control form-control-sm" name="waterAvailability" placeholder="Borewell / Canal"></div></div>`;
+      } else if (cat === 'FARMHOUSE') {
+        unit.value = 'Acres';
+        box.innerHTML = `<div class="row g-2"><div class="col-6"><label class="form-label small fw-bold">Bedrooms</label><input type="number" class="form-control form-control-sm" name="bedrooms" value="3" min="1"></div><div class="col-6"><label class="form-label small fw-bold">Swimming Pool</label><select class="form-select form-select-sm" name="hasSwimmingPool"><option value="true">Yes</option><option value="false">No</option></select></div></div>`;
+      } else if (cat === 'PLOT') {
+        unit.value = 'Sq. Ft.';
+        box.innerHTML = `<div class="row g-2"><div class="col-4"><label class="form-label small fw-bold">Dimensions</label><input type="text" class="form-control form-control-sm" name="plotDimensions" placeholder="40 x 60"></div><div class="col-4"><label class="form-label small fw-bold">Facing</label><select class="form-select form-select-sm" name="facingDirection"><option value="EAST">East</option><option value="NORTH">North</option><option value="NORTH_EAST">North-East</option></select></div><div class="col-4"><label class="form-label small fw-bold">Authority</label><input type="text" class="form-control form-control-sm" name="approvalAuthority" placeholder="MUDA / BDA"></div></div>`;
+      } else {
+        unit.value = 'Sq. Ft.';
+        box.innerHTML = `<div class="row g-2"><div class="col-6"><label class="form-label small fw-bold">Total Units</label><input type="number" class="form-control form-control-sm" name="totalUnits" value="20" min="1"></div><div class="col-6"><label class="form-label small fw-bold">Builder Name</label><input type="text" class="form-control form-control-sm" name="builderName" placeholder="Developer Name"></div></div>`;
+      }
+    }
+
+    async function submitNewProperty(e) {
+      e.preventDefault();
+      const form = new FormData(e.target);
+      const body = new URLSearchParams();
+      for (const [k, v] of form.entries()) body.append(k, v);
+      try {
+        const json = await apiFetch('/api/properties', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body.toString() });
+        if (json.status === 'success') { toast('Property submitted for admin approval!'); e.target.reset(); navigate('dashboard'); }
+        else toast(json.message || 'Failed to save property', 'danger');
+      } catch (err) { toast('Server error submitting property.', 'danger'); }
+    }
+
+    /* =========================================================================
+       USER DASHBOARD & ADMIN PORTAL
+    ========================================================================= */
+    function showDashTab(name, btn) {
+      ['listings','visits','rentals','purchases','kyc'].forEach(t => document.getElementById('dash-tab-' + t).style.display = (t === name ? 'block' : 'none'));
+      document.querySelectorAll('#dash-tabs button').forEach(b => { b.className = 'btn btn-outline-dark btn-sm'; });
+      if (btn) btn.className = 'btn btn-black btn-sm';
+    }
+
+    async function loadDashboard() {
+      document.getElementById('dash-welcome').textContent = `Welcome, ${currentUser.fullName} (${currentUser.role})`;
+      try {
+        const [my, vis, ren, pur, kyc] = await Promise.all([
+          apiFetch('/api/properties/my'), apiFetch('/api/appointments'), apiFetch('/api/rentals'), apiFetch('/api/purchases'), apiFetch('/api/verifications')
+        ]);
+        document.getElementById('dash-my-props').innerHTML = (my.data && my.data.length)
+          ? my.data.map(p => `<div class="col-md-4"><div class="border rounded-3 p-3 h-100"><div class="d-flex justify-content-between mb-1"><span class="badge ${p.approvalStatus==='APPROVED'?'bg-success':'bg-dark'}">${p.approvalStatus}</span><span class="fw-bold text-success">${fmtPrice(p.price,p.purpose)}</span></div><div class="fw-bold small">${esc(p.title)}</div><div class="small text-muted mb-2">${esc(p.city)}</div><button class="btn btn-outline-danger btn-sm" onclick="deleteMyProp(${p.propertyId})">Delete</button></div></div>`).join('')
+          : '<div class="col-12 text-muted small">No properties posted yet.</div>';
+
+        document.getElementById('dash-visits-body').innerHTML = (vis.data && vis.data.length)
+          ? vis.data.map(v => `<tr><td>${esc(v.propertyTitle)}</td><td>${esc(v.visitDate)}</td><td>${esc(v.visitTime)}</td><td>${esc(v.contactNumber)}</td><td><span class="badge bg-success">${esc(v.status)}</span></td><td class="small">${esc(v.notes||'-')}</td></tr>`).join('')
+          : '<tr><td colspan="6" class="text-center text-muted">No scheduled visits.</td></tr>';
+
+        document.getElementById('dash-rentals-body').innerHTML = (ren.data && ren.data.length)
+          ? ren.data.map(r => `<tr><td>${esc(r.propertyTitle)}</td><td class="fw-bold text-success">₹ ${Number(r.monthlyRent).toLocaleString('en-IN')}</td><td>₹ ${Number(r.securityDeposit).toLocaleString('en-IN')}</td><td class="small">${esc(r.startDate)} → ${esc(r.endDate)}</td><td><span class="badge bg-success">${esc(r.status)}</span></td><td><button class="btn btn-green btn-sm" onclick="payRent(${r.agreementId},${r.monthlyRent})">Pay Rent</button></td></tr>`).join('')
+          : '<tr><td colspan="6" class="text-center text-muted">No rental agreements.</td></tr>';
+
+        document.getElementById('dash-purchases-body').innerHTML = (pur.data && pur.data.length)
+          ? pur.data.map(p => `<tr><td>${esc(p.propertyTitle)}</td><td class="fw-bold text-success">₹ ${Number(p.purchasePrice).toLocaleString('en-IN')}</td><td><code>${esc(p.txnRef)}</code></td><td><span class="badge bg-success">${esc(p.status)}</span></td><td class="small">${esc(p.remarks||'-')}</td></tr>`).join('')
+          : '<tr><td colspan="5" class="text-center text-muted">No purchase records.</td></tr>';
+
+        const k = kyc.data || { status: 'NOT_SUBMITTED' };
+        document.getElementById('dash-kyc-status').className = k.status === 'APPROVED' ? 'alert alert-success small' : 'alert alert-dark small';
+        document.getElementById('dash-kyc-status').innerHTML = `<strong>KYC Status:</strong> ${esc(k.status)}`;
+      } catch (e) { toast('Could not load dashboard data.', 'danger'); }
+    }
+
+    async function deleteMyProp(propertyId) {
+      if (!confirm('Delete this listing?')) return;
+      const json = await apiFetch('/api/properties/delete', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: 'propertyId=' + propertyId });
+      toast(json.message, json.status === 'success' ? 'success' : 'danger');
+      loadDashboard();
+    }
+
+    async function payRent(agreementId, amount) {
+      const month = prompt('Enter payment month (e.g. December 2026):', 'December 2026');
+      if (!month) return;
+      const json = await apiFetch('/api/rentals/pay', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ agreementId, paymentMonth: month, amount, paymentMethod: 'SIMULATED_UPI' }).toString() });
+      toast(json.message, json.status === 'success' ? 'success' : 'danger');
+    }
+
+    async function submitKyc(e) {
+      e.preventDefault();
+      const body = new URLSearchParams({
+        proofType: document.getElementById('kyc-type').value,
+        proofNumber: document.getElementById('kyc-num').value,
+        propertyAddress: document.getElementById('kyc-addr').value
+      });
+      const json = await apiFetch('/api/verifications', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body.toString() });
+      toast(json.message, json.status === 'success' ? 'success' : 'danger');
+      loadDashboard();
+    }
+
+    async function loadAdminPortal() {
+      try {
+        const [st, pend, ver, usrs] = await Promise.all([
+          apiFetch('/api/admin/stats'), apiFetch('/api/admin/properties/pending'), apiFetch('/api/admin/verifications'), apiFetch('/api/admin/users')
+        ]);
+        const s = st.data || {};
+        const kpis = [['Total Users', s.totalUsers], ['Total Properties', s.totalProperties], ['For Sale', s.propertiesForSale], ['Rent / Lease', s.propertiesForRent], ['Pending Approvals', s.pendingApprovals], ['Verified Owners', s.verifiedOwners], ['Appointments', s.totalAppointments], ['Purchases', s.purchaseTransactions]];
+        document.getElementById('admin-kpi-row').innerHTML = kpis.map(k => `<div class="col-6 col-md-3"><div class="bg-white border rounded-3 p-3 shadow-sm"><div class="small text-muted">${k[0]}</div><div class="fs-3 fw-bold text-success">${k[1] || 0}</div></div></div>`).join('');
+
+        document.getElementById('admin-pending-body').innerHTML = (pend.data && pend.data.length)
+          ? pend.data.map(p => `<tr><td><strong>${esc(p.title)}</strong><div class="small text-muted">${esc(p.city)}</div></td><td>${esc(p.categoryName)}</td><td>${esc(p.ownerName)}</td><td class="text-success fw-bold">${fmtPrice(p.price,p.purpose)}</td><td class="text-end"><button class="btn btn-green btn-sm me-1" onclick="adminProp(${p.propertyId},'approve')">Approve</button><button class="btn btn-outline-danger btn-sm" onclick="adminProp(${p.propertyId},'reject')">Reject</button></td></tr>`).join('')
+          : '<tr><td colspan="5" class="text-center text-success">No pending approvals.</td></tr>';
+
+        document.getElementById('admin-kyc-body').innerHTML = (ver.data && ver.data.length)
+          ? ver.data.map(v => `<tr><td>${esc(v.userName)}</td><td>${esc(v.proofType)}</td><td><code>${esc(v.proofNumber)}</code></td><td class="small">${esc(v.address)}</td><td class="text-end"><button class="btn btn-green btn-sm me-1" onclick="adminKyc(${v.verificationId},'APPROVED')">Verify</button><button class="btn btn-outline-danger btn-sm" onclick="adminKyc(${v.verificationId},'REJECTED')">Reject</button></td></tr>`).join('')
+          : '<tr><td colspan="5" class="text-center text-muted">No pending KYC requests.</td></tr>';
+
+        document.getElementById('admin-users-body').innerHTML = (usrs.data || []).map(u => `<tr><td>#${u.userId}</td><td><strong>${esc(u.fullName)}</strong></td><td>${esc(u.email)}</td><td>${esc(u.mobile)}</td><td><span class="badge bg-dark">${esc(u.role)}</span></td><td>${u.isVerified?'<span class="badge bg-success">Verified</span>':'<span class="badge bg-secondary">Standard</span>'}</td></tr>`).join('');
+      } catch (e) { toast('Failed to load admin portal.', 'danger'); }
+    }
+
+    async function adminProp(propertyId, action) {
+      const json = await apiFetch('/api/admin/properties/' + action, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ propertyId, reason: 'Reviewed by admin' }).toString() });
+      toast(json.message); loadAdminPortal();
+    }
+
+    async function adminKyc(verificationId, status) {
+      const json = await apiFetch('/api/admin/verifications/action', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ verificationId, status, notes: 'Reviewed by admin' }).toString() });
+      toast(json.message); loadAdminPortal();
+    }
+
+    /* =========================================================================
+       LIVE EMAIL VALIDATOR + AUTH + FORGOT PASSWORD (EMAIL OTP)
+    ========================================================================= */
+    function isEmailSyntaxValid(email) {
+      return /^[A-Za-z0-9](?:[A-Za-z0-9._%+-]{0,62}[A-Za-z0-9])?@[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*\.[A-Za-z]{2,63}$/.test(email) && !email.includes('..');
+    }
+
+    function attachValidator(inputId, fbId, opts = {}) {
+      const inp = document.getElementById(inputId), fb = document.getElementById(fbId);
+      let ok = false, timer = null;
+      const run = async (now = false) => {
+        const val = inp.value.trim();
+        if (!val) { ok = false; inp.classList.remove('is-valid','is-invalid'); fb.className = 'email-feedback'; fb.innerHTML = ''; return false; }
+        if (!isEmailSyntaxValid(val)) {
+          ok = false; inp.classList.add('is-invalid'); inp.classList.remove('is-valid');
+          fb.className = 'email-feedback invalid'; fb.innerHTML = '<i class="bi bi-x-circle-fill"></i> Invalid email format (e.g. name@domain.com)';
+          return false;
+        }
+        const check = async () => {
+          fb.className = 'email-feedback checking'; fb.innerHTML = 'Checking email domain...';
+          try {
+            const json = await apiFetch('/api/auth/validate-email', {
+              method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+              body: new URLSearchParams({ email: val, checkExists: opts.checkExists ? 'true' : 'false' }).toString()
+            });
+            const d = json.data || {};
+            if (!d.valid) {
+              ok = false; inp.classList.add('is-invalid'); inp.classList.remove('is-valid'); fb.className = 'email-feedback invalid';
+              fb.innerHTML = d.suggestion
+                ? `<i class="bi bi-exclamation-circle-fill"></i> ${esc(d.message)} <button type="button" class="btn btn-link btn-sm p-0 text-success fw-bold" id="${fbId}-fix">Fix</button>`
+                : `<i class="bi bi-x-circle-fill"></i> ${esc(d.message)}`;
+              const fx = document.getElementById(fbId + '-fix');
+              if (fx) fx.onclick = () => { inp.value = d.suggestion; run(true); };
+              return false;
+            }
+            if (opts.mustBeNew && d.registered) { ok = false; inp.classList.add('is-invalid'); fb.className = 'email-feedback invalid'; fb.innerHTML = '<i class="bi bi-x-circle-fill"></i> Email already registered.'; return false; }
+            if (opts.mustExist && !d.registered) { ok = false; inp.classList.add('is-invalid'); fb.className = 'email-feedback invalid'; fb.innerHTML = '<i class="bi bi-x-circle-fill"></i> No account found with this email.'; return false; }
+            ok = true; inp.classList.remove('is-invalid'); inp.classList.add('is-valid'); fb.className = 'email-feedback valid';
+            fb.innerHTML = `<i class="bi bi-check-circle-fill"></i> ${esc(d.message)}`;
+            return true;
+          } catch (e) { ok = true; inp.classList.add('is-valid'); fb.className = 'email-feedback valid'; fb.innerHTML = '<i class="bi bi-check-circle-fill"></i> Valid format'; return true; }
+        };
+        if (now) return check();
+        clearTimeout(timer); timer = setTimeout(check, 400); return ok;
+      };
+      inp.addEventListener('input', () => run(false));
+      inp.addEventListener('blur', () => run(true));
+      return { validateNow: () => run(true) };
+    }
+
+    let valLogin, valReg, valFp;
+
+    function openAuthModal(tab) {
+      switchAuthTab(tab);
+      new bootstrap.Modal(document.getElementById('authModal')).show();
+    }
+
+    function switchAuthTab(tab) {
+      ['login','register','forgot'].forEach(t => document.getElementById('auth-panel-' + t).style.display = (t === tab ? 'block' : 'none'));
+      if (tab === 'forgot') setFpStep(1);
+    }
+
+    function toggleEye(id, btn) {
+      const el = document.getElementById(id);
+      const show = el.type === 'password';
+      el.type = show ? 'text' : 'password';
+      btn.innerHTML = show ? '<i class="bi bi-eye-slash"></i>' : '<i class="bi bi-eye"></i>';
+    }
+
+    function fillDemo(email, pwd) {
+      document.getElementById('in-login-email').value = email;
+      document.getElementById('in-login-pwd').value = pwd;
+      valLogin.validateNow();
+    }
+
+    function renderAuthNav() {
+      const slot = document.getElementById('nav-auth-slot');
+      if (currentUser) {
+        slot.innerHTML = `
+          <div class="dropdown">
+            <button class="btn btn-black btn-sm dropdown-toggle d-flex align-items-center gap-2" data-bs-toggle="dropdown">
+              <i class="bi bi-person-circle text-success"></i><span>${esc(currentUser.fullName)}</span>
+              <span class="badge bg-success">${esc(currentUser.role)}</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+              <li><a class="dropdown-item" style="cursor:pointer" onclick="navigate('dashboard')"><i class="bi bi-speedometer2 me-2 text-success"></i>Dashboard</a></li>
+              <li><a class="dropdown-item" style="cursor:pointer" onclick="navigate('post')"><i class="bi bi-plus-circle me-2 text-success"></i>Post Property</a></li>
+              ${currentUser.role === 'ADMIN' ? '<li><a class="dropdown-item text-success fw-bold" style="cursor:pointer" onclick="navigate(\'admin\')"><i class="bi bi-shield-check me-2"></i>Admin Portal</a></li>' : ''}
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" style="cursor:pointer" onclick="handleLogout()"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+            </ul>
+          </div>`;
+      } else {
+        slot.innerHTML = `<button class="btn btn-outline-green btn-sm px-3" onclick="openAuthModal('login')">Login</button><button class="btn btn-green btn-sm px-3" onclick="openAuthModal('register')">Register</button>`;
+      }
+    }
+
+    async function checkSession() {
+      try {
+        const json = await apiFetch('/api/auth/me');
+        currentUser = (json.status === 'success' && json.data) ? json.data : null;
+      } catch (e) { currentUser = null; }
+      renderAuthNav();
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      if (!(await valLogin.validateNow())) { toast('Enter a valid email address.', 'danger'); return; }
+      const email = document.getElementById('in-login-email').value.trim();
+      const password = document.getElementById('in-login-pwd').value;
+      try {
+        const json = await apiFetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ email, password }).toString() });
+        if (json.status === 'success' && json.data) {
+          currentUser = json.data;
+          if (json.data.authToken) { authToken = json.data.authToken; localStorage.setItem('re_auth_token', authToken); }
+          renderAuthNav();
+          bootstrap.Modal.getInstance(document.getElementById('authModal')).hide();
+          toast(`Welcome back, ${currentUser.fullName}!`);
+          navigate(currentUser.role === 'ADMIN' ? 'admin' : 'dashboard');
+        } else toast(json.message || 'Invalid credentials', 'danger');
+      } catch (err) { toast('Backend server offline. Run start.bat or java RealEstateBackend.java.', 'danger'); }
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      if (!(await valReg.validateNow())) { toast('Enter a valid, unregistered email.', 'danger'); return; }
+      const body = new URLSearchParams({
+        fullName: document.getElementById('in-reg-name').value.trim(),
+        mobile: document.getElementById('in-reg-mobile').value.trim(),
+        email: document.getElementById('in-reg-email').value.trim(),
+        password: document.getElementById('in-reg-pwd').value,
+        role: document.getElementById('in-reg-role').value
+      });
+      try {
+        const json = await apiFetch('/api/auth/register', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body.toString() });
+        if (json.status === 'success' && json.data) {
+          currentUser = json.data;
+          if (json.data.authToken) { authToken = json.data.authToken; localStorage.setItem('re_auth_token', authToken); }
+          renderAuthNav();
+          bootstrap.Modal.getInstance(document.getElementById('authModal')).hide();
+          toast('Account created in Supabase!');
+          navigate('dashboard');
+        } else toast(json.message || 'Registration failed', 'danger');
+      } catch (err) { toast('Backend server offline.', 'danger'); }
+    }
+
+    async function handleLogout() {
+      try { await apiFetch('/api/auth/logout', { method: 'POST' }); } catch (e) {}
+      authToken = ''; currentUser = null; localStorage.removeItem('re_auth_token');
+      renderAuthNav(); navigate('home'); toast('Signed out successfully.');
+    }
+
+    // FORGOT PASSWORD (3-STEP EMAIL OTP)
+    function setFpStep(n) {
+      [1,2,3].forEach(i => {
+        document.getElementById('fp-step-' + i).style.display = (i === n ? 'block' : 'none');
+        const d = document.getElementById('fp-dot-' + i);
+        d.classList.remove('active','done');
+        if (i < n) d.classList.add('done'); else if (i === n) d.classList.add('active');
+      });
+    }
+
+    function startFpTimer(sec) {
+      clearInterval(fpTimer);
+      let rem = sec;
+      const el = document.getElementById('fp-timer');
+      const tick = () => {
+        el.textContent = `${String(Math.floor(rem/60)).padStart(2,'0')}:${String(rem%60).padStart(2,'0')}`;
+        if (rem-- <= 0) { clearInterval(fpTimer); el.textContent = 'Expired'; }
+      };
+      tick(); fpTimer = setInterval(tick, 1000);
+    }
+
+    async function handleSendOtp(e) {
+      e.preventDefault();
+      if (!(await valFp.validateNow())) { toast('Enter a valid, registered email.', 'danger'); return; }
+      fpEmail = document.getElementById('in-fp-email').value.trim();
+      try {
+        const json = await apiFetch('/api/auth/forgot-password', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ email: fpEmail }).toString() });
+        if (json.status === 'success' && json.data) {
+          const d = json.data;
+          const b = document.getElementById('fp-otp-banner');
+          b.className = d.sentToInbox ? 'alert alert-success small mb-2' : 'alert alert-dark border-success small mb-2';
+          b.innerHTML = d.sentToInbox
+            ? `<i class="bi bi-envelope-check-fill me-1"></i>${esc(d.infoMessage)}`
+            : `<div>${esc(d.infoMessage)}</div>${d.demoOtp ? `<div class="mt-1">Dev OTP: <span class="badge bg-success fs-6">${esc(d.demoOtp)}</span></div>` : ''}`;
+          setFpStep(2); startFpTimer(d.expiresInSeconds || 300); toast('6-digit OTP sent!');
+        } else toast(json.message || 'Could not send OTP', 'danger');
+      } catch (err) { toast('Backend server offline.', 'danger'); }
+    }
+
+    async function handleResendOtp() {
+      if (!fpEmail) return;
+      const json = await apiFetch('/api/auth/forgot-password', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ email: fpEmail }).toString() });
+      if (json.status === 'success') {
+        startFpTimer(300); toast('Fresh OTP sent!');
+        if (json.data && json.data.demoOtp) document.getElementById('fp-otp-banner').innerHTML = `<div>${esc(json.data.infoMessage)}</div><div class="mt-1">Dev OTP: <span class="badge bg-success fs-6">${esc(json.data.demoOtp)}</span></div>`;
+      } else toast(json.message, 'warning');
+    }
+
+    async function handleVerifyOtp(e) {
+      e.preventDefault();
+      const otp = Array.from(document.querySelectorAll('#fp-otp-boxes .otp-digit')).map(i => i.value).join('');
+      if (otp.length !== 6) { toast('Enter all 6 digits.', 'danger'); return; }
+      const json = await apiFetch('/api/auth/verify-otp', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ email: fpEmail, otp }).toString() });
+      if (json.status === 'success' && json.data) {
+        fpOtp = otp; fpResetToken = json.data.resetToken; clearInterval(fpTimer);
+        setFpStep(3); toast('OTP verified! Set your new password.');
+      } else toast(json.message || 'Invalid OTP', 'danger');
+    }
+
+    async function handleResetPassword(e) {
+      e.preventDefault();
+      const p1 = document.getElementById('in-fp-newpwd').value, p2 = document.getElementById('in-fp-confpwd').value;
+      if (p1 !== p2) { toast('Passwords do not match.', 'danger'); return; }
+      const json = await apiFetch('/api/auth/reset-password', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ email: fpEmail, resetToken: fpResetToken, otp: fpOtp, newPassword: p1 }).toString() });
+      if (json.status === 'success') { toast('Password updated in Supabase! Sign in now.'); switchAuthTab('login'); }
+      else toast(json.message || 'Reset failed', 'danger');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      valLogin = attachValidator('in-login-email', 'fb-login-email', { checkExists: false });
+      valReg = attachValidator('in-reg-email', 'fb-reg-email', { checkExists: true, mustBeNew: true });
+      valFp = attachValidator('in-fp-email', 'fb-fp-email', { checkExists: true, mustExist: true });
+
+      const boxes = document.querySelectorAll('#fp-otp-boxes .otp-digit');
+      boxes.forEach((b, idx) => {
+        b.addEventListener('input', () => { b.value = b.value.replace(/\D/g,'').slice(0,1); if (b.value && idx < 5) boxes[idx+1].focus(); });
+        b.addEventListener('keydown', e => { if (e.key === 'Backspace' && !b.value && idx > 0) boxes[idx-1].focus(); });
+        b.addEventListener('paste', e => {
+          e.preventDefault();
+          const d = (e.clipboardData.getData('text')||'').replace(/\D/g,'').slice(0,6);
+          d.split('').forEach((ch,i) => { if (boxes[i]) boxes[i].value = ch; });
+        });
+      });
+
+      const propModalEl = document.getElementById('propertyModal');
+      if (propModalEl) {
+        propModalEl.addEventListener('hidden.bs.modal', () => {
+          const v = document.getElementById('md-prop-video');
+          if (v) { v.pause(); v.currentTime = 0; }
+        });
+      }
+
+      updateCompareBadge();
+      checkSession();
+      loadFeatured();
+    });
   </script>
 </body>
 </html>
