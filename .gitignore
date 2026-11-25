@@ -1,0 +1,18 @@
+# Secrets & local environment (NEVER commit .env!)
+.env
+
+# Build artifacts & Java binaries
+target/
+bin/
+*.class
+*.war
+*.jar
+
+# Python / IDE / OS files
+.venv/
+.claude/
+.vscode/
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
