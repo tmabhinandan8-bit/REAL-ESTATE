@@ -5,6 +5,14 @@ A full-stack, responsive, and professional web application designed for property
 
 ---
 
+## Standalone two-file version
+
+- `index.front` contains the complete standalone frontend.
+- `backend.java` contains the embedded Java server and serves `index.front` as HTML at `http://localhost:8080/`.
+- Start it with `.\start.ps1` or `.\start.bat` using JDK 11. The Maven/Servlet source tree remains available separately.
+
+---
+
 ## 1. DRAWBACK ANALYSIS & HOW THEY ARE COMPLETELY RESOLVED
 
 When analyzing the original ChatGPT master development prompt and naive college implementations, eight critical software engineering, security, and architectural drawbacks were identified and systematically resolved:

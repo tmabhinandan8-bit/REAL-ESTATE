@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload 3D Property Model</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f6f8;color:#172033}
+    .wrap{max-width:720px;margin:40px auto;padding:24px}.card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:26px;box-shadow:0 8px 28px #1522380c}
+    h1{margin:0 0 8px;font-size:26px}.muted{color:#667085;line-height:1.5}.field{margin:20px 0}
+    label{display:block;font-weight:600;margin-bottom:8px}input{width:100%;padding:12px;border:1px solid #cfd5df;border-radius:9px;font-size:15px}
+    button{border:0;border-radius:9px;background:#172b4d;color:white;padding:13px 20px;font-weight:700;cursor:pointer}
+    button:disabled{opacity:.55;cursor:wait}.status{margin-top:18px;padding:12px;border-radius:9px;display:none;white-space:pre-wrap}
+    .note{font-size:13px;color:#667085}.status.ok{display:block;background:#ecfdf3;color:#067647}.status.err{display:block;background:#fef3f2;color:#b42318}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h1>Upload 3D House Model</h1>
+    <p class="muted">Upload a GLB or GLTF model for one of your properties. After upload, buyers can open the property page and explore the model.</p>
+    <form id="uploadForm">
+      <div class="field">
+        <label for="propertyId">Property ID</label>
+        <input id="propertyId" type="number" min="1" required placeholder="Enter the property ID">
+      </div>
+      <div class="field">
+        <label for="modelFile">3D model file (.glb or .gltf)</label>
+        <input id="modelFile" type="file" accept=".glb,.gltf,model/gltf-binary,model/gltf+json" required>
+        <p class="note">Maximum file size: 50 MB. For the simplest upload, use a single .glb file. A .gltf file may depend on separate texture files.</p>
+      </div>
+      <button id="uploadButton" type="submit">Upload and attach to property</button>
+    </form>
+    <div id="status" class="status" role="status"></div>
+  </div>
+</div>
+<script>
+const form = document.getElementById('uploadForm');
+const statusBox = document.getElementById('status');
+const button = document.getElementById('uploadButton');
+
+function showStatus(message, ok) {
+  statusBox.textContent = message;
+  statusBox.className = 'status ' + (ok ? 'ok' : 'err');
+}
+async function readJson(response) {
+  const body = await response.json();
+  if (!response.ok || body.status === 'error') {
+    throw new Error(body.message || ('Request failed: HTTP ' + response.status));
+  }
+  return body;
+}
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const propertyId = document.getElementById('propertyId').value.trim();
+  const file = document.getElementById('modelFile').files[0];
+  if (!file) return showStatus('Choose a 3D model first.', false);
+  const ext = file.name.toLowerCase().split('.').pop();
+  if (!['glb','gltf'].includes(ext)) return showStatus('Only .glb and .gltf files are supported.', false);
+  if (file.size <= 0 || file.size > 50 * 1024 * 1024) return showStatus('The file must be smaller than 50 MB.', false);
+
+  const contentType = ext === 'glb' ? 'model/gltf-binary' : 'model/gltf+json';
+  button.disabled = true;
+  button.textContent = 'Uploading...';
+  showStatus('Step 1 of 3: requesting a secure upload link...', true);
+
+  try {
+    // Same-origin session cookie (AUTH_TOKEN) is sent automatically by the browser.
+    const presignResponse = await fetch('/api/uploads/presign', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({filename:file.name, contentType, sizeBytes:file.size})
+    });
+    const presign = await readJson(presignResponse);
+    const uploadInfo = presign.data;
+    if (!uploadInfo || !uploadInfo.uploadUrl || !uploadInfo.publicUrl) {
+      throw new Error('The backend did not return the upload URL.');
+    }
+
+    showStatus('Step 2 of 3: uploading the 3D model...', true);
+    const uploadResponse = await fetch(uploadInfo.uploadUrl, {
+      method: 'PUT',
+      credentials: 'same-origin',
+      headers: {'Content-Type':contentType},
+      body: file
+    });
+    await readJson(uploadResponse);
+
+    showStatus('Step 3 of 3: attaching the model to property #' + propertyId + '...', true);
+    const updateResponse = await fetch('/api/properties/update', {
+      method: 'PUT',
+      credentials: 'same-origin',
+      headers: {'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
+      body: new URLSearchParams({
+        propertyId,
+        model3dUrl: uploadInfo.publicUrl,
+        model3dFormat: 'GLB'
+      })
+    });
+    await readJson(updateResponse);
+
+    showStatus('Success! The 3D model has been uploaded and attached to this property.\\nBuyer preview: /property-3d-view.html?id=' + encodeURIComponent(propertyId), true);
+  } catch (error) {
+    showStatus('Upload failed: ' + error.message + '\\nMake sure you are logged in and that this property belongs to your seller account.', false);
+  } finally {
+    button.disabled = false;
+    button.textContent = 'Upload and attach to property';
+  }
+});
+</script>
+</body>
+</html>
