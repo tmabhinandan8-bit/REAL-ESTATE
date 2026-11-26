@@ -31,7 +31,7 @@ if errorlevel 1 (
     exit /b 1
 )
 
-echo Starting EstateEase Real Estate Management System (Java + Supabase)...
+echo Starting EstateEase Real Estate Management System (Java Backend - Standalone Data Store)...
 if not exist out mkdir out
 javac -encoding UTF-8 -d out RealEstateBackend.java
 if errorlevel 1 (

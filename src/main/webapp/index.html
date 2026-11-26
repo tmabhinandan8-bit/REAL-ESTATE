@@ -200,8 +200,23 @@ footer{background:var(--navy);color:#e8eef4;padding:32px 20px;text-align:center;
         <div class="field"><label>Bedrooms</label><input id="sellBeds" type="number" min="0" placeholder="e.g. 4"></div>
         <div class="field"><label>Bathrooms</label><input id="sellBaths" type="number" min="0" placeholder="e.g. 4"></div>
         <div class="field"><label>Super Built-up Area (Sq. Ft.)</label><input id="sellArea" type="number" placeholder="e.g. 3400"></div>
-        <div class="field"><label>Attach 3D Model (.glb / .gltf)</label><input id="sellModelFile" type="file" accept=".glb,.gltf"></div>
-        <div class="field" style="margin-top:20px;">
+        <div class="field">
+          <label>📸 Upload Property Photo (JPEG, PNG, JPG, WebP)</label>
+          <input id="sellPhotoFile" type="file" accept="image/jpeg,image/png,image/webp,image/jpg" onchange="previewPropertyPhoto(this)">
+          <div id="photoPreviewContainer" style="display:none; margin-top:10px;">
+            <img id="sellPhotoPreview" src="" alt="Property Preview" style="width:100%; max-height:160px; object-fit:cover; border-radius:8px; border:2px solid var(--blue);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+              <span style="font-size:12px; color:var(--blue); font-weight:700;">✓ Photo ready for listing</span>
+              <button type="button" class="btn light" style="padding:2px 8px; font-size:11px;" onclick="clearPropertyPhoto()">✕ Remove</button>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Or Photo URL (optional)</label>
+          <input id="sellPhotoUrl" type="url" placeholder="https://... (or upload photo file above)">
+        </div>
+        <div class="field"><label>Attach 3D Model (.glb / .gltf)</label><input id="sellModelFile" type="file" accept=".glb,.gltf" onchange="previewModelFile(this)"></div>
+        <div class="field" style="margin-top:15px;">
           <a href="seller-3d-upload.html" target="_blank" class="btn light" style="width:100%;">
             ⚡ Open Dedicated 3D Model Uploader Studio
           </a>
@@ -223,18 +238,18 @@ footer{background:var(--navy);color:#e8eef4;padding:32px 20px;text-align:center;
 <section id="about" class="page">
   <div class="panel">
     <h2>About DreamHome Real Estate Management System</h2>
-    <p>DreamHome is an enterprise-grade real estate platform designed for property buyers, sellers, renters, and agents. Developed as an academic and professional project, it combines Java backend architecture, Supabase cloud persistence, interactive Three.js 3D architectural rendering, and Google Maps geo-spatial location services.</p>
+    <p>DreamHome is an enterprise-grade real estate platform designed for property buyers, sellers, renters, and agents. Developed as an academic and professional project, it combines robust Java backend architecture, standalone in-backend data persistence, interactive Three.js 3D architectural rendering, and Google Maps geo-spatial location services.</p>
     <h3>Core Capabilities</h3>
     <div class="detail-list">
       <div><b>🗺️ Google Maps Location Services:</b> Exact coordinates, street landmarks, and one-click driving navigation for every property.</div>
       <div><b>🎮 3D Architectural Studio:</b> Interactive 360° Three.js models with day, sunset, and night lighting controls, and interior inspection.</div>
       <div><b>🏛️ Multi-State Property Portfolio:</b> Curated listings covering Karnataka, Maharashtra, Goa, Telangana, Tamil Nadu, and Delhi NCR.</div>
-      <div><b>🔒 Supabase REST &amp; Cloud Database:</b> Live synchronized PostgREST queries with in-memory caching resilience.</div>
+      <div><b>🔒 Standalone Java Backend Store:</b> High-performance in-memory and local persistence with zero external database dependencies.</div>
       <div><b>👤 Verified Agent &amp; Owner Channels:</b> Direct phone calling and WhatsApp messaging for instant site visits.</div>
       <div><b>📑 Title &amp; Clear Encumbrance Checks:</b> RERA, MUDA, BDA, and CMDA compliance information on every listing.</div>
     </div>
     <h3 style="margin-top:24px;">Project Information</h3>
-    <p class="muted">Course: Real Estate Management System · College Evaluation Project<br>Live Server: http://localhost:8080/ · Backend Mode: Supabase &amp; Java 11 REST</p>
+    <p class="muted">Course: Real Estate Management System · College Evaluation Project<br>Live Server: http://localhost:8080/ · Backend Mode: Java 11 Standalone REST &amp; Local Data Store</p>
   </div>
 </section>
 
@@ -510,46 +525,122 @@ function bookSiteVisit(id) {
   alert("Thank you " + name + "! Your site visit request for \"" + (p ? p.title : 'Property #' + id) + "\" has been recorded.\n\nOur property manager will call you at " + phone + " with driving directions.");
 }
 
+let selectedPhotoBase64 = '';
+let selectedModelBase64 = '';
+let selectedModelFileName = '';
+
+function previewPropertyPhoto(input) {
+  const file = input.files && input.files[0];
+  if (!file) {
+    selectedPhotoBase64 = '';
+    document.getElementById('photoPreviewContainer').style.display = 'none';
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    selectedPhotoBase64 = e.target.result;
+    document.getElementById('sellPhotoPreview').src = selectedPhotoBase64;
+    document.getElementById('photoPreviewContainer').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearPropertyPhoto() {
+  selectedPhotoBase64 = '';
+  const input = document.getElementById('sellPhotoFile');
+  if (input) input.value = '';
+  document.getElementById('photoPreviewContainer').style.display = 'none';
+}
+
+function previewModelFile(input) {
+  const file = input.files && input.files[0];
+  if (!file) {
+    selectedModelBase64 = '';
+    selectedModelFileName = '';
+    return;
+  }
+  selectedModelFileName = file.name;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    selectedModelBase64 = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
 async function submitListing(e) {
   e.preventDefault();
   const status = document.getElementById('sellStatus');
   const btn = document.getElementById('sellSubmitBtn');
   
-  const title = document.getElementById('sellTitle').value;
+  const title = document.getElementById('sellTitle').value.trim();
   const categoryCode = document.getElementById('sellType').value;
   const purpose = document.getElementById('sellPurpose').value;
-  const price = document.getElementById('sellPrice').value;
-  const city = document.getElementById('sellCity').value || 'Mysuru';
-  const address = document.getElementById('sellAddress').value;
-  const description = document.getElementById('sellDesc').value;
+  const price = document.getElementById('sellPrice').value.trim();
+  const city = document.getElementById('sellCity').value.trim() || 'Mysuru';
+  const address = document.getElementById('sellAddress').value.trim();
+  const description = document.getElementById('sellDesc').value.trim();
   const bedrooms = document.getElementById('sellBeds').value || '3';
   const bathrooms = document.getElementById('sellBaths').value || '3';
   const propertyArea = document.getElementById('sellArea').value || '1800';
+  const photoUrlInput = document.getElementById('sellPhotoUrl') ? document.getElementById('sellPhotoUrl').value.trim() : '';
 
   btn.disabled = true;
   status.style.color = 'var(--blue)';
-  status.textContent = 'Saving listing to backend & Supabase...';
+  status.textContent = 'Publishing listing to backend data store...';
 
   try {
-    const body = new URLSearchParams({
-      title, categoryCode, purpose, price, city, address,
-      description, bedrooms, bathrooms, propertyArea
-    });
+    const payload = {
+      title,
+      categoryCode,
+      purpose,
+      price,
+      city,
+      address,
+      description,
+      bedrooms,
+      bathrooms,
+      propertyArea,
+      photoData: selectedPhotoBase64,
+      primaryImageUrl: photoUrlInput,
+      model3dData: selectedModelBase64,
+      model3dName: selectedModelFileName
+    };
 
     const res = await fetch('/api/properties', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(payload)
     });
     const json = await res.json();
     if (!res.ok || json.status === 'error') throw new Error(json.message || 'Failed to save listing');
 
     status.style.color = '#047857';
     status.innerHTML = '✓ Success! Property listing has been published. <a href="seller-3d-upload.html" target="_blank" style="color:var(--blue); text-decoration:underline;">Click here to upload custom 3D model</a>.';
-    loadPropertiesFromBackend();
+    
+    // Clear form inputs
+    document.getElementById('sellTitle').value = '';
+    document.getElementById('sellPrice').value = '';
+    document.getElementById('sellAddress').value = '';
+    document.getElementById('sellDesc').value = '';
+    clearPropertyPhoto();
+    if (document.getElementById('sellPhotoUrl')) document.getElementById('sellPhotoUrl').value = '';
+    if (document.getElementById('sellModelFile')) document.getElementById('sellModelFile').value = '';
+    selectedModelBase64 = '';
+    selectedModelFileName = '';
+
+    await loadPropertiesFromBackend();
+
+    setTimeout(() => {
+      if (purpose === 'RENT') {
+        showPage('rent', document.querySelectorAll('nav button')[2]);
+      } else {
+        showPage('buy', document.querySelectorAll('nav button')[1]);
+      }
+    }, 1200);
   } catch (err) {
     status.style.color = '#dc2626';
-    status.textContent = 'Notice: ' + err.message + ' (Make sure you are logged in as a Seller to publish listings)';
+    status.textContent = 'Notice: ' + err.message;
   } finally {
     btn.disabled = false;
   }

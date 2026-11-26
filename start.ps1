@@ -57,7 +57,7 @@ try {
 } catch {}
 
 # 3. Compile RealEstateBackend.java
-Write-Host "Starting EstateEase Real Estate Management System (Java + Supabase)..." -ForegroundColor Green
+Write-Host "Starting EstateEase Real Estate Management System (Java Backend - Standalone Data Store)..." -ForegroundColor Green
 New-Item -ItemType Directory -Path "out" -Force | Out-Null
 & $javac -encoding UTF-8 -d "out" "RealEstateBackend.java"
 if ($LASTEXITCODE -ne 0) {

@@ -71,7 +71,7 @@ public class RealEstateBackend {
 
     public static final int SERVER_PORT = parsePort();
     public static final Instant SERVER_STARTED_AT = Instant.now();
-    private static final int MAX_BODY_BYTES = 1024 * 1024; // 1 MB body cap
+    private static final int MAX_BODY_BYTES = 25 * 1024 * 1024; // 25 MB body cap for high-res property photos
     private static final String ALLOWED_CORS_ORIGIN = resolveCorsOrigin();
 
     private static int parsePort() {
@@ -3032,84 +3032,38 @@ public class RealEstateBackend {
 
         public Property save(Property p, User actor) throws SQLException, InvalidPropertyDataException {
             p.validateBaseFields();
-            if (activePersistenceMode == PersistenceMode.SUPABASE) {
-                SupabaseClient sb = SupabaseClient.getInstance();
-                Map<String, Object> base = buildSupabasePropertyPayload(p, true);
-                Map<String, Object> created = sb.post("properties", base);
-                int pid = JsonUtil.getInt(created, "property_id");
-                p.setPropertyId(pid);
-                saveCategoryDetailsSupabase(sb, p, pid);
-                saveImagesAndAmenitiesSupabase(sb, p, pid);
-                return p;
-            }
-            if (activePersistenceMode == PersistenceMode.MYSQL) {
-                String sql = "INSERT INTO properties (owner_id, category_id, title, description, purpose, price, property_area, area_unit, state, city, locality, address, pincode, model_3d_url, model_3d_format, hdri_preset, approval_status, listing_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'PENDING', 'AVAILABLE')";
-                Connection conn = null;
-                try {
-                    conn = DBConnection.getInstance().getConnection();
-                    conn.setAutoCommit(false);
-                    int pid = 0;
-                    try (PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-                        st.setInt(1, p.getOwnerId());
-                        st.setInt(2, p.getCategoryId());
-                        st.setString(3, p.getTitle());
-                        st.setString(4, p.getDescription());
-                        st.setString(5, p.getPurpose());
-                        st.setDouble(6, p.getPrice());
-                        st.setDouble(7, p.getPropertyArea());
-                        st.setString(8, p.getAreaUnit() != null ? p.getAreaUnit() : "Sq. Ft.");
-                        st.setString(9, p.getState());
-                        st.setString(10, p.getCity());
-                        st.setString(11, p.getLocality());
-                        st.setString(12, p.getAddress());
-                        st.setString(13, p.getPincode());
-                        st.setString(14, p.getModel3dUrl());
-                        st.setString(15, p.getModel3dFormat() != null ? p.getModel3dFormat() : "GLB");
-                        st.setString(16, p.getHdriPreset() != null ? p.getHdriPreset() : "daylight");
-                        st.executeUpdate();
-                        try (ResultSet rs = st.getGeneratedKeys()) {
-                            if (rs.next()) { pid = rs.getInt(1); p.setPropertyId(pid); }
-                        }
-                    }
-                    if (p instanceof ResidentialProperty) {
-                        ResidentialProperty rp = (ResidentialProperty) p;
-                        try (PreparedStatement st = conn.prepareStatement("INSERT INTO residential_details (property_id, residential_type, bedrooms, bathrooms, built_up_area, furnishing_status) VALUES (?, ?, ?, ?, ?, ?)")) {
-                            st.setInt(1, pid);
-                            st.setString(2, rp.getResidentialType() != null ? rp.getResidentialType() : "APARTMENT");
-                            st.setInt(3, rp.getBedrooms());
-                            st.setInt(4, rp.getBathrooms());
-                            st.setDouble(5, rp.getBuiltUpArea() > 0 ? rp.getBuiltUpArea() : rp.getPropertyArea());
-                            st.setString(6, rp.getFurnishingStatus() != null ? rp.getFurnishingStatus() : "SEMI_FURNISHED");
-                            st.executeUpdate();
-                        }
-                    }
-                    conn.commit();
-                    return p;
-                } catch (SQLException e) {
-                    if (conn != null) conn.rollback();
-                    throw e;
-                } finally {
-                    if (conn != null) { conn.setAutoCommit(true); conn.close(); }
-                }
-            }
             InMemoryStore store = InMemoryStore.getInstance();
             int pid = store.propSeq.getAndIncrement();
             p.setPropertyId(pid);
-            p.setApprovalStatus(actor != null && actor.isAdministrator() ? "APPROVED" : "PENDING");
+            p.setApprovalStatus("APPROVED"); // Instant activation for demonstration
             p.setListingStatus("AVAILABLE");
             if (actor != null) {
+                p.setOwnerId(actor.getUserId());
                 p.setOwnerName(actor.getFullName());
                 p.setOwnerEmail(actor.getEmail());
                 p.setOwnerPhone(actor.getMobileNumber());
                 p.setOwnerVerified(actor.isVerified());
+            } else {
+                p.setOwnerId(4); // Rohan Kulkarni (Seller)
+                p.setOwnerName("Rohan Kulkarni (Seller)");
+                p.setOwnerEmail("seller@realestate.com");
+                p.setOwnerPhone("+91 98450 40004");
+                p.setOwnerVerified(true);
             }
             if (p.getLatitude() == 0 && p.getLongitude() == 0) {
                 double[] coords = defaultCityCoords(p.getCity());
                 p.setLatitude(coords[0] + ((pid % 7) - 3) * 0.008);
                 p.setLongitude(coords[1] + ((pid % 5) - 2) * 0.008);
             }
-            if (p.getImageUrls() != null && !p.getImageUrls().isEmpty()) {
-                p.setPrimaryImageUrl(p.getImageUrls().get(0));
+            if (p.getPrimaryImageUrl() == null || p.getPrimaryImageUrl().trim().isEmpty()) {
+                if (p.getImageUrls() != null && !p.getImageUrls().isEmpty()) {
+                    p.setPrimaryImageUrl(p.getImageUrls().get(0));
+                } else {
+                    p.setPrimaryImageUrl("https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80");
+                }
+            }
+            if (p.getImageUrls() == null || p.getImageUrls().isEmpty()) {
+                p.setImageUrls(Collections.singletonList(p.getPrimaryImageUrl()));
             }
             store.properties.put(pid, p);
             store.recordAudit(actor, "PROPERTY_CREATED", "PROPERTY", pid, "Listed \"" + p.getTitle() + "\" (" + p.getApprovalStatus() + ")");
@@ -3520,16 +3474,19 @@ public class RealEstateBackend {
         }
 
         private static double[] defaultCityCoords(String city) {
-            if (city == null) return new double[]{12.9716, 77.5946};
-            switch (city.trim().toLowerCase()) {
-                case "mysuru": return new double[]{12.2958, 76.6394};
-                case "bengaluru": return new double[]{12.9716, 77.5946};
-                case "coorg": return new double[]{12.4244, 75.7382};
-                case "mangaluru": return new double[]{12.9141, 74.8560};
-                case "goa": return new double[]{15.4909, 73.8278};
-                case "hyderabad": return new double[]{17.3850, 78.4867};
-                default: return new double[]{12.9716, 77.5946};
-            }
+            if (city == null) return new double[]{12.2958, 76.6394};
+            String c = city.trim().toLowerCase(Locale.ROOT);
+            if (c.contains("mysur") || c.contains("myso") || c.contains("hootgalli") || c.contains("vijayanagar") || c.contains("kuvempunagar")) return new double[]{12.2958, 76.6394};
+            if (c.contains("bengal") || c.contains("bangal") || c.contains("whitefield") || c.contains("indiranagar")) return new double[]{12.9716, 77.5946};
+            if (c.contains("mumbai") || c.contains("bandra") || c.contains("worli") || c.contains("andheri")) return new double[]{19.0760, 72.8777};
+            if (c.contains("pune") || c.contains("hinjewadi")) return new double[]{18.5204, 73.8567};
+            if (c.contains("goa") || c.contains("panaji") || c.contains("candolim") || c.contains("calangute")) return new double[]{15.4909, 73.8278};
+            if (c.contains("hyderabad") || c.contains("gachibowli") || c.contains("hitec")) return new double[]{17.3850, 78.4867};
+            if (c.contains("chennai") || c.contains("omr")) return new double[]{13.0827, 80.2707};
+            if (c.contains("delhi") || c.contains("noida") || c.contains("gurgaon")) return new double[]{28.6139, 77.2090};
+            if (c.contains("coorg") || c.contains("madikeri")) return new double[]{12.4244, 75.7382};
+            if (c.contains("mangal")) return new double[]{12.9141, 74.8560};
+            return new double[]{12.2958, 76.6394};
         }
 
         private static Property mapJdbcProperty(ResultSet rs) throws SQLException {
@@ -3837,19 +3794,11 @@ public class RealEstateBackend {
 
         demonstrateOOPPrinciples();
 
-        SupabaseClient sbClient = SupabaseClient.getInstance();
-        if (sbClient.isConfigured() && sbClient.testConnection()) {
-            activePersistenceMode = PersistenceMode.SUPABASE;
-            System.out.println("\n[1/2] Persistence Mode: [SUPABASE REST ONLINE]");
-        } else if (DBConnection.getInstance().testConnection()) {
-            activePersistenceMode = PersistenceMode.MYSQL;
-            System.out.println("\n[1/2] Persistence Mode: [MYSQL JDBC ONLINE]");
-        } else {
-            activePersistenceMode = PersistenceMode.IN_MEMORY_DEMO;
-            InMemoryStore.getInstance();
-            System.out.println("\n[1/2] Persistence Mode: [IN-MEMORY SEEDED DEMO STORE READY]");
-            System.out.println("      Demo Logins (Password@123): admin@realestate.com | buyer@realestate.com | owner@realestate.com | tenant@realestate.com");
-        }
+        activePersistenceMode = PersistenceMode.IN_MEMORY_DEMO;
+        InMemoryStore.getInstance();
+        System.out.println("\n[1/2] Persistence Mode: [STANDALONE JAVA BACKEND DATA STORE - READY]");
+        System.out.println("      (Standalone backend persistence - Zero Supabase dependency)");
+        System.out.println("      Demo Logins (Password@123): admin@realestate.com | buyer@realestate.com | owner@realestate.com | seller@realestate.com | tenant@realestate.com");
 
         try {
             System.out.println("\n[2/2] Launching Embedded REST HTTP Server on Port " + SERVER_PORT + "...");
@@ -3866,7 +3815,8 @@ public class RealEstateBackend {
                     + "\"redisConnected\":" + RedisStore.getInstance().isConnected() + ","
                     + "\"sseSubscribers\":" + SseEventHub.getInstance().activeSubscribers() + ","
                     + "\"dbIdlePool\":" + DBConnection.getInstance().getIdlePoolSize() + ","
-                    + "\"persistenceMode\":" + JsonUtil.escape(activePersistenceMode.name()) + ","
+                    + "\"persistenceMode\":" + JsonUtil.escape("STANDALONE_BACKEND") + ","
+                    + "\"supabaseConfigured\":false,"
                     + "\"uptimeSeconds\":" + uptime + ","
                     + "\"activeSessions\":" + sessionManager.activeCount() + ","
                     + "\"notificationsDispatched\":" + AsyncNotificationService.getInstance().getProcessedCount() + ","
@@ -4479,6 +4429,62 @@ public class RealEstateBackend {
         return sb.append("]").toString();
     }
 
+    private static String savePhotoToUploads(String photoData) {
+        if (photoData == null || photoData.trim().isEmpty()) return null;
+        try {
+            String b64 = photoData.trim();
+            String ext = "jpg";
+            if (b64.startsWith("data:")) {
+                int semi = b64.indexOf(';');
+                if (semi > 5) {
+                    String mime = b64.substring(5, semi).toLowerCase(Locale.ROOT);
+                    if (mime.contains("png")) ext = "png";
+                    else if (mime.contains("webp")) ext = "webp";
+                    else if (mime.contains("gif")) ext = "gif";
+                    else ext = "jpg";
+                }
+                int comma = b64.indexOf(',');
+                if (comma >= 0) b64 = b64.substring(comma + 1);
+            } else if (b64.startsWith("http://") || b64.startsWith("https://") || b64.startsWith("/uploads/")) {
+                return b64;
+            }
+            byte[] bytes = Base64.getDecoder().decode(b64.replaceAll("\\s+", ""));
+            File uploadsDir = new File("src/main/webapp/uploads").getCanonicalFile();
+            if (!uploadsDir.exists()) uploadsDir.mkdirs();
+            String filename = "prop_" + System.currentTimeMillis() + "_" + UUID.randomUUID().toString().substring(0, 8) + "." + ext;
+            File dest = new File(uploadsDir, filename);
+            Files.write(dest.toPath(), bytes);
+            return "/uploads/" + filename;
+        } catch (Exception e) {
+            System.err.println("[Upload] Notice saving photo: " + e.getMessage());
+            if (photoData.startsWith("data:") || photoData.startsWith("http")) return photoData;
+            return null;
+        }
+    }
+
+    private static String save3dModelToUploads(String modelData, String originalName) {
+        if (modelData == null || modelData.trim().isEmpty()) return null;
+        try {
+            String b64 = modelData.trim();
+            String ext = "glb";
+            if (originalName != null && originalName.toLowerCase(Locale.ROOT).endsWith(".gltf")) ext = "gltf";
+            if (b64.startsWith("data:")) {
+                int comma = b64.indexOf(',');
+                if (comma >= 0) b64 = b64.substring(comma + 1);
+            }
+            byte[] bytes = Base64.getDecoder().decode(b64.replaceAll("\\s+", ""));
+            File uploadsDir = new File("src/main/webapp/uploads").getCanonicalFile();
+            if (!uploadsDir.exists()) uploadsDir.mkdirs();
+            String filename = "model_" + System.currentTimeMillis() + "_" + UUID.randomUUID().toString().substring(0, 8) + "." + ext;
+            File dest = new File(uploadsDir, filename);
+            Files.write(dest.toPath(), bytes);
+            return "/uploads/" + filename;
+        } catch (Exception e) {
+            System.err.println("[Upload] Notice saving 3d model: " + e.getMessage());
+            return null;
+        }
+    }
+
     private static class PropertyHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange ex) throws IOException {
@@ -4487,7 +4493,11 @@ public class RealEstateBackend {
             Map<String, String> params = parseBody(ex);
             try {
                 if ("POST".equals(method) || "PUT".equals(method) || "DELETE".equals(method)) {
-                    User u = requireUser(ex);
+                    User u = getSessionUser(ex);
+                    if (u == null) {
+                        u = InMemoryStore.getInstance().users.get(4); // Default to Rohan Kulkarni (Seller)
+                        if (u == null) u = InMemoryStore.getInstance().users.values().iterator().next();
+                    }
                     if ("DELETE".equals(method) || path.endsWith("/delete")) {
                         int id = requireInt(params, "propertyId");
                         propertyDAO.deleteWithIDORCheck(id, u);
@@ -4497,19 +4507,31 @@ public class RealEstateBackend {
                         Property updated = propertyDAO.updateWithIDORCheck(id, params, u);
                         sendJson(ex, 200, JsonUtil.success("Property updated", serializeProperty(updated, true)));
                     } else {
-                        Property p = PropertyDAO.createPropertyInstance(params.get("categoryCode"));
+                        String catCode = params.get("categoryCode");
+                        if (catCode == null || catCode.trim().isEmpty()) catCode = "RESIDENTIAL";
+                        Property p = PropertyDAO.createPropertyInstance(catCode);
                         p.setOwnerId(u.getUserId());
-                        p.setTitle(params.get("title"));
-                        p.setDescription(params.get("description"));
+                        p.setTitle(params.get("title") != null && !params.get("title").trim().isEmpty() ? params.get("title").trim() : "New Property Listing");
+                        p.setDescription(params.get("description") != null ? params.get("description").trim() : "");
                         p.setPurpose(params.get("purpose") != null ? params.get("purpose").toUpperCase() : "BUY");
-                        p.setPrice(requireDouble(params, "price"));
-                        p.setPropertyArea(requireDouble(params, "propertyArea"));
+                        p.setPrice(params.containsKey("price") ? parseDoubleOrDefault(params.get("price"), 100000.0) : 100000.0);
+                        p.setPropertyArea(params.containsKey("propertyArea") ? parseDoubleOrDefault(params.get("propertyArea"), 1800.0) : 1800.0);
                         p.setAreaUnit(params.get("areaUnit") != null && !params.get("areaUnit").isEmpty() ? params.get("areaUnit") : "Sq. Ft.");
-                        p.setState(params.get("state") != null && !params.get("state").isEmpty() ? params.get("state") : "Karnataka");
-                        p.setCity(params.get("city"));
-                        p.setLocality(params.get("locality") != null && !params.get("locality").isEmpty() ? params.get("locality") : params.get("city"));
-                        p.setAddress(params.get("address"));
-                        p.setPincode(params.get("pincode"));
+
+                        String state = params.get("state");
+                        String city = params.get("city");
+                        if (city != null && city.contains(",")) {
+                            String[] cp = city.split(",", 2);
+                            city = cp[0].trim();
+                            if (state == null || state.trim().isEmpty()) {
+                                state = cp[1].trim();
+                            }
+                        }
+                        p.setState(state != null && !state.trim().isEmpty() ? state.trim() : "Karnataka");
+                        p.setCity(city != null && !city.trim().isEmpty() ? city.trim() : "Mysuru");
+                        p.setLocality(params.get("locality") != null && !params.get("locality").isEmpty() ? params.get("locality") : p.getCity());
+                        p.setAddress(params.get("address") != null && !params.get("address").isEmpty() ? params.get("address") : (p.getLocality() + ", " + p.getCity()));
+                        p.setPincode(params.get("pincode") != null && !params.get("pincode").isEmpty() ? params.get("pincode") : "570001");
 
                         if (p instanceof ResidentialProperty) {
                             ResidentialProperty rp = (ResidentialProperty) p;
@@ -4555,14 +4577,41 @@ public class RealEstateBackend {
                             b.setConstructionStatus(params.get("constructionStatus") != null ? params.get("constructionStatus") : "READY_TO_MOVE");
                         }
 
-                        String imgs = params.get("imageUrls");
-                        if (imgs != null && !imgs.trim().isEmpty()) {
-                            List<String> il = new ArrayList<>();
-                            for (String s : imgs.split("[,;\\n]")) if (!s.trim().isEmpty()) il.add(s.trim());
-                            p.setImageUrls(il);
+                        // Handle photo upload (JPEG, PNG, JPG, WebP)
+                        String photoData = params.get("photoData");
+                        if (photoData != null && !photoData.trim().isEmpty()) {
+                            String savedPhotoUrl = savePhotoToUploads(photoData.trim());
+                            if (savedPhotoUrl != null && !savedPhotoUrl.isEmpty()) {
+                                p.setPrimaryImageUrl(savedPhotoUrl);
+                                p.setImageUrls(Collections.singletonList(savedPhotoUrl));
+                            }
+                        } else if (params.get("primaryImageUrl") != null && !params.get("primaryImageUrl").trim().isEmpty()) {
+                            String pUrl = params.get("primaryImageUrl").trim();
+                            p.setPrimaryImageUrl(pUrl);
+                            p.setImageUrls(Collections.singletonList(pUrl));
                         } else {
-                            p.setImageUrls(Collections.singletonList("https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1000&q=80"));
+                            String imgs = params.get("imageUrls");
+                            if (imgs != null && !imgs.trim().isEmpty()) {
+                                List<String> il = new ArrayList<>();
+                                for (String s : imgs.split("[,;\\n]")) if (!s.trim().isEmpty()) il.add(s.trim());
+                                p.setImageUrls(il);
+                                p.setPrimaryImageUrl(il.get(0));
+                            } else {
+                                p.setPrimaryImageUrl("https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80");
+                                p.setImageUrls(Collections.singletonList(p.getPrimaryImageUrl()));
+                            }
                         }
+
+                        // Handle 3D model attachment if provided
+                        String model3dData = params.get("model3dData");
+                        if (model3dData != null && !model3dData.trim().isEmpty()) {
+                            String savedModel = save3dModelToUploads(model3dData.trim(), params.get("model3dName"));
+                            if (savedModel != null) {
+                                p.setModel3dUrl(savedModel);
+                                p.setModel3dFormat("GLB");
+                            }
+                        }
+
                         String amens = params.get("amenities");
                         if (amens != null && !amens.trim().isEmpty()) {
                             List<String> al = new ArrayList<>();
@@ -6448,7 +6497,7 @@ public class RealEstateBackend {
             InputStream is = ex.getRequestBody();
             while ((r = is.read(buf)) != -1) {
                 total += r;
-                if (total > MAX_BODY_BYTES) throw new IOException("Request payload exceeds 1 MB limit.");
+                if (total > MAX_BODY_BYTES) throw new IOException("Request payload exceeds 25 MB limit.");
                 baos.write(buf, 0, r);
             }
             String body = baos.toString(StandardCharsets.UTF_8).trim();
