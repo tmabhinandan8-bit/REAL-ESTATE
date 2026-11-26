@@ -9,18 +9,24 @@ if not errorlevel 1 (
     exit /b 0
 )
 
+:: Check java in PATH, or add Eclipse Adoptium directory
 where java.exe >nul 2>&1
 if errorlevel 1 (
-    echo Java was not found in PATH.
-    echo Install Eclipse Temurin JDK 11 or newer, then retry.
-    pause
-    exit /b 1
+    if exist "%LOCALAPPDATA%\Programs\Eclipse Adoptium\jdk-11.0.33+10\bin\java.exe" (
+        set "PATH=%LOCALAPPDATA%\Programs\Eclipse Adoptium\jdk-11.0.33+10\bin;%PATH%"
+    ) else if exist "C:\Program Files\Eclipse Adoptium\jdk-11.0.33+10\bin\java.exe" (
+        set "PATH=C:\Program Files\Eclipse Adoptium\jdk-11.0.33+10\bin;%PATH%"
+    ) else (
+        echo Java was not found in PATH or standard install directories.
+        echo Install Eclipse Temurin JDK 11 or newer, then retry.
+        pause
+        exit /b 1
+    )
 )
 
 where javac.exe >nul 2>&1
 if errorlevel 1 (
-    echo javac was not found.
-    echo Install a JDK, not only a JRE.
+    echo javac was not found. Install a full JDK, not only a JRE.
     pause
     exit /b 1
 )
