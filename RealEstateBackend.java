@@ -2455,8 +2455,8 @@ public class RealEstateBackend {
             p7.setPropertyId(107); p7.setOwnerId(agent.getUserId()); p7.setTitle("Aurelia Mixed-Use Boutique Tower (18 Units)");
             p7.setPurpose("BUY"); p7.setPrice(95000000); p7.setPropertyArea(24000); p7.setTotalUnits(18);
             p7.setBuildingType("MIXED_USE_COMPLEX"); p7.setConstructionStatus("READY_TO_MOVE"); p7.setBuilderName("Verma Signature Estates");
-            p7.setState("Telangana"); p7.setCity("Hyderabad"); p7.setLocality("Jubilee Hills"); p7.setAddress("Plot 14, Road No. 36, Jubilee Hills"); p7.setPincode("500033");
-            p7.setLatitude(17.4326); p7.setLongitude(78.4071);
+            p7.setState("Telangana"); p7.setCity("Hyderabad"); p7.setLocality("Madhapur"); p7.setAddress("Plot 88, Cyber Towers Road, Madhapur, Hyderabad"); p7.setPincode("500081");
+            p7.setLatitude(17.4486); p7.setLongitude(78.3908);
             p7.setApprovalStatus("APPROVED"); p7.setListingStatus("AVAILABLE"); p7.setFeatured(false);
             p7.setDescription("Newly completed 5-floor glass facade building with ground retail, 16 luxury suites, 2 basement parking decks, and solar microgrid.");
             p7.setAmenities(Arrays.asList("2 Elevators", "Basement Parking", "Fire NOC", "Solar Microgrid", "OC Received"));
@@ -2621,7 +2621,7 @@ public class RealEstateBackend {
             p18.setDescription("Awe-inspiring architectural masterpiece perched on Jubilee Hills. Features private home theater, temperature-controlled indoor pool, and elevator.");
             p18.setAmenities(Arrays.asList("Home Theater", "Private Elevator", "Heated Pool", "Security Automation", "6 Car Garage"));
             p18.setImageUrls(Arrays.asList(
-                "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80"
+                "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=1200&q=80"
             ));
             attachOwner(p18, seller); p18.setAverageRating(5.0); p18.setViewsCount(490);
             properties.put(118, p18);
@@ -2690,10 +2690,10 @@ public class RealEstateBackend {
             p23.setLocality("Golf Course Extn"); p23.setAddress("Villa 18, Palm Springs Golf Enclave, Sector 54, Gurugram"); p23.setPincode("122011");
             p23.setLatitude(28.4089); p23.setLongitude(77.0783);
             p23.setApprovalStatus("APPROVED"); p23.setListingStatus("AVAILABLE");
-            p23.setDescription("Ultra-modern golf-facing villa with private elevator, heated jacuzzi deck, clubhouse golf access, and 24x7 biometric security.");
-            p23.setAmenities(Arrays.asList("Golf Course Access", "Private Jacuzzi", "Elevator", "EV Ready 3 Car Parking"));
+            p23.setDescription("Ultra-modern golf-facing villa with private elevator, heated jacuzzi deck, dedicated Pooja room, clubhouse golf access, and 24x7 biometric security.");
+            p23.setAmenities(Arrays.asList("Golf Course Access", "Private Jacuzzi", "Pooja Room", "EV Ready 3 Car Parking"));
             p23.setImageUrls(Arrays.asList(
-                "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80"
+                "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80"
             ));
             attachOwner(p23, seller); p23.setAverageRating(4.9); p23.setViewsCount(410);
             properties.put(123, p23);
@@ -2704,15 +2704,99 @@ public class RealEstateBackend {
             p24.setLocality("Gokulam 3rd Stage"); p24.setAddress("5th Cross, Near Yoga Shala, Gokulam 3rd Stage, Mysuru"); p24.setPincode("570002");
             p24.setLatitude(12.3312); p24.setLongitude(76.6298);
             p24.setApprovalStatus("APPROVED"); p24.setListingStatus("AVAILABLE");
-            p24.setDescription("Charming bungalow in tranquil Gokulam cultural enclave. Clear view of Chamundi Hills from rooftop pergola, rain harvesting, and teakwood doors.");
-            p24.setAmenities(Arrays.asList("Chamundi Hill View", "Rainwater Harvesting", "Teak Finish", "2 Car Porch"));
+            p24.setDescription("Charming bungalow in tranquil Gokulam cultural enclave. Clear view of Chamundi Hills from rooftop pergola, dedicated North-East Pooja room, rain harvesting, and teakwood doors.");
+            p24.setAmenities(Arrays.asList("Chamundi Hill View", "North-East Pooja Room", "Teak Finish", "2 Car Porch"));
             p24.setImageUrls(Arrays.asList(
-                "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80"
+                "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1200&q=80"
             ));
             attachOwner(p24, seller); p24.setAverageRating(4.8); p24.setViewsCount(295);
             properties.put(124, p24);
 
-            propSeq.set(126);
+            // 25. Madurai District, Tamil Nadu: Indian Cultural Chettinad Heritage Courtyard Home with Pooja Mandap
+            ResidentialProperty p25 = new ResidentialProperty(125, owner.getUserId(), "Chettinad Heritage 4 BHK Courtyard Home with Pooja Mandap", "BUY", 21500000, 3600, "Tamil Nadu", "Madurai", 4, 4);
+            p25.setResidentialType("VILLA"); p25.setFurnishingStatus("FULLY_FURNISHED"); p25.setFeatured(true);
+            p25.setLocality("KK Nagar"); p25.setAddress("14 Temple Tank Street, Near Meenakshi Enclave, KK Nagar, Madurai"); p25.setPincode("625020");
+            p25.setLatitude(9.9252); p25.setLongitude(78.1198);
+            p25.setApprovalStatus("APPROVED"); p25.setListingStatus("AVAILABLE");
+            p25.setDescription("Authentic Indian Vaastu-compliant courtyard home featuring carved Burma teak pillars, central open Tulsi Aangan, dedicated carved teak Pooja Temple Room with brass diya alcove, Athangudi tiled flooring, and spacious family dining hall.");
+            p25.setAmenities(Arrays.asList("Carved Teak Pooja Mandap", "Central Tulsi Courtyard", "100% Vaastu Compliant", "Athangudi Tiles", "Traditional Verandah"));
+            p25.setImageUrls(Arrays.asList(
+                "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=1200&q=80"
+            ));
+            attachOwner(p25, owner); p25.setAverageRating(5.0); p25.setViewsCount(510);
+            properties.put(125, p25);
+
+            // 26. Ernakulam District, Kochi, Kerala: Traditional Nalukettu Sloped-Roof Vastu Home
+            ResidentialProperty p26 = new ResidentialProperty(126, seller.getUserId(), "Nalukettu 3 BHK Traditional Sloped-Roof Vastu Home", "BUY", 14800000, 2650, "Kerala", "Kochi", 3, 3);
+            p26.setResidentialType("VILLA"); p26.setFurnishingStatus("SEMI_FURNISHED"); p26.setFeatured(true);
+            p26.setLocality("Panampilly Nagar"); p26.setAddress("27 Heritage Agrahara Lane, Panampilly Nagar, Ernakulam, Kochi"); p26.setPincode("682036");
+            p26.setLatitude(9.9636); p26.setLongitude(76.2982);
+            p26.setApprovalStatus("APPROVED"); p26.setListingStatus("AVAILABLE");
+            p26.setDescription("Classic Kerala Nalukettu architecture with terracotta Mangalore tile roof, open courtyard rain harvesting, separate North-East Pooja Temple Room, wood-paneled living room, and kitchen.");
+            p26.setAmenities(Arrays.asList("Dedicated Pooja Temple Room", "Terracotta Tile Roof", "Open Courtyard", "Tulsi Vrindavan"));
+            p26.setImageUrls(Arrays.asList(
+                "https://images.unsplash.com/photo-1598228723793-52759bba239c?auto=format&fit=crop&w=1200&q=80"
+            ));
+            attachOwner(p26, seller); p26.setAverageRating(4.9); p26.setViewsCount(380);
+            properties.put(126, p26);
+
+            // 27. Whitefield, Bengaluru: Contemporary 3 BHK Smart Row House (RENT)
+            ResidentialProperty p27 = new ResidentialProperty(127, owner.getUserId(), "Whitefield 3 BHK Contemporary Smart Row House", "RENT", 58000, 2100, "Karnataka", "Bengaluru", 3, 3);
+            p27.setResidentialType("DUPLEX"); p27.setFurnishingStatus("FULLY_FURNISHED"); p27.setFeatured(false);
+            p27.setLocality("Varthur Main Road"); p27.setAddress("Row Villa 9, Palm Meadows Phase 2, Whitefield, Bengaluru"); p27.setPincode("560066");
+            p27.setLatitude(12.9592); p27.setLongitude(77.7426);
+            p27.setApprovalStatus("APPROVED"); p27.setListingStatus("AVAILABLE");
+            p27.setDescription("Modern gated community row house with double-height living area, modular island kitchen, private backyard lawn, Pooja niche, and covered parking.");
+            p27.setAmenities(Arrays.asList("Smart Locks", "Modular Kitchen", "Pooja Alcove", "Clubhouse & Pool"));
+            p27.setImageUrls(Arrays.asList(
+                "https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=1200&q=80"
+            ));
+            attachOwner(p27, owner); p27.setAverageRating(4.8); p27.setViewsCount(265);
+            properties.put(127, p27);
+
+            // 28. Jaipur District, Rajasthan: Sandstone Heritage Haveli Villa with Temple Room
+            ResidentialProperty p28 = new ResidentialProperty(128, seller.getUserId(), "Jaipur Sandstone 4 BHK Heritage Haveli with Temple Room", "BUY", 34000000, 4400, "Rajasthan", "Jaipur", 4, 5);
+            p28.setResidentialType("VILLA"); p28.setFurnishingStatus("FULLY_FURNISHED"); p28.setFeatured(true);
+            p28.setLocality("C-Scheme"); p28.setAddress("Haveli 12, Bhagwan Das Road, C-Scheme, Jaipur"); p28.setPincode("302001");
+            p28.setLatitude(26.9048); p28.setLongitude(75.7985);
+            p28.setApprovalStatus("APPROVED"); p28.setListingStatus("AVAILABLE");
+            p28.setDescription("Royal Pink City sandstone villa with arched jharokha balconies, marble Pooja Mandir room, courtyard fountain, and modern modular kitchen.");
+            p28.setAmenities(Arrays.asList("Marble Pooja Mandir", "Courtyard Fountain", "Sandstone Facade", "Vaastu Compliant"));
+            p28.setImageUrls(Arrays.asList(
+                "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?auto=format&fit=crop&w=1200&q=80"
+            ));
+            attachOwner(p28, seller); p28.setAverageRating(4.9); p28.setViewsCount(420);
+            properties.put(128, p28);
+
+            // 29. Ahmedabad District, Gujarat: Sindhu Bhavan Road 4 BHK Smart Duplex
+            ResidentialProperty p29 = new ResidentialProperty(129, owner.getUserId(), "Sindhu Bhavan 4 BHK Contemporary Garden Duplex", "BUY", 28500000, 3500, "Gujarat", "Ahmedabad", 4, 4);
+            p29.setResidentialType("DUPLEX"); p29.setFurnishingStatus("FULLY_FURNISHED"); p29.setFeatured(false);
+            p29.setLocality("Bodakdev / SBR"); p29.setAddress("Bungalow 6, Emerald Greens, Sindhu Bhavan Road, Ahmedabad"); p29.setPincode("380054");
+            p29.setLatitude(23.0405); p29.setLongitude(72.5023);
+            p29.setApprovalStatus("APPROVED"); p29.setListingStatus("AVAILABLE");
+            p29.setDescription("Spacious West-India luxury duplex featuring double-height foyer, dedicated Pooja Ghar, private lawn, solar rooftop, and 3-car parking.");
+            p29.setAmenities(Arrays.asList("Dedicated Pooja Ghar", "Solar Rooftop", "Private Lawn", "24x7 Security"));
+            p29.setImageUrls(Arrays.asList(
+                "https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?auto=format&fit=crop&w=1200&q=80"
+            ));
+            attachOwner(p29, owner); p29.setAverageRating(4.8); p29.setViewsCount(310);
+            properties.put(129, p29);
+
+            // 30. Kolkata District, West Bengal: Salt Lake Sector V Executive Sky Flat (RENT)
+            ResidentialProperty p30 = new ResidentialProperty(130, agent.getUserId(), "New Town 3 BHK Lake-View Executive Sky Apartment", "RENT", 48000, 1850, "West Bengal", "Kolkata", 3, 3);
+            p30.setResidentialType("APARTMENT"); p30.setFurnishingStatus("FULLY_FURNISHED"); p30.setFeatured(false);
+            p30.setLocality("New Town Action Area I"); p30.setAddress("Tower B-14, Eco Park Enclave, New Town, Kolkata"); p30.setPincode("700156");
+            p30.setLatitude(22.5898); p30.setLongitude(88.4682);
+            p30.setApprovalStatus("APPROVED"); p30.setListingStatus("AVAILABLE");
+            p30.setDescription("Modern furnished apartment overlooking Eco Park lake with modular kitchen, Pooja corner, club infinity pool, and Metro connectivity.");
+            p30.setAmenities(Arrays.asList("Lake View", "Club Infinity Pool", "Metro Proximity", "Power Backup"));
+            p30.setImageUrls(Arrays.asList(
+                "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80"
+            ));
+            attachOwner(p30, agent); p30.setAverageRating(4.7); p30.setViewsCount(240);
+            properties.put(130, p30);
+
+            propSeq.set(200);
 
             // Seed visits, rental agreement, verification, favorites, reviews, and audit log
             PropertyVisit v1 = new PropertyVisit();
@@ -4249,28 +4333,32 @@ public class RealEstateBackend {
     }
 
     public static String resolveModel3dUrl(Property p) {
-        if (p.getModel3dUrl() != null && !p.getModel3dUrl().trim().isEmpty()) return p.getModel3dUrl().trim();
-        int pid = p.getPropertyId();
-        switch (pid) {
-            case 101: return "https://cdn.jsdelivr.net/gh/BougieZoe/lanai-house@main/public/models/lanai_house.glb";
-            case 102: return "https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/models/gltf/bath_day.glb";
-            case 103: return "https://cdn.jsdelivr.net/gh/andrewwoan/daniels-home-office-portfolio@main/public/models/Light%20Room/Light_First.glb|https://cdn.jsdelivr.net/gh/andrewwoan/daniels-home-office-portfolio@main/public/models/Light%20Room/Light_Second.glb|https://cdn.jsdelivr.net/gh/andrewwoan/daniels-home-office-portfolio@main/public/models/Light%20Room/Light_Third.glb";
-            case 104: return "https://cdn.jsdelivr.net/gh/bandurchencko/lived-in-houses@main/docs/glb/red-stone-garden-house-7.glb";
-            case 105: return "https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/models/gltf/pool.glb";
-            case 106: return "https://cdn.jsdelivr.net/gh/kavyasenthamarai/3d-property-f@main/models/home1.glb";
-            case 107: return "https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Assets@main/Models/VirtualCity/glTF-Binary/VirtualCity.glb";
-            case 108: return "https://cdn.jsdelivr.net/gh/bandurchencko/lived-in-houses@main/docs/glb/red-stone-garden-house-7.glb";
-            case 109: return "https://cdn.jsdelivr.net/gh/mrdoob/three.js@r170/examples/models/gltf/LittlestTokyo.glb";
-            case 110: return "https://cdn.jsdelivr.net/gh/bandurchencko/lived-in-houses@main/docs/glb/workshop-house-2020.glb";
-            case 111: return "https://cdn.jsdelivr.net/gh/kavyasenthamarai/3d-property-f@main/models/home1.glb";
-            case 112: return "https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Assets@main/Models/VirtualCity/glTF-Binary/VirtualCity.glb";
-            default: break;
+        if (p.getModel3dUrl() != null && !p.getModel3dUrl().trim().isEmpty()) {
+            String u = p.getModel3dUrl().trim();
+            if (u.startsWith("/uploads/") || u.startsWith("/models/")) {
+                return u;
+            }
         }
         String cat = p.getCategoryCode() != null ? p.getCategoryCode().toUpperCase(Locale.ROOT) : "RESIDENTIAL";
-        if ("COMMERCIAL".equals(cat)) return "https://cdn.jsdelivr.net/gh/andrewwoan/daniels-home-office-portfolio@main/public/models/Light%20Room/Light_First.glb|https://cdn.jsdelivr.net/gh/andrewwoan/daniels-home-office-portfolio@main/public/models/Light%20Room/Light_Second.glb";
-        if ("BUILDING".equals(cat)) return "https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Assets@main/Models/VirtualCity/glTF-Binary/VirtualCity.glb";
-        if ("FARMHOUSE".equals(cat)) return "https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/models/gltf/pool.glb";
-        return "https://cdn.jsdelivr.net/gh/BougieZoe/lanai-house@main/public/models/lanai_house.glb";
+        String title = p.getTitle() != null ? p.getTitle().toLowerCase(Locale.ROOT) : "";
+        int pid = Math.abs(p.getPropertyId());
+
+        if ("COMMERCIAL".equals(cat) || "BUILDING".equals(cat) || title.contains("tech park") || title.contains("office") || title.contains("tower")) {
+            return title.contains("office") ? "/models/light_interior.glb" : "/models/city_tower.glb";
+        }
+        if ("FARMHOUSE".equals(cat) || "AGRICULTURAL".equals(cat) || title.contains("farm") || title.contains("estate") || title.contains("garden") || title.contains("plantation")) {
+            return "/models/garden_house.glb";
+        }
+        if ("PLOT".equals(cat) || title.contains("plot") || title.contains("site")) {
+            return "/models/workshop_loft.glb";
+        }
+        if (title.contains("apartment") || title.contains("flat") || title.contains("penthouse") || title.contains("condo")) {
+            return (pid % 2 == 0) ? "/models/light_interior.glb" : "/models/city_tower.glb";
+        }
+        if (title.contains("villa") || title.contains("courtyard") || title.contains("bungalow") || title.contains("beach")) {
+            return (pid % 2 == 0) ? "/models/lanai_villa.glb" : "/models/modern_home.glb";
+        }
+        return "/models/modern_home.glb";
     }
 
     public static String resolveModel3dFormat(Property p) {
